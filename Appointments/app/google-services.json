@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "193053979736",
+    "firebase_url": "https://wellcureclinic.firebaseio.com",
+    "project_id": "wellcureclinic",
+    "storage_bucket": "wellcureclinic.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:193053979736:android:10624bf20377b93d",
+        "android_client_info": {
+          "package_name": "com.gtaandteam.android.wellcure"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "193053979736-1pp8919fav072uusskv64ed0m833imkf.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "193053979736-1pp8919fav072uusskv64ed0m833imkf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgk6VL9AlNmmdLZ7siXSWG679jY6pTfvc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

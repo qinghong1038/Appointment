@@ -1,0 +1,11 @@
+Requirements that were specified on call:
+
+1) Home page: Doctor's name, photograph
+2) Book: Patient name, mobile number, email, date (Calendar). Amount has to be displayed.
+3) Have a way to display past appointments
+4) Two types for appointments: New, Follow-up. Follow-up within 30 days of new appointment. 
+5) Pay: Payment mode to be decided, Options: PhonePe, Paytm, Tez, instamojo.
+6) Follow up costs lesser than new.
+7) On successful payment, go back to home page, generate a confirmation message and email to patient.
+8) Reminder to the patient after 15 days for a follow up check.
+

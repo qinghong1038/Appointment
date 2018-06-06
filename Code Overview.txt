@@ -1,0 +1,35 @@
+MainActivity:
+--
+  Primary idea:
+  Take in Username, Password and handle user aunthentication.
+  Once a user has been verified, pre-load the particular user's autocomplete data, appointment history.
+  Handle a "Forgot Password?" option provided to the users.
+  
+  Alternative idea:
+  Have an option to choose between "New" and "Existing" users.
+  Use phone numbers and OTPs to authenticate users rather than username and passwords.
+  
+  Login button:
+  Currently takes you to the DoctorsActivity
+
+DoctorsActivity:
+--
+  Currently displays a page for a single doctor, will later display a list for choosing a doctor.
+  Page contains Doctor's photo, his name and qualifications.
+  
+  "Appointment" button takes you to AppointmentActivity 
+  
+  Idea: have a button to view doctor's contact information, his clinic address, his phone number etc
+        Also have a button that loads the address onto google maps.
+  
+AppointmentActivity: 
+--
+  Enter the name, phone number, email and date of prefernce.
+  Fields are potentially autofilled using login data, if user data exists.
+  Date field loads a calendar widget to choose a date.
+  Book and Pay - Checks for availability, notifies if not available, leads you to the Payment Page.
+  
+  
+PaymentsActivity: 
+--
+  No code yet.
