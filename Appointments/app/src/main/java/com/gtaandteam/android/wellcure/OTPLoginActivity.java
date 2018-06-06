@@ -18,6 +18,7 @@ public class OTPLoginActivity extends AppCompatActivity {
     EditText PhoneOTP;
     Boolean OTP = false;//This variable will be used to check if the activity is currently in OTP mode or Phone number mode
     String EnteredValue; //Stores the user input as a String.
+    String PhoneNumber;
     final String LOG_TAG = this.getClass().getSimpleName();
 
     @Override
@@ -44,7 +45,7 @@ public class OTPLoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                EnteredValue = PhoneOTP.getText().toString().trim();
+                PhoneNumber = PhoneOTP.getText().toString().trim();
                 PhoneOTP.setText("");
 
                 if(!OTP)
