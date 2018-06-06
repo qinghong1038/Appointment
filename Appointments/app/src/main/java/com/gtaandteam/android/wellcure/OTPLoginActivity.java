@@ -59,6 +59,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                     SendOTPButton.setText("Verify OTP");
                     PhoneOTPLayout.setHint("Enter OTP:");
                     Log.v(LOG_TAG, "Phone number accepted");
+                    ResendOTP.setVisibility(View.VISIBLE);
                     OTP = true;
 
                 }
@@ -67,7 +68,6 @@ public class OTPLoginActivity extends AppCompatActivity {
                     Currently in OTP Mode.
                     TODO: Handle invalid OTPs
                     */
-                    ResendOTP.setVisibility(View.VISIBLE);
                     Log.v(LOG_TAG, "OTP Sent");
 
                 }
