@@ -167,7 +167,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                             // Invalid request
                             Log.d(LOG_TAG, "Invalid credential: "
                                     + e.getLocalizedMessage());
-                            Toast.makeText(OTPLoginActivity.this, "Invalid OTP", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OTPLoginActivity.this, "Invalid Request", Toast.LENGTH_SHORT).show();
                         } else if (e instanceof FirebaseTooManyRequestsException) {
                             // SMS quota exceeded
                             Log.d(LOG_TAG, "SMS Quota exceeded.");
