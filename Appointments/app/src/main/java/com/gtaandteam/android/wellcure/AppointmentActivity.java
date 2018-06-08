@@ -5,10 +5,15 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -17,6 +22,9 @@ public class AppointmentActivity extends AppCompatActivity {
     EditText dateText;
     Button BookAndPayButton;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
+
+    Toolbar toolbar;
+
 
 
     @Override
@@ -52,6 +60,35 @@ public class AppointmentActivity extends AppCompatActivity {
 
         BookAndPayButton = findViewById(R.id.bookAndPay_Button);
 
+
+        toolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_SignOut:
+                // TODO: Handle user sign out.
+                Toast.makeText(getApplicationContext(), "Signing out...", Toast.LENGTH_SHORT).show();
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                Toast.makeText(getApplicationContext(), "Error!", Toast.LENGTH_SHORT).show();
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
 }
