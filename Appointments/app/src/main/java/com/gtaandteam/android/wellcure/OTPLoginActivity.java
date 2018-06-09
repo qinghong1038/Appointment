@@ -213,7 +213,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                             resendButton.setEnabled(true);
                             verifyButton.setEnabled(false);*/
                             /*
-                            TODO: Need to check if the registered number is displayed again in TOAST.
+                            TODO: Need to check if the registered number is displayed again in TOAST while testing.
                              */
                             FirebaseUser user = task.getResult().getUser();
                             String phone = user.getPhoneNumber();
@@ -248,10 +248,10 @@ public class OTPLoginActivity extends AppCompatActivity {
                 resendToken);
     }
 
-    public void signOut(View view) {
+    public void signOut() {
         fbAuth.signOut();
         /*
-        TODO: Call this function when signOut is clicked
+        TODO: Call this function when signOut is clicked. I dont think we need this function here. What say?
          */
         /*statusText.setText("Signed Out");
         signoutButton.setEnabled(false);

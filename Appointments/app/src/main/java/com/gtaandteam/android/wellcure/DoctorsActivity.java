@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class DoctorsActivity extends AppCompatActivity {
 
     /*
@@ -20,11 +22,13 @@ public class DoctorsActivity extends AppCompatActivity {
 
     Button AppointmentButton;
     Toolbar toolbar;
+    private FirebaseAuth fbAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctors);
+        fbAuth = FirebaseAuth.getInstance();
         AppointmentButton = findViewById(R.id.get_appointment);
         AppointmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +60,9 @@ public class DoctorsActivity extends AppCompatActivity {
             case R.id.action_SignOut:
                 // TODO: Handle user sign out.
                 Toast.makeText(getApplicationContext(), "Signing out...", Toast.LENGTH_SHORT).show();
+                signOut();
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
                 return true;
 
             default:
@@ -65,5 +72,8 @@ public class DoctorsActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+    public void signOut() {
+        fbAuth.signOut();
     }
 }

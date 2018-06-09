@@ -1,6 +1,7 @@
 package com.gtaandteam.android.wellcure;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.Calendar;
 
 public class AppointmentActivity extends AppCompatActivity {
@@ -22,7 +25,7 @@ public class AppointmentActivity extends AppCompatActivity {
     EditText dateText;
     Button BookAndPayButton;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
-
+    private FirebaseAuth fbAuth;
     Toolbar toolbar;
 
 
@@ -31,7 +34,7 @@ public class AppointmentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appointment);
-
+        fbAuth = FirebaseAuth.getInstance();
         dateText = findViewById(R.id.date_editText);
         dateText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +83,9 @@ public class AppointmentActivity extends AppCompatActivity {
             case R.id.action_SignOut:
                 // TODO: Handle user sign out.
                 Toast.makeText(getApplicationContext(), "Signing out...", Toast.LENGTH_SHORT).show();
+                signOut();
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
                 return true;
 
             default:
@@ -89,6 +95,9 @@ public class AppointmentActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+    public void signOut() {
+        fbAuth.signOut();
     }
 
 }
