@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
 import android.text.Selection;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -61,36 +59,6 @@ public class OTPLoginActivity extends AppCompatActivity {
         PhoneOTP.setText("+91 ");
         Selection.setSelection(PhoneOTP.getText(), PhoneOTP.getText().length());
 
-        PhoneOTP.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(!OTP) {
-                    if (!s.toString().startsWith("+91 ")) {
-                        PhoneOTP.setText("+91 ");
-                        Selection.setSelection(PhoneOTP.getText(), PhoneOTP.getText().length());
-
-                    }
-                }
-
-
-
-            }
-        });
-
         SwitchToEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,12 +95,19 @@ public class OTPLoginActivity extends AppCompatActivity {
                         }
                         else
                         {
-                            Toast.makeText(OTPLoginActivity.this, "Please Enter A Valid Phone Number", Toast.LENGTH_LONG).show();
+                            Toast.makeText(OTPLoginActivity.this, "Please Enter A Valid Phone Number after the +91", Toast.LENGTH_LONG).show();
+                            PhoneOTP.setText("+91 ");
+                            Selection.setSelection(PhoneOTP.getText(), PhoneOTP.getText().length());
+
                         }
                     }
                     else
                     {
-                        Toast.makeText(OTPLoginActivity.this, "Please Enter A Valid Phone Number", Toast.LENGTH_LONG).show();
+                        Toast.makeText(OTPLoginActivity.this, "Please Enter A Valid Phone Number after the +91", Toast.LENGTH_LONG).show();
+                        PhoneOTP.setText("+91 ");
+                        Selection.setSelection(PhoneOTP.getText(), PhoneOTP.getText().length());
+
+
                     }
 
 
@@ -180,7 +155,6 @@ public class OTPLoginActivity extends AppCompatActivity {
                 TimeUnit.SECONDS,   // Unit of timeout
                 this,               // Activity (for callback binding)
                 verificationCallbacks);
-        PhoneOTP.setText("");
     }
     private void setUpVerificationCallbacks() {
 
