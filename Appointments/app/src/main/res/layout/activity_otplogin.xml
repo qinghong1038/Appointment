@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:hint="Enter Phone Number: "
             android:inputType="number"
+            android:maxLength="14"
             android:singleLine="true" />
 
 

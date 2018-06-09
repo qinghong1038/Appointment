@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.Selection;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -32,11 +33,11 @@ public class OTPLoginActivity extends AppCompatActivity {
     TextInputLayout PhoneOTPLayout;
     Button SendOTPButton;
     TextView SwitchToEmail, ResendOTP;
-    EditText PhoneOTP;
     Boolean OTP = false;//This variable will be used to check if the activity is currently in OTP mode or Phone number mode
     String EnteredValue; //Stores the user input as a String.
     String PhoneNumber;
     private FirebaseAuth fbAuth;
+    EditText PhoneOTP;
     private String phoneVerificationId;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
             verificationCallbacks;
@@ -52,10 +53,39 @@ public class OTPLoginActivity extends AppCompatActivity {
 
         SwitchToEmail = findViewById(R.id.SwitchToEmail);
         PhoneOTPLayout = findViewById(R.id.PhoneOTPLayout);
-        PhoneOTP = findViewById(R.id.PhoneOTP_editText);
         SendOTPButton = findViewById(R.id.SendOTP_button);
         ResendOTP = findViewById(R.id.ResendOTP_textView);
         fbAuth = FirebaseAuth.getInstance();
+
+        PhoneOTP = findViewById(R.id.PhoneOTP_editText);
+        PhoneOTP.setText("+91 ");
+        Selection.setSelection(PhoneOTP.getText(), PhoneOTP.getText().length());
+
+        PhoneOTP.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!s.toString().startsWith("+91 ")){
+                    PhoneOTP.setText("+91 ");
+                    Selection.setSelection(PhoneOTP.getText(), PhoneOTP.getText().length());
+
+                }
+
+            }
+        });
 
         SwitchToEmail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,37 +94,13 @@ public class OTPLoginActivity extends AppCompatActivity {
                 finish();
             }
         });
-        /*TODO: Checkout this commented code of appending +91. I will also try. */
-        /*PhoneOTP.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            }
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(!OTP)
-                {
-                    if(!PhoneOTP.toString().startsWith("+91")){
-                        editable.insert(0, "+91");
-                    }
-                }
-
-            }
-        });
-        */
         SendOTPButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 PhoneNumber = PhoneOTP.getText().toString().trim();
-                char PhoneArray[] = PhoneNumber.toCharArray();
-
 
                 if(!OTP)
                 {
@@ -104,26 +110,24 @@ public class OTPLoginActivity extends AppCompatActivity {
                     If input is valid, set OTP to True
 
                     */
-                    if(PhoneNumber.length()==13)
+                    if(PhoneNumber.length()==14)
                     {
-                        if((PhoneArray[0] == '+') && (PhoneArray[1]=='9') && (PhoneArray[2]=='1'))
+                        if(PhoneNumber.startsWith("+91 "))
                         {
                             sendCode();
                             PhoneOTP.setText("");
-
                             Log.v(LOG_TAG, "Phone Number Accepted");
                             Toast.makeText(OTPLoginActivity.this, "Function to Send OTP", Toast.LENGTH_SHORT).show();
-
                             OTP = true;
                         }
                         else
                         {
-                            Toast.makeText(OTPLoginActivity.this, "Please Enter Your Mobile Number as : +91xxxxxxxxxx", Toast.LENGTH_LONG).show();
+                            Toast.makeText(OTPLoginActivity.this, "Please Enter A Valid Phone Number", Toast.LENGTH_LONG).show();
                         }
                     }
                     else
                     {
-                        Toast.makeText(OTPLoginActivity.this, "Please Enter Your Mobile Number as : +91xxxxxxxxxx", Toast.LENGTH_LONG).show();
+                        Toast.makeText(OTPLoginActivity.this, "Please Enter A Valid Phone Number", Toast.LENGTH_LONG).show();
                     }
 
 
