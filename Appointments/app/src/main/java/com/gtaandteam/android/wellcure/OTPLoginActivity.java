@@ -100,7 +100,8 @@ public class OTPLoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                PhoneNumber = PhoneOTP.getText().toString().trim();
+                PhoneNumber = PhoneOTP.getText().toString().trim().replaceAll(" ", "" );
+                Log.v(LOG_TAG, PhoneNumber);
 
                 if(!OTP)
                 {
@@ -110,9 +111,9 @@ public class OTPLoginActivity extends AppCompatActivity {
                     If input is valid, set OTP to True
 
                     */
-                    if(PhoneNumber.length()==14)
+                    if(PhoneNumber.length()==13)
                     {
-                        if(PhoneNumber.startsWith("+91 "))
+                        if(PhoneNumber.startsWith("+91"))
                         {
                             sendCode();
                             PhoneOTP.setText("");
