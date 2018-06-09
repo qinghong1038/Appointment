@@ -1,12 +1,16 @@
 package com.gtaandteam.android.wellcure;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -66,6 +70,12 @@ public class AppointmentActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
+
+        // Get a support ActionBar corresponding to this toolbar
+        ActionBar ab = getSupportActionBar();
+
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
     }
 
 
@@ -81,17 +91,39 @@ public class AppointmentActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_SignOut:
-                // TODO: Handle user sign out.
-                Toast.makeText(getApplicationContext(), "Signing out...", Toast.LENGTH_SHORT).show();
-                signOut();
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
+                // Handle user sign out.
+                AlertDialog.Builder builder = new AlertDialog.Builder(
+                        new ContextThemeWrapper(AppointmentActivity.this, R.style.AlertDialogCustom)
+                );
+                builder.setCancelable(true);
+                builder.setTitle("Sign Out");
+                builder.setMessage("Are you sure you want to sign out?");
+                builder.setPositiveButton("YES",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                signOut();
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                finish();
+                                Toast.makeText(getApplicationContext(), "Signing Out", Toast.LENGTH_LONG).show();
+
+                            }
+                        });
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
                 return true;
 
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
-                Toast.makeText(getApplicationContext(), "Error!", Toast.LENGTH_SHORT).show();
                 return super.onOptionsItemSelected(item);
 
         }
