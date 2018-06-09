@@ -34,7 +34,6 @@
     <style name="AlertDialogCustom" parent="@android:style/Theme.Holo.Light.Dialog.NoActionBar">
         <item name="android:textColor">@color/blue</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:typeface">sans</item>
         <item name="android:textSize">22sp</item>
     </style>
