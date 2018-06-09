@@ -78,11 +78,15 @@ public class OTPLoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!s.toString().startsWith("+91 ")){
-                    PhoneOTP.setText("+91 ");
-                    Selection.setSelection(PhoneOTP.getText(), PhoneOTP.getText().length());
+                if(!OTP) {
+                    if (!s.toString().startsWith("+91 ")) {
+                        PhoneOTP.setText("+91 ");
+                        Selection.setSelection(PhoneOTP.getText(), PhoneOTP.getText().length());
 
+                    }
                 }
+
+
 
             }
         });
@@ -176,6 +180,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                 TimeUnit.SECONDS,   // Unit of timeout
                 this,               // Activity (for callback binding)
                 verificationCallbacks);
+        PhoneOTP.setText("");
     }
     private void setUpVerificationCallbacks() {
 
