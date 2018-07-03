@@ -183,6 +183,7 @@ public class AppointmentActivity extends AppCompatActivity {
                 //go to page which shows users details
                 Log.v("App","Done Shit");
                 Toast.makeText(getApplicationContext(),"Stored Data",Toast.LENGTH_SHORT).show();
+                startActivity (new Intent(AppointmentActivity.this, ConfirmActivity.class));
             }
         });
     }
