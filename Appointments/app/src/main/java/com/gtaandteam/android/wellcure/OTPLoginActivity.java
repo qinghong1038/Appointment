@@ -32,7 +32,7 @@ public class OTPLoginActivity extends AppCompatActivity {
     Button SendOTPButton;
     TextView SwitchToEmail, ResendOTP;
     Boolean OTP = false;//This variable will be used to check if the activity is currently in OTP mode or Phone number mode
-    String EnteredValue; //Stores the user input as a String.
+    String UserId; //Stores the user input as a String.
     String PhoneNumber;
     private FirebaseAuth fbAuth;
     EditText PhoneOTP;
@@ -40,6 +40,7 @@ public class OTPLoginActivity extends AppCompatActivity {
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
             verificationCallbacks;
     private PhoneAuthProvider.ForceResendingToken resendToken;
+    Boolean loginMode;
 
     final String LOG_TAG = this.getClass().getSimpleName();
     
@@ -62,6 +63,7 @@ public class OTPLoginActivity extends AppCompatActivity {
         SwitchToEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 finish();
             }
@@ -225,9 +227,12 @@ public class OTPLoginActivity extends AppCompatActivity {
                              */
                             FirebaseUser user = task.getResult().getUser();
                             String phone = user.getPhoneNumber();
+                            UserId = user.getUid();
                             Toast.makeText(OTPLoginActivity.this,"Login Successful by : "+phone,Toast.LENGTH_SHORT).show();
                             finish();
-                            startActivity(new Intent(getApplicationContext(),DoctorsActivity.class));
+                            Intent i=new Intent(getApplicationContext(),DoctorsActivity.class);
+                            i.putExtra("loginMode",2);
+                            startActivity(i);
 
                         } else {
                             if (task.getException() instanceof

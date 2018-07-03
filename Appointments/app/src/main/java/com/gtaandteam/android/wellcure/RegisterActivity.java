@@ -34,7 +34,9 @@ public class RegisterActivity extends AppCompatActivity {
         {
             //user already logged in. go directly to doctor activity
             finish();
-            startActivity(new Intent(getApplicationContext(),DoctorsActivity.class));
+            Intent i =new Intent(getApplicationContext(),DoctorsActivity.class);
+            i.putExtra("loginMode",0);
+            startActivity(i);
         }
         LoginButton = findViewById(R.id.login_button2);
         LoginButton.setOnClickListener(new View.OnClickListener() {

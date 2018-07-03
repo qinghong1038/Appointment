@@ -31,12 +31,16 @@ public class DoctorsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctors);
+        Intent n3=getIntent();	//gives the ref to the destn intent
+        final int i = n3.getIntExtra("loginMode",0);	//loginMode is given in MainActivity and OTPLoginAcitivty
+
         fbAuth = FirebaseAuth.getInstance();
         AppointmentButton = findViewById(R.id.get_appointment);
         AppointmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(DoctorsActivity.this, AppointmentActivity.class);
+                intent.putExtra("loginMode",i);
                 startActivity(intent);
 
 

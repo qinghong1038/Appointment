@@ -61,7 +61,9 @@ public class MainActivity extends AppCompatActivity {
             //user already logged in .. previous login credentials stored in phone
             //then skip login and directly go to choosing doctor page
             finish();
-            startActivity(new Intent(MainActivity.this, DoctorsActivity.class));
+            Intent i =new Intent(MainActivity.this, DoctorsActivity.class);
+            i.putExtra("loginMode",1);
+            startActivity(i);
         }
         LoginButton = findViewById(R.id.login_button);
         LoginButton.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +123,9 @@ public class MainActivity extends AppCompatActivity {
                             //we start doctor activity here
                             Toast.makeText(MainActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
                             finish();
-                            startActivity(new Intent(getApplicationContext(),DoctorsActivity.class));
+                            Intent i =new Intent(MainActivity.this, DoctorsActivity.class);
+                            i.putExtra("loginMode",1);
+                            startActivity(i);
                         }
                         else
                         {

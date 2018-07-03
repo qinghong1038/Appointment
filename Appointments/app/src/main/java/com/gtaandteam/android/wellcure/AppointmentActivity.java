@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,9 +22,18 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 
 import java.util.Calendar;
+import java.util.HashMap;
+
+/*TODO: Lots of Bugs in this code as of 3rd July at 11:18 AM. Fixing of them needed*/
 
 public class AppointmentActivity extends AppCompatActivity {
 
@@ -31,7 +42,14 @@ public class AppointmentActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private FirebaseAuth fbAuth;
     Toolbar toolbar;
-
+    EditText Name,Phone,Email;
+    //FirebaseUser user;
+    String user, password, first_name, second_name, email, phone,date1;
+    FirebaseAuth mauth;
+    HashMap<String, String> data;
+    //FirebaseDatabase database= FirebaseDatabase.getInstance();
+    DatabaseReference databaseObject;
+    int year,month,day;
 
 
     @Override
@@ -39,14 +57,17 @@ public class AppointmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appointment);
         fbAuth = FirebaseAuth.getInstance();
+        Name = findViewById(R.id.name_editText);
+        Phone = findViewById(R.id.phone_editText);
+        Email = findViewById(R.id.email_editText);
         dateText = findViewById(R.id.date_editText);
         dateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
-                int day= cal.get(Calendar.DAY_OF_MONTH);
+                year = cal.get(Calendar.YEAR);
+                month = cal.get(Calendar.MONTH);
+                day= cal.get(Calendar.DAY_OF_MONTH);
 
                 DatePickerDialog dialog = new DatePickerDialog(
                         AppointmentActivity.this, android.R.style.Theme_Holo_Dialog,mDateSetListener,year,month,day);
@@ -66,12 +87,11 @@ public class AppointmentActivity extends AppCompatActivity {
 
 
         BookAndPayButton = findViewById(R.id.bookAndPay_Button);
-        //TODO: IMPORTANT! Change the action of the BookAndPayButton to lead to the PAYTM page and NOT the confirmation page
-        //The following code is only for checking out the confirm page.
         BookAndPayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity (new Intent(AppointmentActivity.this, ConfirmActivity.class));
+                Log.v("App","Clicked Submit");
+                storeData();
             }
         });
 
@@ -138,6 +158,79 @@ public class AppointmentActivity extends AppCompatActivity {
     }
     public void signOut() {
         fbAuth.signOut();
+    }
+
+    public void createAcc(View view){
+        //user= etUser.getText().toString();
+        //password= etPassword.getText().toString();
+
+        //if (isDataFine())
+          //  createAccount();
+    }
+    // checks if data is fine
+    private boolean isDataFine() {
+
+        if (user.trim().length()<0 || !(user.contains("@")))
+        {
+            Toast.makeText(this, "nter proper user name, Like an email",Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (password.trim().length()<8 )
+        {
+            Toast.makeText(this, "Please enter atleast 8 char password",Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (first_name.trim().length()<0 )
+        {
+            Toast.makeText(this, "Name cannot be empty",Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (second_name.trim().length()<0)
+        {
+            Toast.makeText(this, "Second name cannot be empty",Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if (phone.trim().length()<10)
+        {
+            Toast.makeText(this, "Enter valid phone number",Toast.LENGTH_LONG).show();
+            return false;
+        }if (email.trim().length()<0 || !email.contains("@"))
+        {
+            Toast.makeText(this, "Enter proper emailid ",Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+
+    //STORE USER DATA IN DATABASE//
+    public void storeData(){
+        Log.v("App","Entered FUnction");
+        first_name=Name.getText().toString();
+        //second_name=etSecondName.getText().toString();
+        email=Email.getText().toString();
+        phone= Phone.getText().toString();
+        date1=day+" "+month+" "+year;
+        data= new HashMap<>();
+        data.put("Name", first_name);
+        //data.put("Second Name", second_name);
+        data.put("Email", email);
+        data.put("Phone", phone);
+        data.put("Date",date1);
+        Log.v("App","Hashmap Done");
+        databaseObject = FirebaseDatabase.getInstance().getReference().child("users");
+        databaseObject.child(mauth.getCurrentUser().getUid()).setValue(data).addOnCompleteListener(this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                //finish();
+                //go to page which shows users details
+                Log.v("App","Done Shit");
+                Toast.makeText(getApplicationContext(),"Stored Data",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

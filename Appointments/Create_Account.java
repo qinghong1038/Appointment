@@ -137,7 +137,7 @@ public class Create_Account extends AppCompatActivity {
         databaseObject.child(mauth.getCurrentUser().getUid()).setValue(data).addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                finish();
+                //finish();
                 //go to page which shows users details
             }
         });
