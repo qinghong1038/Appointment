@@ -45,7 +45,7 @@ public class AppointmentActivity extends AppCompatActivity {
     EditText Name,Phone,Email;
     //FirebaseUser user;
     String user, password, first_name, second_name, email, phone,date1;
-    FirebaseAuth mauth;
+    //FirebaseAuth mauth;
     HashMap<String, String> data;
     //FirebaseDatabase database= FirebaseDatabase.getInstance();
     DatabaseReference databaseObject;
@@ -176,7 +176,7 @@ public class AppointmentActivity extends AppCompatActivity {
         data.put("Date",date1);
         Log.v("App","Hashmap Done");
         databaseObject = FirebaseDatabase.getInstance().getReference().child("users");
-        databaseObject.child(mauth.getCurrentUser().getUid()).setValue(data).addOnCompleteListener(this, new OnCompleteListener<Void>() {
+        databaseObject.child(fbAuth.getCurrentUser().getUid()).setValue(data).addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 //finish();
