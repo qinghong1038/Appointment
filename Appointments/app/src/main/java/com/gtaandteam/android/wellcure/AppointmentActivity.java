@@ -160,53 +160,7 @@ public class AppointmentActivity extends AppCompatActivity {
         fbAuth.signOut();
     }
 
-    public void createAcc(View view){
-        //user= etUser.getText().toString();
-        //password= etPassword.getText().toString();
-
-        //if (isDataFine())
-          //  createAccount();
-    }
-    // checks if data is fine
-    private boolean isDataFine() {
-
-        if (user.trim().length()<0 || !(user.contains("@")))
-        {
-            Toast.makeText(this, "nter proper user name, Like an email",Toast.LENGTH_LONG).show();
-            return false;
-        }
-        if (password.trim().length()<8 )
-        {
-            Toast.makeText(this, "Please enter atleast 8 char password",Toast.LENGTH_LONG).show();
-            return false;
-        }
-        if (first_name.trim().length()<0 )
-        {
-            Toast.makeText(this, "Name cannot be empty",Toast.LENGTH_LONG).show();
-            return false;
-        }
-        if (second_name.trim().length()<0)
-        {
-            Toast.makeText(this, "Second name cannot be empty",Toast.LENGTH_LONG).show();
-            return false;
-        }
-        if (phone.trim().length()<10)
-        {
-            Toast.makeText(this, "Enter valid phone number",Toast.LENGTH_LONG).show();
-            return false;
-        }if (email.trim().length()<0 || !email.contains("@"))
-        {
-            Toast.makeText(this, "Enter proper emailid ",Toast.LENGTH_LONG).show();
-            return false;
-        }
-
-        return true;
-    }
-
-
-
-
-    //STORE USER DATA IN DATABASE//
+ //STORE USER DATA IN DATABASE//
     public void storeData(){
         Log.v("App","Entered FUnction");
         first_name=Name.getText().toString();
