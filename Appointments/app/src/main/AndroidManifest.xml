@@ -9,7 +9,8 @@
         android:roundIcon="@drawable/app_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:label="Wellcure Clinic">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,17 +18,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AppointmentActivity"
+        <activity
+            android:name=".AppointmentActivity"
             android:label="Appointments"
-            android:parentActivityName=".DoctorsActivity"/>
-        <activity android:name=".DoctorsActivity"
-            android:label="Doctors"/>
-        <activity android:name=".RegisterActivity"
-            android:label="Register"/>
-        <activity android:name=".OTPLoginActivity"
-            android:label="Login using OTP">
-
-        </activity>
+            android:parentActivityName=".DoctorsActivity" />
+        <activity
+            android:name=".DoctorsActivity"
+            android:label="Doctors" />
+        <activity
+            android:name=".RegisterActivity"
+            android:label="Register" />
+        <activity
+            android:name=".OTPLoginActivity"
+            android:label="Login using OTP"></activity>
+        <activity android:name=".ConfirmActivity"></activity>
     </application>
 
 </manifest>

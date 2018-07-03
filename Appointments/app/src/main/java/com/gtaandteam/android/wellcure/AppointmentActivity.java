@@ -66,6 +66,14 @@ public class AppointmentActivity extends AppCompatActivity {
 
 
         BookAndPayButton = findViewById(R.id.bookAndPay_Button);
+        //TODO: IMPORTANT! Change the action of the BookAndPayButton to lead to the PAYTM page and NOT the confirmation page
+        //The following code is only for checking out the confirm page.
+        BookAndPayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity (new Intent(AppointmentActivity.this, ConfirmActivity.class));
+            }
+        });
 
 
         toolbar = findViewById(R.id.my_toolbar);
