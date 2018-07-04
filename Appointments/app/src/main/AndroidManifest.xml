@@ -30,7 +30,8 @@
             android:label="Register" />
         <activity
             android:name=".OTPLoginActivity"
-            android:label="Login using OTP"></activity>
+            android:label="Login using OTP" />
+        <activity android:name=".StatusActivity" />
         <activity android:name=".ConfirmActivity"></activity>
     </application>
 
