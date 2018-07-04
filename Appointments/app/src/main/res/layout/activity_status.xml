@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StatusActivity">
+
+    <ImageView
+        android:id="@+id/payment_status"
+        android:layout_width="144dp"
+        android:layout_height="144dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/success"
+        app:layout_constraintBottom_toTopOf="@+id/status_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/status_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="Your booking was made successfully! "
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/GoBackButton"
+        style="@style/ButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:fontFamily="sans-serif-condensed"
+        android:layout_marginTop="8dp"
+        android:text="Back to home"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ID_label" />
+
+    <TextView
+        android:id="@+id/ID_label"
+        android:layout_width="0dp"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="18sp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Booking ID:"
+        app:layout_constraintStart_toStartOf="@+id/status_message"
+        app:layout_constraintTop_toBottomOf="@+id/status_message" />
+
+    <TextView
+        android:id="@+id/status_header"
+        android:fontFamily="sans-serif-condensed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="SUCCESS!"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        app:layout_constraintBottom_toTopOf="@+id/status_message"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/ID_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="18sp"
+        android:layout_marginStart="8dp"
+        android:text="---"
+        app:layout_constraintBaseline_toBaselineOf="@+id/ID_label"
+        app:layout_constraintEnd_toEndOf="@+id/status_message"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/ID_label" />
+
+    <TextView
+        android:id="@+id/time_label"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="8dp"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        android:text="Booked at: "
+        app:layout_constraintEnd_toEndOf="@+id/ID_label"
+        app:layout_constraintStart_toStartOf="@+id/status_message"
+        app:layout_constraintTop_toBottomOf="@+id/ID_label" />
+
+    <TextView
+        android:id="@+id/time_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textSize="18sp"
+        android:layout_marginStart="8dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="---"
+        app:layout_constraintBaseline_toBaselineOf="@+id/time_label"
+        app:layout_constraintEnd_toEndOf="@+id/status_message"
+        app:layout_constraintStart_toEndOf="@+id/time_label" />
+
+
+</android.support.constraint.ConstraintLayout>

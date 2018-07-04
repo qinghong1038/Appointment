@@ -10,48 +10,37 @@ import android.widget.TextView;
 
 public class ConfirmActivity extends AppCompatActivity {
 
-    Button GoBackbutton;
-    TextView StatusHeader, StatusMessage, BookingID, TimeOfBooking;
-    ImageView StatusView;
+
+    Button ConfirmButton;
+    TextView DoctorName, Date, PatientName, Email, Amount;
+    ImageView DoctorPhoto;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm);
 
+        ConfirmButton = findViewById(R.id.PayButton);
+        DoctorName = findViewById(R.id.DoctorName);
+        Date = findViewById(R.id.DateValue); //Date of appointment
+        PatientName = findViewById(R.id.NameValue);
+        Email = findViewById(R.id.EmailValue);
+        Amount = findViewById(R.id.Amount); //Amount to be paid
+        DoctorPhoto = findViewById(R.id.profile_photo);
 
-            /*
-    There are three PNG files in the drawables folder: one each for success, error and pending.
-    TODO: Depending on what the status returned by payTM is, set the appropriate image and display status message
-
-    TODO : ALSO read the TODO message in Appointment Activity
-     */
-
-
-        GoBackbutton = findViewById(R.id.GoBackButton);
-
-        //TODO : Manipulate the following views in accordance with the status returned by PayTM.
-        //Side note : prefer to use "hh:mm,  dd-mm-yyyy" for displaying time of completion.
-
-        StatusHeader = findViewById(R.id.status_header);
-        StatusMessage = findViewById(R.id.status_message);
-        BookingID = findViewById(R.id.ID_value);
-        StatusView = findViewById(R.id.payment_status);
-        TimeOfBooking = findViewById(R.id.time_value);
-
-
-        GoBackbutton.setOnClickListener(new View.OnClickListener() {
+        ConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ConfirmActivity.this, DoctorsActivity.class));
+                //TODO: Change this to redirect to Paytm
+                startActivity(new Intent(ConfirmActivity.this, StatusActivity.class));
                 finish();
+
             }
         });
 
+
     }
-
-
-
-
-
-
 }
