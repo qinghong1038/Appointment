@@ -44,7 +44,7 @@ public class AppointmentActivity extends AppCompatActivity {
     Toolbar toolbar;
     EditText Name,Phone,Email;
     //FirebaseUser user;
-    String user, password, first_name, second_name, email, phone,date1;
+    String user, password, first_name, email, phone,date1;
     //FirebaseAuth mauth;
     HashMap<String, String> data;
     //FirebaseDatabase database= FirebaseDatabase.getInstance();
@@ -170,7 +170,6 @@ public class AppointmentActivity extends AppCompatActivity {
         date1=day+" "+month+" "+year;
         data= new HashMap<>();
         data.put("Name", first_name);
-        //data.put("Second Name", second_name);
         data.put("Email", email);
         data.put("Phone", phone);
         data.put("Date",date1);
