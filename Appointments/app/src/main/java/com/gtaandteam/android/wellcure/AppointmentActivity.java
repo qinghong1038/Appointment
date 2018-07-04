@@ -219,7 +219,7 @@ public class AppointmentActivity extends AppCompatActivity {
                 Email.setText(rEmail);
                 Phone.setText(rPhone);
                 progress.dismiss();
-
+                //ok
 
             }
 
