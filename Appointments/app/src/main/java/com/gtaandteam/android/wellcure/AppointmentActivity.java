@@ -1,6 +1,7 @@
 package com.gtaandteam.android.wellcure;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -52,10 +53,11 @@ public class AppointmentActivity extends AppCompatActivity {
     String user, password, first_name, email, phone,date1,name;
     String rName,rEmail,rPhone,rDate; //retrieved files from database
     //FirebaseAuth mauth;
-    HashMap<String, String> data,data2;
+    HashMap<String, String> data;
     //FirebaseDatabase database= FirebaseDatabase.getInstance();
-    DatabaseReference databaseObject,mdb;
+    DatabaseReference userDb1,userDb2,appointmentDb;
     int year,month,day;
+    private ProgressDialog progress;
 
 
 
@@ -68,6 +70,7 @@ public class AppointmentActivity extends AppCompatActivity {
         Phone = findViewById(R.id.phone_editText);
         Email = findViewById(R.id.email_editText);
         dateText = findViewById(R.id.date_editText);
+        progress=new ProgressDialog(this);
         dateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -183,8 +186,8 @@ public class AppointmentActivity extends AppCompatActivity {
         data.put("Phone", phone);
         data.put("Date",date1);
         Log.v("App","Hashmap Done");
-        databaseObject = FirebaseDatabase.getInstance().getReference().child("users");
-        databaseObject.child(fbAuth.getCurrentUser().getUid()).setValue(data).addOnCompleteListener(this, new OnCompleteListener<Void>() {
+        userDb1 = FirebaseDatabase.getInstance().getReference().child("users");
+        userDb1.child(fbAuth.getCurrentUser().getUid()).setValue(data).addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 //finish();
@@ -196,12 +199,15 @@ public class AppointmentActivity extends AppCompatActivity {
         });
     }
     public void retrieve() {
-        mdb = FirebaseDatabase.getInstance().getReference("users").child(fbAuth.getCurrentUser().getUid());
-        mdb.addChildEventListener(new ChildEventListener() {
+
+        userDb2 = FirebaseDatabase.getInstance().getReference("users").child(fbAuth.getCurrentUser().getUid());
+        userDb2.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
 
+                progress.setMessage("Loading Details of User");
+                progress.show();
                 String ss = dataSnapshot.getKey().toString();
                 if (ss.equals("Name")) {
                     rName= dataSnapshot.getValue().toString();
@@ -214,6 +220,7 @@ public class AppointmentActivity extends AppCompatActivity {
                 Name.setText(rName);
                 Email.setText(rEmail);
                 Phone.setText(rPhone);
+                progress.dismiss();
 
 
             }
