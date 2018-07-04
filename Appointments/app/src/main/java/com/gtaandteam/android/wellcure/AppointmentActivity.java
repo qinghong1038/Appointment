@@ -38,7 +38,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Calendar;
 import java.util.HashMap;
 
-/*TODO: Lots of Bugs in this code as of 3rd July at 11:18 AM. Fixing of them needed*/
+/*TODO: Autoenter Details Added. Should add getting details from Main Screen*/
 
 public class AppointmentActivity extends AppCompatActivity {
 
