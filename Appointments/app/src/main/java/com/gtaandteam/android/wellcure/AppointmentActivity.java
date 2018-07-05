@@ -102,7 +102,9 @@ public class AppointmentActivity extends AppCompatActivity {
                 long diffday=duration/(24 * 60 * 60 * 1000) +1;
                 int days=(int)diffday-1;
                 if(days<0)
-                Toast.makeText(getBaseContext(),"Days Gap "+ days,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(),"Appointment Date Has Already Passed",Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(getBaseContext(),"Days Gap "+ days,Toast.LENGTH_SHORT).show();
 
             }
         };
