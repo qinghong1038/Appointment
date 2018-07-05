@@ -2,11 +2,18 @@ package com.gtaandteam.android.wellcure;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class ConfirmActivity extends AppCompatActivity {
 
@@ -43,4 +50,56 @@ public class ConfirmActivity extends AppCompatActivity {
 
 
     }
+    /*public void retrieve() {
+
+        userDb2 = FirebaseDatabase.getInstance().getReference("users").child(fbAuth.getCurrentUser().getUid());
+        userDb2.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+
+                progress.setMessage("Loading Details of User");
+                progress.show();
+                String ss = dataSnapshot.getKey().toString();
+                if (ss.equals("Name")) {
+                    rName= dataSnapshot.getValue().toString();
+                } else if (ss.equals("Email"))
+                    rEmail= dataSnapshot.getValue().toString();
+                else if (ss.equals("Phone"))
+                    rPhone= dataSnapshot.getValue().toString();
+                else if (ss.equals("Date"))
+                    rDate= dataSnapshot.getValue().toString();
+                Name.setText(rName);
+                Email.setText(rEmail);
+                Phone.setText(rPhone);
+                progress.dismiss();
+                //ok
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+
+        });
+
+
+    }*/
 }

@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
@@ -34,8 +35,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /*TODO: Autoenter Details Added. Should add getting details from Main Screen*/
 
@@ -86,13 +91,21 @@ public class AppointmentActivity extends AppCompatActivity {
             }
         });
 
+
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 dateText.setText(dayOfMonth+"/"+(month+1)+"/"+year);
+                Date endDate = new Date(year+"/"+(month+1)+"/"+dayOfMonth);
+                Date startDate = Calendar.getInstance().getTime();
+                long duration  = endDate.getTime() - startDate.getTime();
+                long diffday=duration/(24 * 60 * 60 * 1000) +1;
+                int days=(int)diffday-1;
+                if(days<0)
+                Toast.makeText(getBaseContext(),"Days Gap "+ days,Toast.LENGTH_SHORT).show();
+
             }
         };
-
 
         BookAndPayButton = findViewById(R.id.bookAndPay_Button);
         BookAndPayButton.setOnClickListener(new View.OnClickListener() {
@@ -177,7 +190,7 @@ public class AppointmentActivity extends AppCompatActivity {
         //second_name=etSecondName.getText().toString();
         email=Email.getText().toString();
         phone= Phone.getText().toString();
-        date1=day+" "+month+" "+year;
+        date1=day+" "+(month+1)+" "+year;
         data= new HashMap<>();
         data.put("Name", first_name);
         data.put("Email", email);

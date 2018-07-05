@@ -23,7 +23,7 @@ public class StatusActivity extends AppCompatActivity {
     There are three PNG files in the drawables folder: one each for success, error and pending.
     TODO: Depending on what the status returned by payTM is, set the appropriate image and display status message
 
-    TODO : ALSO read the TODO message in Appointment Activity
+    TODO : ALSO read the TODO message in Appointment Activity. Glenn here. There is no TODO message there
      */
 
 
