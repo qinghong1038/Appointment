@@ -52,12 +52,10 @@ public class AppointmentActivity extends AppCompatActivity {
     private FirebaseAuth fbAuth;
     Toolbar toolbar;
     EditText Name,Phone,Email;
-    //FirebaseUser user;
-    String user, password, first_name, email, phone,date1,name;
+    String first_name, email, phone,date1;
+    static String selectedDate,todaysDate;
     String rName,rEmail,rPhone,rDate; //retrieved files from database
-    //FirebaseAuth mauth;
     HashMap<String, String> data;
-    //FirebaseDatabase database= FirebaseDatabase.getInstance();
     DatabaseReference userDb1,userDb2,appointmentDb;
     int year,month,day;
     private ProgressDialog progress;
@@ -81,7 +79,7 @@ public class AppointmentActivity extends AppCompatActivity {
                 year = cal.get(Calendar.YEAR);
                 month = cal.get(Calendar.MONTH);
                 day= cal.get(Calendar.DAY_OF_MONTH);
-
+                todaysDate=day+"/"+(month+1)+"/"+year;
                 DatePickerDialog dialog = new DatePickerDialog(
                         AppointmentActivity.this, android.R.style.Theme_Holo_Dialog,mDateSetListener,year,month,day);
 
@@ -96,6 +94,7 @@ public class AppointmentActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 dateText.setText(dayOfMonth+"/"+(month+1)+"/"+year);
+                selectedDate=dayOfMonth+"/"+(month+1)+"/"+year;
                 Date endDate = new Date(year+"/"+(month+1)+"/"+dayOfMonth);
                 Date startDate = Calendar.getInstance().getTime();
                 long duration  = endDate.getTime() - startDate.getTime();
@@ -105,7 +104,13 @@ public class AppointmentActivity extends AppCompatActivity {
                     Toast.makeText(getBaseContext(),"Appointment Date Has Already Passed",Toast.LENGTH_SHORT).show();
                 else
                     Toast.makeText(getBaseContext(),"Days Gap "+ days,Toast.LENGTH_SHORT).show();
-
+                //Toast.makeText(getBaseContext(),"Selected Date "+ selectedDate,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(),"Today's Date "+ todaysDate,Toast.LENGTH_SHORT).show();
+                /*String s1=year+"/"+(month+1)+"/"+dayOfMonth;
+                String currentString = "Fruit: they taste good";
+                String[] separated = currentString.split(":");
+                separated[0];
+                separated[1];*/
             }
         };
 
@@ -197,7 +202,7 @@ public class AppointmentActivity extends AppCompatActivity {
         data.put("Name", first_name);
         data.put("Email", email);
         data.put("Phone", phone);
-        data.put("Date",date1);
+        data.put("LoginDate",date1);
         Log.v("App","Hashmap Done");
         userDb1 = FirebaseDatabase.getInstance().getReference().child("users");
         userDb1.child(fbAuth.getCurrentUser().getUid()).setValue(data).addOnCompleteListener(this, new OnCompleteListener<Void>() {

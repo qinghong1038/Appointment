@@ -97,10 +97,10 @@
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginStart="8dp"
-        android:fontFamily="sans-serif-condensed"
-        android:textSize="18sp"
+        android:text="On"
         android:layout_marginTop="8dp"
-        android:text="Booked at: "
+        android:textSize="18sp"
+        android:fontFamily="sans-serif-con"
         app:layout_constraintEnd_toEndOf="@+id/ID_label"
         app:layout_constraintStart_toStartOf="@+id/status_message"
         app:layout_constraintTop_toBottomOf="@+id/ID_label" />
@@ -117,6 +117,18 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/time_label"
         app:layout_constraintEnd_toEndOf="@+id/status_message"
         app:layout_constraintStart_toEndOf="@+id/time_label" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="@+id/time_label"
+        app:layout_constraintStart_toStartOf="@+id/time_label"
+        app:layout_constraintTop_toBottomOf="@+id/time_label" />
 
 
 </android.support.constraint.ConstraintLayout>

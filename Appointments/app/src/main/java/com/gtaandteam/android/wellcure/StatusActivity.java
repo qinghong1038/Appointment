@@ -13,6 +13,7 @@ public class StatusActivity extends AppCompatActivity {
     Button GoBackbutton;
     TextView StatusHeader, StatusMessage, BookingID, TimeOfBooking;
     ImageView StatusView;
+    String bookedDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +38,7 @@ public class StatusActivity extends AppCompatActivity {
         BookingID = findViewById(R.id.ID_value);
         StatusView = findViewById(R.id.payment_status);
         TimeOfBooking = findViewById(R.id.time_value);
+        bookedDate=AppointmentActivity.selectedDate;
 
 
         GoBackbutton.setOnClickListener(new View.OnClickListener() {
