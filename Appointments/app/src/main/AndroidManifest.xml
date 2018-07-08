@@ -48,6 +48,25 @@
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar.MinWidth">
 
         </activity>
+    <meta-data android:name="instamojo.orderauth.url"
+                   android:value="https://wellcure.000webhostapp.com/access_token.php"
+            />
     </application>
+    <uses-permission-sdk-23 android:name="android.permission.RECEIVE_SMS"/>
+ 
+    <uses-permission-sdk-23 android:name="android.permission.READ_SMS"/>
+ 
+    <uses-permission-sdk-23 android:name="android.permission.READ_PHONE_STATE"/>
+ 
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+ 
+    <uses-permission android:name="android.permission.READ_SMS"/>
+ 
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+ 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+ 
+    <uses-permission android:name="android.permission.INTERNET"/>
+ 
 
 </manifest>

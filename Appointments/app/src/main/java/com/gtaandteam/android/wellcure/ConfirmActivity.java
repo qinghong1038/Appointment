@@ -1,6 +1,14 @@
 package com.gtaandteam.android.wellcure;
 
 import android.content.Intent;
+import android.app.Activity;
+import instamojo.library.InstapayListener;
+import instamojo.library.InstamojoPay;
+import instamojo.library.Config;
+import org.json.JSONObject;
+import org.json.JSONException;
+import android.content.IntentFilter;
+import android.widget.Toast;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,13 +30,60 @@ public class ConfirmActivity extends AppCompatActivity {
     TextView DoctorName, Date, PatientName, Email, Amount;
     ImageView DoctorPhoto;
 
+    //TODO: GET PAYMENT VALUES FROM PREVIOUS ACTIVITY : EMAIL, PHONE, AMOUNT, PURPOSE AND CUSTOMER NAME
 
 
+    
+    private void callInstamojoPay(String email, String phone, String amount, String purpose, String buyername) {
+        final Activity activity = this;
+        InstamojoPay instamojoPay = new InstamojoPay();
+        IntentFilter filter = new IntentFilter("ai.devsupport.instamojo");
+        registerReceiver(instamojoPay, filter);
+        JSONObject pay = new JSONObject();
+        try {
+            pay.put("email", email);
+            pay.put("phone", phone);
+            pay.put("purpose", purpose);
+            pay.put("amount", amount);
+            pay.put("name", buyername);
+       pay.put("send_sms", true);
+      pay.put("send_email", true);
+ } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        initListener();
+        instamojoPay.start(activity, pay, listener);
+    }
+    
+    InstapayListener listener;
 
+    
+    private void initListener() {
+        listener = new InstapayListener() {
+            @Override
+            public void onSuccess(String response) {
+                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG)
+                        .show();
+                /*TODO: ADD INTENT EXTRAS FOR TELLING PAYMENT SUCCESSFULL.*/
+                startActivity(new Intent(ConfirmActivity.this, StatusActivity.class));
+                finish();
+            }
+
+            @Override
+            public void onFailure(int code, String reason) {
+                Toast.makeText(getApplicationContext(), "Failed: " + reason, Toast.LENGTH_LONG)
+                        .show();
+                //TODO: ADD INTENT EXTRAS FOR TELLING PAYMENT FAILED
+                startActivity(new Intent(ConfirmActivity.this, StatusActivity.class));
+                finish();
+            }
+        };
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm);
+        // Call the function callInstamojo to start payment here
 
         ConfirmButton = findViewById(R.id.PayButton);
         DoctorName = findViewById(R.id.DoctorName);
@@ -41,9 +96,9 @@ public class ConfirmActivity extends AppCompatActivity {
         ConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Change this to redirect to Paytm
-                startActivity(new Intent(ConfirmActivity.this, StatusActivity.class));
-                finish();
+                //TODO: BELOW FUNCTION CALL TO BE UNCOMMENTED AFTER PASSING THE NEEDED DETAILS.
+                //callInstamojoPay(email,phone,amount,purpose,buyername);
+
 
             }
         });
