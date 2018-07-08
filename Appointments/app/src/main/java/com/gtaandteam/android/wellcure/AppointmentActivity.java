@@ -13,7 +13,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
@@ -34,15 +33,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
-/*TODO: Autoenter Details Added. Should add getting details from Main Screen*/
+/*TODO: Auto-enter Details Added. Should add getting details from Main Screen*/
 
 public class AppointmentActivity extends AppCompatActivity {
 
@@ -177,6 +172,9 @@ public class AppointmentActivity extends AppCompatActivity {
                 AlertDialog dialog = builder.create();
                 dialog.show();
 
+                return true;
+            case R.id.action_past:
+                startActivity(new Intent(AppointmentActivity.this, PastActivity.class));
                 return true;
 
             default:

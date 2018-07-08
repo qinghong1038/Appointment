@@ -3,24 +3,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".DetailsPopUp"
+    android:paddingBottom="16dp"
+    tools:layout_editor_absoluteY="25dp">
 
-    tools:context=".ConfirmActivity">
+    <TextView
+        android:id="@+id/DetailsLabel"
+        style="@style/TabStyle"
+        android:background="@color/blue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed"
+        android:text="Appointment Details"
+        android:paddingBottom="8dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/profile_image"
-        android:layout_width="143dp"
-        android:layout_height="143dp"
+        android:id="@+id/DoctorImage"
+        android:layout_width="127dp"
+        android:layout_height="100dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_marginTop="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/dogtor"
-        app:civ_border_color="@color/colorAccent"
+        app:civ_border_color="@color/blue"
         app:civ_border_width="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/DetailsLabel" />
+
+
+
 
     <TextView
         android:id="@+id/DateLabel"
@@ -28,6 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:background="@color/blue"
         android:layout_marginTop="28dp"
         android:text="  Date  "
         app:layout_constraintStart_toStartOf="parent"
@@ -36,6 +57,7 @@
     <TextView
         android:id="@+id/NameLabel"
         style="@style/TabStyle"
+        android:background="@color/blue"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -48,14 +70,14 @@
 
     <TextView
         android:id="@+id/EmailLabel"
-        android:layout_width="0dp"
         style="@style/TabStyle"
+        android:layout_width="0dp"
+        android:background="@color/blue"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Email"
-        app:layout_constraintEnd_toStartOf="@+id/EmailValue"
+        android:text="Fees"
+        app:layout_constraintEnd_toEndOf="@+id/NameLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/NameLabel" />
 
@@ -72,37 +94,24 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Dr. Borkson Woofberg"
-        app:layout_constraintEnd_toEndOf="@+id/profile_image"
-        app:layout_constraintStart_toStartOf="@+id/profile_image"
-        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="@+id/DoctorImage"
+        app:layout_constraintStart_toStartOf="@+id/DoctorImage"
+        app:layout_constraintTop_toBottomOf="@+id/DoctorImage" />
 
     <TextView
         android:id="@+id/Amount"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="₹420"
         android:fontFamily="sans-serif"
+        android:text="₹420"
         android:textColor="#000000"
-        android:textSize="36sp"
-        app:layout_constraintBottom_toTopOf="@+id/PayButton"
+        android:textSize="18sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/EmailLabel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/PayButton"
-        style="@style/ButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="Confirm Payment"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/EmailLabel" />
 
     <TextView
         android:id="@+id/DateValue"
@@ -129,32 +138,5 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/NameLabel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/DateLabel" />
-
-    <TextView
-        android:id="@+id/EmailValue"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="glennlx@douchebag.com"
-        android:textSize="18sp"
-        android:fontFamily="sans-serif-condensed"
-        app:layout_constraintBaseline_toBaselineOf="@+id/EmailLabel"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/NameLabel" />
-
-    <TextView
-        android:id="@+id/DetailsLabel"
-        style="@style/TabStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-condensed"
-        android:text="Appointment Details"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

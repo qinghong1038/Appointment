@@ -2,11 +2,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- "Mark Favorite", should appear as action button if possible -->
+
+    <item
+        android:id="@+id/action_past"
+        android:icon="@drawable/common_full_open_on_phone"
+        android:title="Past Appointments"
+        app:showAsAction="never"/>
+
     <item
         android:id="@+id/action_SignOut"
         android:icon="@drawable/common_full_open_on_phone"
         android:title="Sign Out"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="never"/>
 
 
 </menu>
