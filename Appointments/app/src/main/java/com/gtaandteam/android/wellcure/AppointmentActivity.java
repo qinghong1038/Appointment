@@ -54,6 +54,7 @@ public class AppointmentActivity extends AppCompatActivity {
     DatabaseReference userDb1,userDb2,appointmentDb;
     int year,month,day;
     private ProgressDialog progress;
+    Boolean userExists;
 
 
 
@@ -61,12 +62,20 @@ public class AppointmentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appointment);
+        Intent i=getIntent();
+        userExists=i.getBooleanExtra("userExists",false);
+        progress=new ProgressDialog(this);
+        if(userExists)
+        {
+            progress.setMessage("Loading Details of User");
+            progress.show();
+        }
         fbAuth = FirebaseAuth.getInstance();
         Name = findViewById(R.id.name_editText);
         Phone = findViewById(R.id.phone_editText);
         Email = findViewById(R.id.email_editText);
         dateText = findViewById(R.id.date_editText);
-        progress=new ProgressDialog(this);
+
         dateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -210,7 +219,11 @@ public class AppointmentActivity extends AppCompatActivity {
                 //go to page which shows users details
                 Log.v("App","Done Shit");
                 Toast.makeText(getApplicationContext(),"Stored Data",Toast.LENGTH_SHORT).show();
-                startActivity (new Intent(AppointmentActivity.this, ConfirmActivity.class));
+                Intent toConfirm = new Intent(AppointmentActivity.this, ConfirmActivity.class);
+                toConfirm.putExtra("Name",first_name);
+                toConfirm.putExtra("Email",email);
+                toConfirm.putExtra("Phone",phone);
+                startActivity (toConfirm);
             }
         });
     }
@@ -222,8 +235,7 @@ public class AppointmentActivity extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
 
-                progress.setMessage("Loading Details of User");
-                progress.show();
+
                 String ss = dataSnapshot.getKey().toString();
                 if (ss.equals("Name")) {
                     rName= dataSnapshot.getValue().toString();

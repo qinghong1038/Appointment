@@ -29,6 +29,7 @@ public class ConfirmActivity extends AppCompatActivity {
     Button ConfirmButton;
     TextView DoctorName, Date, PatientName, Email, Amount;
     ImageView DoctorPhoto;
+    String name,phone,email,purpose,amount;
 
     //TODO: GET PAYMENT VALUES FROM PREVIOUS ACTIVITY : EMAIL, PHONE, AMOUNT, PURPOSE AND CUSTOMER NAME
 
@@ -46,8 +47,8 @@ public class ConfirmActivity extends AppCompatActivity {
             pay.put("purpose", purpose);
             pay.put("amount", amount);
             pay.put("name", buyername);
-       pay.put("send_sms", true);
-      pay.put("send_email", true);
+            pay.put("send_sms", true);
+            pay.put("send_email", true);
  } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -62,10 +63,16 @@ public class ConfirmActivity extends AppCompatActivity {
         listener = new InstapayListener() {
             @Override
             public void onSuccess(String response) {
+                String payInfo[]=response.split(":");
                 Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG)
                         .show();
                 /*TODO: ADD INTENT EXTRAS FOR TELLING PAYMENT SUCCESSFULL.*/
-                startActivity(new Intent(ConfirmActivity.this, StatusActivity.class));
+                Intent onSuccess = new Intent(ConfirmActivity.this, StatusActivity.class);
+                onSuccess.putExtra("Status",true);
+                onSuccess.putExtra("OrderID",payInfo[1]);
+                onSuccess.putExtra("PaymentID",payInfo[3]);
+                onSuccess.putExtra("PaymentToken",payInfo[4]);
+                startActivity(onSuccess);
                 finish();
             }
 
@@ -74,7 +81,9 @@ public class ConfirmActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Failed: " + reason, Toast.LENGTH_LONG)
                         .show();
                 //TODO: ADD INTENT EXTRAS FOR TELLING PAYMENT FAILED
-                startActivity(new Intent(ConfirmActivity.this, StatusActivity.class));
+                Intent onFailure = new Intent(ConfirmActivity.this, StatusActivity.class);
+                onFailure.putExtra("Status",false);
+                startActivity(onFailure);
                 finish();
             }
         };
@@ -83,7 +92,12 @@ public class ConfirmActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm);
-        // Call the function callInstamojo to start payment here
+
+        Intent getDetails = getIntent();
+
+        name=getDetails.getStringExtra("Name");
+        phone=getDetails.getStringExtra("Phone");
+        email=getDetails.getStringExtra("Email");
 
         ConfirmButton = findViewById(R.id.PayButton);
         DoctorName = findViewById(R.id.DoctorName);
@@ -92,12 +106,15 @@ public class ConfirmActivity extends AppCompatActivity {
         Email = findViewById(R.id.EmailValue);
         Amount = findViewById(R.id.Amount); //Amount to be paid
         DoctorPhoto = findViewById(R.id.profile_photo);
+        purpose = "Wellcure Clinic Appointment Fee";
+        amount ="12";
+
 
         ConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //TODO: BELOW FUNCTION CALL TO BE UNCOMMENTED AFTER PASSING THE NEEDED DETAILS.
-                //callInstamojoPay(email,phone,amount,purpose,buyername);
+                callInstamojoPay(email,phone,amount,purpose,name);
 
 
             }

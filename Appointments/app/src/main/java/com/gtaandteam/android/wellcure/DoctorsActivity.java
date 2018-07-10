@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class DoctorsActivity extends AppCompatActivity {
 
@@ -26,6 +28,8 @@ public class DoctorsActivity extends AppCompatActivity {
     Button AppointmentButton;
     Toolbar toolbar;
     private FirebaseAuth fbAuth;
+    DatabaseReference userDb1;
+    Boolean userExists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +39,15 @@ public class DoctorsActivity extends AppCompatActivity {
         final int i = n3.getIntExtra("loginMode",0);	//loginMode is given in MainActivity and OTPLoginAcitivty
 
         fbAuth = FirebaseAuth.getInstance();
+
         AppointmentButton = findViewById(R.id.get_appointment);
         AppointmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                checkUserExists();
                 Intent intent = new Intent(DoctorsActivity.this, AppointmentActivity.class);
                 intent.putExtra("loginMode",i);
+                intent.putExtra("userExists",userExists);
                 startActivity(intent);
 
 
@@ -109,5 +116,19 @@ public class DoctorsActivity extends AppCompatActivity {
     }
     public void signOut() {
         fbAuth.signOut();
+    }
+
+    private void checkUserExists()
+    {
+        userDb1 = FirebaseDatabase.getInstance().getReference().child("users");
+        try
+        {
+            userDb1.child(fbAuth.getCurrentUser().getUid());
+            userExists = true;
+        }
+        catch (Exception e)
+        {
+            userExists = false;
+        }
     }
 }
