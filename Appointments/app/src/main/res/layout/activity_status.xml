@@ -50,18 +50,20 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ID_label" />
+        app:layout_constraintTop_toBottomOf="@+id/BookingIDLabel" />
 
     <TextView
-        android:id="@+id/ID_label"
+        android:id="@+id/BookingIDLabel"
         android:layout_width="0dp"
-        android:fontFamily="sans-serif-condensed"
-        android:textSize="18sp"
+        style="@style/TabStyle"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Booking ID:"
-        app:layout_constraintStart_toStartOf="@+id/status_message"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="16sp"
+        android:text="Appt ID"
+        app:layout_constraintEnd_toEndOf="@+id/time_label"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/status_message" />
 
     <TextView
@@ -71,6 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
+
         android:layout_marginStart="8dp"
         android:text="SUCCESS!"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
@@ -80,45 +83,73 @@
 
     <TextView
         android:id="@+id/ID_value"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:fontFamily="sans-serif-condensed"
-        android:textSize="18sp"
         android:layout_marginStart="8dp"
+        android:fontFamily="sans-serif-condensed"
         android:text="---"
-        app:layout_constraintBaseline_toBaselineOf="@+id/ID_label"
-        app:layout_constraintEnd_toEndOf="@+id/status_message"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/ID_label" />
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/BookingIDLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/BookingIDLabel" />
 
     <TextView
         android:id="@+id/time_label"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="8dp"
-        android:text="On"
-        android:layout_marginTop="8dp"
-        android:textSize="18sp"
-        android:fontFamily="sans-serif-con"
-        app:layout_constraintEnd_toEndOf="@+id/ID_label"
-        app:layout_constraintStart_toStartOf="@+id/status_message"
-        app:layout_constraintTop_toBottomOf="@+id/ID_label" />
-
-    <TextView
-        android:id="@+id/time_value"
+        style="@style/TabStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="Booked"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/AppointmentDateLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/BookingIDLabel" />
+
+    <TextView
+        android:id="@+id/BookingDateLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:textSize="18sp"
         android:layout_marginStart="8dp"
         android:fontFamily="sans-serif-condensed"
         android:text="---"
+        android:textColor="#000000"
+
+        android:textSize="18sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/time_label"
-        app:layout_constraintEnd_toEndOf="@+id/status_message"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/time_label" />
 
+    <TextView
+        android:id="@+id/AppointmentDateLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Appt ON"
+        style="@style/TabStyle"
 
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time_label" />
+
+    <TextView
+        android:id="@+id/AppointmentDateValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="---"
+        android:textColor="#000000"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/AppointmentDateLabel"
+        tools:layout_editor_absoluteY="362dp" />
 
 
 </android.support.constraint.ConstraintLayout>

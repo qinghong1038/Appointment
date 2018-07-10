@@ -38,7 +38,7 @@ public class StatusActivity extends AppCompatActivity {
         StatusMessage = findViewById(R.id.status_message);
         BookingID = findViewById(R.id.ID_value);
         StatusView = findViewById(R.id.payment_status);
-        TimeOfBooking = findViewById(R.id.time_value);
+        TimeOfBooking = findViewById(R.id.BookingDateLabel);
         bookedDate=AppointmentActivity.selectedDate;
         if(status==true)
         {

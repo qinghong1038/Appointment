@@ -75,6 +75,8 @@ public class AppointmentActivity extends AppCompatActivity {
         Phone = findViewById(R.id.phone_editText);
         Email = findViewById(R.id.email_editText);
         dateText = findViewById(R.id.date_editText);
+        
+        
 
         dateText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -227,6 +229,8 @@ public class AppointmentActivity extends AppCompatActivity {
             }
         });
     }
+    
+
     public void retrieve() {
 
         userDb2 = FirebaseDatabase.getInstance().getReference("users").child(fbAuth.getCurrentUser().getUid());
