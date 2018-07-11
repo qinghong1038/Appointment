@@ -64,22 +64,24 @@ public class ConfirmActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String response) {
                 String payInfo[]=response.split(":");
-                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG)
-                        .show();
-                /*TODO: ADD INTENT EXTRAS FOR TELLING PAYMENT SUCCESSFULL.*/
+                String orderID[]=payInfo[1].split("=");;
+                String paymentID[]=payInfo[3].split("=");;
+                String paymentToken[]=payInfo[4].split("=");;
+
+                //Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+
                 Intent onSuccess = new Intent(ConfirmActivity.this, StatusActivity.class);
                 onSuccess.putExtra("Status",true);
-                onSuccess.putExtra("OrderID",payInfo[1]);
-                onSuccess.putExtra("PaymentID",payInfo[3]);
-                onSuccess.putExtra("PaymentToken",payInfo[4]);
+                onSuccess.putExtra("OrderID",orderID[2]);
+                onSuccess.putExtra("PaymentID",paymentID[2]);
+                onSuccess.putExtra("PaymentToken",paymentToken[2]);
                 startActivity(onSuccess);
                 finish();
             }
 
             @Override
             public void onFailure(int code, String reason) {
-                Toast.makeText(getApplicationContext(), "Failed: " + reason, Toast.LENGTH_LONG)
-                        .show();
+                //Toast.makeText(getApplicationContext(), "Failed: " + reason, Toast.LENGTH_LONG).show();
                 //TODO: ADD INTENT EXTRAS FOR TELLING PAYMENT FAILED
                 Intent onFailure = new Intent(ConfirmActivity.this, StatusActivity.class);
                 onFailure.putExtra("Status",false);

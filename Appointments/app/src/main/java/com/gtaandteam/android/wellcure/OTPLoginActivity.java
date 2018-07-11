@@ -1,5 +1,6 @@
 package com.gtaandteam.android.wellcure;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -41,6 +42,7 @@ public class OTPLoginActivity extends AppCompatActivity {
             verificationCallbacks;
     private PhoneAuthProvider.ForceResendingToken resendToken;
     Boolean loginMode;
+    private ProgressDialog progress;
 
     final String LOG_TAG = this.getClass().getSimpleName();
     
@@ -49,7 +51,7 @@ public class OTPLoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otplogin);
-
+        progress=new ProgressDialog(this);
         SwitchToEmail = findViewById(R.id.SwitchToEmail);
         PhoneOTPLayout = findViewById(R.id.PhoneOTPLayout);
         SendOTPButton = findViewById(R.id.SendOTP_button);
@@ -89,6 +91,9 @@ public class OTPLoginActivity extends AppCompatActivity {
                     {
                         if(PhoneNumber.startsWith("+91"))
                         {
+                            //OTP will be sent now
+                            progress.setMessage("Sending OTP");
+                            progress.show();
                             sendCode();
                             PhoneOTP.setText("");
                             Log.v(LOG_TAG, "Phone Number Accepted");
@@ -134,6 +139,8 @@ public class OTPLoginActivity extends AppCompatActivity {
                 if(view.getVisibility() == View.VISIBLE)
                 {
                     //TODO: Handle resending of OTPs. Function added. Need to test if working.
+                    progress.setMessage("Resending OTP");
+                    progress.show();
                     resendCode();
                     Toast.makeText(OTPLoginActivity.this, "Resending OTP", Toast.LENGTH_LONG).show();
                     Log.v(LOG_TAG, "Resending OTP");
@@ -189,7 +196,9 @@ public class OTPLoginActivity extends AppCompatActivity {
                     public void onCodeSent(String verificationId,
                                            PhoneAuthProvider.ForceResendingToken token) {
 
-                        Toast.makeText(OTPLoginActivity.this, "OTP Sent", Toast.LENGTH_LONG).show();
+
+                        progress.dismiss();
+                        Toast.makeText(OTPLoginActivity.this, "OTP Sent", Toast.LENGTH_SHORT).show();
                         phoneVerificationId = verificationId;
                         resendToken = token;
                         SendOTPButton.setText("Verify OTP");
