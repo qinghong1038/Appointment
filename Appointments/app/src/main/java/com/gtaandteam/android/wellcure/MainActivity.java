@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,13 +35,14 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog progress;
     private FirebaseAuth firebaseAuth;
     Button registerButton;
-    TextView textViewReg;
+    TextView textViewReg,forgotPasswordTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        forgotPasswordTextView = findViewById(R.id.forgot_password);
 
         final TextView OTPLogin =  findViewById(R.id.OTP_login);
         OTPLogin.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +90,31 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 finish();
                 startActivity(new Intent(MainActivity.this,RegisterActivity.class));
+            }
+        });
+        forgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                String emailAddress = editTextUserName.getText().toString().trim();
+                if(emailAddress.equals(""))
+                {
+                    Toast.makeText(MainActivity.this, "Please Enter The Email ID and Try Again", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    auth.sendPasswordResetEmail(emailAddress)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.d("App", "Email sent.");
+                                        Toast.makeText(MainActivity.this, "Email with Reset Link Sent", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                }
+
             }
         });
 

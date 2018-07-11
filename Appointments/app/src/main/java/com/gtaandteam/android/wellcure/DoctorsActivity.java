@@ -3,9 +3,11 @@ package com.gtaandteam.android.wellcure;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,7 +16,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -27,18 +36,43 @@ public class DoctorsActivity extends AppCompatActivity {
 
     Button AppointmentButton;
     Toolbar toolbar;
-    private FirebaseAuth fbAuth;
+    private FirebaseAuth fbAuth,mAuth;
     DatabaseReference userDb1;
     Boolean userExists;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctors);
+        fbAuth = FirebaseAuth.getInstance();
+        user = fbAuth.getCurrentUser();
+        //Toast.makeText(this, user.getEmail(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, user.getPhoneNumber(), Toast.LENGTH_LONG).show();
+        /*AuthCredential newCredential = EmailAuthProvider.getCredential("banana1@gmail.com","12345678");
+
+        fbAuth.getCurrentUser().linkWithCredential(newCredential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("App", "linkWithCredential:success");
+                            FirebaseUser user = task.getResult().getUser();
+                            //updateUI(user);
+                        } else {
+                            Log.w("App", "linkWithCredential:failure", task.getException());
+                            //Toast.makeText(AnonymousAuthActivity.this, "Authentication failed.",
+                                //    Toast.LENGTH_SHORT).show();
+                            //updateUI(null);
+                        }
+
+                        // ...
+                    }
+                });*/
         Intent n3=getIntent();	//gives the ref to the destn intent
         final int i = n3.getIntExtra("loginMode",0);	//loginMode is given in MainActivity and OTPLoginAcitivty
 
-        fbAuth = FirebaseAuth.getInstance();
+
 
         AppointmentButton = findViewById(R.id.get_appointment);
         AppointmentButton.setOnClickListener(new View.OnClickListener() {

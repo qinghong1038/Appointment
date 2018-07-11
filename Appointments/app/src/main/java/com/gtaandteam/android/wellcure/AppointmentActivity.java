@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,6 +47,7 @@ public class AppointmentActivity extends AppCompatActivity {
     Button BookAndPayButton;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private FirebaseAuth fbAuth;
+    FirebaseUser newUser;
     Toolbar toolbar;
     EditText Name,Phone,Email;
     String first_name, email, phone,date1;
@@ -71,6 +73,7 @@ public class AppointmentActivity extends AppCompatActivity {
             progress.show();
         }
         fbAuth = FirebaseAuth.getInstance();
+        newUser =FirebaseAuth.getInstance().getCurrentUser();
         Name = findViewById(R.id.name_editText);
         Phone = findViewById(R.id.phone_editText);
         Email = findViewById(R.id.email_editText);

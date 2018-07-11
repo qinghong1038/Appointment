@@ -18,7 +18,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
@@ -220,19 +222,13 @@ public class OTPLoginActivity extends AppCompatActivity {
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+
         fbAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            /*signoutButton.setEnabled(true);
-                            codeText.setText("");
-                            statusText.setText("Signed In");
-                            resendButton.setEnabled(true);
-                            verifyButton.setEnabled(false);*/
-                            /*
-                            TODO: Need to check if the registered number is displayed again in TOAST while testing.
-                             */
+
                             FirebaseUser user = task.getResult().getUser();
                             String phone = user.getPhoneNumber();
                             UserId = user.getUid();
