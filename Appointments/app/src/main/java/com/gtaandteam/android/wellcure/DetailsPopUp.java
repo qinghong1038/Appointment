@@ -10,7 +10,6 @@ public class DetailsPopUp extends Activity {
     TextView Doctor, Name, Date, Fees;
     ImageView DoctorImage;
 
-
     //Sorry for inconsistent naming across activities
 
     @Override
@@ -36,10 +35,5 @@ public class DetailsPopUp extends Activity {
 
         //Name.setText(CurrentName);
         //Fees.setText(CurrentFees);
-
-
-
-
     }
-
 }

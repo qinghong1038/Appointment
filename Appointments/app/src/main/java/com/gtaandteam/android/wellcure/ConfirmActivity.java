@@ -29,12 +29,10 @@ public class ConfirmActivity extends AppCompatActivity {
     Button ConfirmButton;
     TextView DoctorName, Date, PatientName, Email, Amount;
     ImageView DoctorPhoto;
-    String name,phone,email,purpose,amount;
+    String name,date,email,purpose,amount,phone;
 
     //TODO: GET PAYMENT VALUES FROM PREVIOUS ACTIVITY : EMAIL, PHONE, AMOUNT, PURPOSE AND CUSTOMER NAME
 
-
-    
     private void callInstamojoPay(String email, String phone, String amount, String purpose, String buyername) {
         final Activity activity = this;
         InstamojoPay instamojoPay = new InstamojoPay();
@@ -70,11 +68,12 @@ public class ConfirmActivity extends AppCompatActivity {
 
                 //Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
 
+
                 Intent onSuccess = new Intent(ConfirmActivity.this, StatusActivity.class);
                 onSuccess.putExtra("Status",true);
-                onSuccess.putExtra("OrderID",orderID[2]);
-                onSuccess.putExtra("PaymentID",paymentID[2]);
-                onSuccess.putExtra("PaymentToken",paymentToken[2]);
+                onSuccess.putExtra("OrderID",orderID[1]);
+                onSuccess.putExtra("PaymentID",paymentID[1]);
+                onSuccess.putExtra("PaymentToken",paymentToken[1]);
                 startActivity(onSuccess);
                 finish();
             }
@@ -98,6 +97,7 @@ public class ConfirmActivity extends AppCompatActivity {
         Intent getDetails = getIntent();
 
         name=getDetails.getStringExtra("Name");
+        date=getDetails.getStringExtra("Date");
         phone=getDetails.getStringExtra("Phone");
         email=getDetails.getStringExtra("Email");
 
@@ -108,72 +108,19 @@ public class ConfirmActivity extends AppCompatActivity {
         Email = findViewById(R.id.EmailValue);
         Amount = findViewById(R.id.Amount); //Amount to be paid
         DoctorPhoto = findViewById(R.id.profile_photo);
-        purpose = "Wellcure Clinic Appointment Fee";
-        amount ="12";
+        PatientName.setText(name);
+        Email.setText(email);
+        Date.setText(date);
 
+        purpose = "Wellcure Clinic Appointment Fee";
+        amount ="10";
 
         ConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //TODO: BELOW FUNCTION CALL TO BE UNCOMMENTED AFTER PASSING THE NEEDED DETAILS.
                 callInstamojoPay(email,phone,amount,purpose,name);
-
-
             }
         });
-
-
     }
-    /*public void retrieve() {
-
-        userDb2 = FirebaseDatabase.getInstance().getReference("users").child(fbAuth.getCurrentUser().getUid());
-        userDb2.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-
-                progress.setMessage("Loading Details of User");
-                progress.show();
-                String ss = dataSnapshot.getKey().toString();
-                if (ss.equals("Name")) {
-                    rName= dataSnapshot.getValue().toString();
-                } else if (ss.equals("Email"))
-                    rEmail= dataSnapshot.getValue().toString();
-                else if (ss.equals("Phone"))
-                    rPhone= dataSnapshot.getValue().toString();
-                else if (ss.equals("Date"))
-                    rDate= dataSnapshot.getValue().toString();
-                Name.setText(rName);
-                Email.setText(rEmail);
-                Phone.setText(rPhone);
-                progress.dismiss();
-                //ok
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-
-
-        });
-
-
-    }*/
 }

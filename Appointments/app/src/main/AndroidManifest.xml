@@ -49,7 +49,7 @@
 
         </activity>
     <meta-data android:name="instamojo.orderauth.url"
-                   android:value="https://wellcure.000webhostapp.com/access_token.php"
+                   android:value="https://wellcure.000webhostapp.com/access_token_test.php"
             />
     </application>
     <uses-permission-sdk-23 android:name="android.permission.RECEIVE_SMS"/>

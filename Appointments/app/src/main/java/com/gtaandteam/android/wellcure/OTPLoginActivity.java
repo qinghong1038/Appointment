@@ -196,7 +196,6 @@ public class OTPLoginActivity extends AppCompatActivity {
                     public void onCodeSent(String verificationId,
                                            PhoneAuthProvider.ForceResendingToken token) {
 
-
                         progress.dismiss();
                         Toast.makeText(OTPLoginActivity.this, "OTP Sent", Toast.LENGTH_SHORT).show();
                         phoneVerificationId = verificationId;

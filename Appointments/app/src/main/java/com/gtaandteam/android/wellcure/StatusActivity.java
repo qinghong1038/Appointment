@@ -24,10 +24,7 @@ public class StatusActivity extends AppCompatActivity {
                     /*
     There are three PNG files in the drawables folder: one each for success, error and pending.
     TODO: Depending on what the status returned by payTM is, set the appropriate image and display status message
-
-
      */
-
 
         GoBackbutton = findViewById(R.id.GoBackButton);
 
@@ -68,12 +65,5 @@ public class StatusActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
-
-
-
-
-
-
 }

@@ -18,7 +18,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
-
     /*
     TODO: Homepage
     Doctor's Name and Photograph
@@ -36,8 +35,6 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     Button registerButton;
     TextView textViewReg;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
     }
     private void userLogin(){
         String email=editTextUserName.getText().toString().trim();
@@ -134,6 +130,5 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-
 
 }
