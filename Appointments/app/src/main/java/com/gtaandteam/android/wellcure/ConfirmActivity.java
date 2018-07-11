@@ -31,7 +31,7 @@ public class ConfirmActivity extends AppCompatActivity {
     ImageView DoctorPhoto;
     String name,date,email,purpose,amount,phone;
 
-    //TODO: GET PAYMENT VALUES FROM PREVIOUS ACTIVITY : EMAIL, PHONE, AMOUNT, PURPOSE AND CUSTOMER NAME
+
 
     private void callInstamojoPay(String email, String phone, String amount, String purpose, String buyername) {
         final Activity activity = this;
@@ -81,7 +81,7 @@ public class ConfirmActivity extends AppCompatActivity {
             @Override
             public void onFailure(int code, String reason) {
                 //Toast.makeText(getApplicationContext(), "Failed: " + reason, Toast.LENGTH_LONG).show();
-                //TODO: ADD INTENT EXTRAS FOR TELLING PAYMENT FAILED
+
                 Intent onFailure = new Intent(ConfirmActivity.this, StatusActivity.class);
                 onFailure.putExtra("Status",false);
                 startActivity(onFailure);
@@ -118,7 +118,7 @@ public class ConfirmActivity extends AppCompatActivity {
         ConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: BELOW FUNCTION CALL TO BE UNCOMMENTED AFTER PASSING THE NEEDED DETAILS.
+
                 callInstamojoPay(email,phone,amount,purpose,name);
             }
         });

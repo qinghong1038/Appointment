@@ -77,7 +77,7 @@ public class AppointmentActivity extends AppCompatActivity {
         dateText = findViewById(R.id.date_editText);
         BookingType = findViewById(R.id.BookingType);
         BookAndPayButton = findViewById(R.id.bookAndPay_Button);
-
+        BookAndPayButton.setVisibility(View.INVISIBLE);
                 dateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
