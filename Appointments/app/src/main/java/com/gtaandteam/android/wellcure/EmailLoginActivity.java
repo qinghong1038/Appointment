@@ -19,16 +19,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class EmailLoginActivity extends AppCompatActivity {
-    /*
-    TODO: Homepage
-    Doctor's Name and Photograph
-    Book appointment button:
-    Enter patient details
-    Book & Pay button
-    Displays pop up to confirm details
-    Confirm button
-    Takes you to Payment
-    */
+
     EditText UsernameET,
             PasswordET;
     private ProgressDialog Progress;
@@ -57,7 +48,7 @@ public class EmailLoginActivity extends AppCompatActivity {
         FbAuth = FirebaseAuth.getInstance();
         if(FbAuth.getCurrentUser()!=null)
         {
-            //user already logged in .. previous login credentials stored in phone
+            //user already logged in .. previous login credentials stored in PhoneNumber
             //then skip login and directly go to choosing doctor page
             finish();
             Intent i =new Intent(EmailLoginActivity.this, DoctorsActivity.class);
@@ -99,7 +90,7 @@ public class EmailLoginActivity extends AppCompatActivity {
                 String emailAddress = UsernameET.getText().toString().trim();
                 if(emailAddress.equals(""))
                 {
-                    Toast.makeText(EmailLoginActivity.this, "Please Enter The Email ID and Try Again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EmailLoginActivity.this, "Please Enter The EmailET ID and Try Again", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
@@ -108,8 +99,8 @@ public class EmailLoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        Log.d("App", "Email sent.");
-                                        Toast.makeText(EmailLoginActivity.this, "Email with Reset Link Sent", Toast.LENGTH_SHORT).show();
+                                        Log.d("App", "EmailET sent.");
+                                        Toast.makeText(EmailLoginActivity.this, "EmailET with Reset Link Sent", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -124,7 +115,7 @@ public class EmailLoginActivity extends AppCompatActivity {
         String pass= PasswordET.getText().toString().trim();
         if(TextUtils.isEmpty(email)){
             // is empty
-            Toast.makeText(this,"Please Enter Email Id",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Please Enter EmailET Id",Toast.LENGTH_SHORT).show();
             return;
         }
         if(TextUtils.isEmpty(pass)){

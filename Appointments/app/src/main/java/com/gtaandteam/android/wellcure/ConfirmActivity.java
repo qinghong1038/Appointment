@@ -1,33 +1,30 @@
 package com.gtaandteam.android.wellcure;
 
-import android.content.Intent;
 import android.app.Activity;
-import instamojo.library.InstapayListener;
-import instamojo.library.InstamojoPay;
-import instamojo.library.Config;
-import org.json.JSONObject;
-import org.json.JSONException;
+import android.content.Intent;
 import android.content.IntentFilter;
-import android.widget.Toast;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import instamojo.library.InstamojoPay;
+import instamojo.library.InstapayListener;
 
 public class ConfirmActivity extends AppCompatActivity {
 
 
     Button ConfirmButton;
-    TextView DoctorName, Date, PatientName, Email, Amount;
+    TextView DoctorNameTV,
+            DateTV,
+            PatientNameTV,
+            EmailTV,
+            AmountTV;
     ImageView DoctorPhoto;
     String name,date,email,purpose,amount,phone;
 
@@ -40,8 +37,8 @@ public class ConfirmActivity extends AppCompatActivity {
         registerReceiver(instamojoPay, filter);
         JSONObject pay = new JSONObject();
         try {
-            pay.put("email", email);
-            pay.put("phone", phone);
+            pay.put("EmailTV", email);
+            pay.put("PhoneNumber", phone);
             pay.put("purpose", purpose);
             pay.put("amount", amount);
             pay.put("name", buyername);
@@ -94,23 +91,24 @@ public class ConfirmActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm);
 
+        ConfirmButton = findViewById(R.id.PayButton);
+        DoctorNameTV = findViewById(R.id.DoctorName);
+        DateTV = findViewById(R.id.DateValue); //DateTV of appointment
+        PatientNameTV = findViewById(R.id.NameValue);
+        EmailTV = findViewById(R.id.EmailValue);
+        AmountTV = findViewById(R.id.Amount); //AmountTV to be paid
+        DoctorPhoto = findViewById(R.id.profile_photo);
+
         Intent getDetails = getIntent();
 
-        name=getDetails.getStringExtra("Name");
-        date=getDetails.getStringExtra("Date");
-        phone=getDetails.getStringExtra("Phone");
-        email=getDetails.getStringExtra("Email");
+        name=getDetails.getStringExtra("NameET");
+        date=getDetails.getStringExtra("DateTV");
+        phone=getDetails.getStringExtra("PhoneET");
+        email=getDetails.getStringExtra("EmailET");
 
-        ConfirmButton = findViewById(R.id.PayButton);
-        DoctorName = findViewById(R.id.DoctorName);
-        Date = findViewById(R.id.DateValue); //Date of appointment
-        PatientName = findViewById(R.id.NameValue);
-        Email = findViewById(R.id.EmailValue);
-        Amount = findViewById(R.id.Amount); //Amount to be paid
-        DoctorPhoto = findViewById(R.id.profile_photo);
-        PatientName.setText(name);
-        Email.setText(email);
-        Date.setText(date);
+        PatientNameTV.setText(name);
+        EmailTV.setText(email);
+        DateTV.setText(date);
 
         purpose = "Wellcure Clinic Appointment Fee";
         amount ="10";

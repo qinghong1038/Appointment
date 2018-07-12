@@ -83,11 +83,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         }
 
-        if((pass != confirm_pass)){
-            // is empty
-            Toast.makeText(this,"Passwords do not match.",Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if((pass != confirm_pass)){
+//            // is empty
+//            Toast.makeText(this,"Passwords do not match.",Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         // if validations are ok we show a Progress bar
         Progress.setMessage("Registering User..");
@@ -113,5 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+        startActivity(new Intent(RegisterActivity.this, OTPopUp.class));
     }
 }

@@ -2,6 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gtaandteam.android.wellcure">
 
+    <uses-permission-sdk-23 android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission-sdk-23 android:name="android.permission.READ_SMS" />
+    <uses-permission-sdk-23 android:name="android.permission.READ_PHONE_STATE" />
+
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/app_icon"
@@ -23,50 +33,39 @@
             android:name=".AppointmentActivity"
             android:label="New Appointment"
             android:parentActivityName=".DoctorsActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".DoctorsActivity"
             android:label="Doctors"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".RegisterActivity"
             android:label="Register"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".OTPLoginActivity"
             android:label="Login using OTP" />
-        <activity android:name=".StatusActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ConfirmActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".StatusActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ConfirmActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".PastActivity"
             android:label="Past Appointments"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".DetailsPopUp"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".DetailsPopUp"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar.MinWidth">
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar.MinWidth"></activity>
 
-        </activity>
-    <meta-data android:name="instamojo.orderauth.url"
-                   android:value="https://wellcure.000webhostapp.com/access_token_test.php"
-            />
+        <meta-data
+            android:name="instamojo.orderauth.url"
+            android:value="https://wellcure.000webhostapp.com/access_token_test.php" />
+
+        <activity android:name=".OTPopUp"
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar.MinWidth"></activity>
     </application>
-    <uses-permission-sdk-23 android:name="android.permission.RECEIVE_SMS"/>
- 
-    <uses-permission-sdk-23 android:name="android.permission.READ_SMS"/>
- 
-    <uses-permission-sdk-23 android:name="android.permission.READ_PHONE_STATE"/>
- 
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
- 
-    <uses-permission android:name="android.permission.READ_SMS"/>
- 
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
- 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
- 
-    <uses-permission android:name="android.permission.INTERNET"/>
- 
 
 </manifest>

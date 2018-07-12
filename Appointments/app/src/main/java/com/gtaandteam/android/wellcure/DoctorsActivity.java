@@ -28,7 +28,7 @@ public class DoctorsActivity extends AppCompatActivity {
 
     Button AppointmentButton;
     Toolbar toolbar;
-    private FirebaseAuth fbAuth,mAuth;
+    private FirebaseAuth fbAuth;
     DatabaseReference userDb1;
     Boolean userExists;
     FirebaseUser user;
