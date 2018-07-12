@@ -22,11 +22,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -45,6 +47,7 @@ public class AppointmentActivity extends AppCompatActivity {
     Button BookAndPayButton;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private FirebaseAuth fbAuth;
+    FirebaseUser newUser;
     Toolbar toolbar;
     EditText Name,Phone,Email;
     String first_name, email, phone,date1;
@@ -55,8 +58,7 @@ public class AppointmentActivity extends AppCompatActivity {
     int year,month,day;
     private ProgressDialog progress;
     Boolean userExists;
-
-
+    TextView BookingType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,20 +67,21 @@ public class AppointmentActivity extends AppCompatActivity {
         Intent i=getIntent();
         userExists=i.getBooleanExtra("userExists",false);
         progress=new ProgressDialog(this);
-        if(userExists)
+        if(userExists==true)
         {
             progress.setMessage("Loading Details of User");
             progress.show();
         }
         fbAuth = FirebaseAuth.getInstance();
+        newUser =FirebaseAuth.getInstance().getCurrentUser();
         Name = findViewById(R.id.name_editText);
         Phone = findViewById(R.id.phone_editText);
         Email = findViewById(R.id.email_editText);
         dateText = findViewById(R.id.date_editText);
-        
-        
-
-        dateText.setOnClickListener(new View.OnClickListener() {
+        BookingType = findViewById(R.id.BookingType);
+        BookAndPayButton = findViewById(R.id.bookAndPay_Button);
+        BookAndPayButton.setVisibility(View.INVISIBLE);
+                dateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
@@ -106,21 +109,23 @@ public class AppointmentActivity extends AppCompatActivity {
                 long duration  = endDate.getTime() - startDate.getTime();
                 long diffday=duration/(24 * 60 * 60 * 1000) +1;
                 int days=(int)diffday-1;
-                if(days<0)
-                    Toast.makeText(getBaseContext(),"Appointment Date Has Already Passed",Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(getBaseContext(),"Days Gap "+ days,Toast.LENGTH_SHORT).show();
-                //Toast.makeText(getBaseContext(),"Selected Date "+ selectedDate,Toast.LENGTH_SHORT).show();
-                //Toast.makeText(getBaseContext(),"Today's Date "+ todaysDate,Toast.LENGTH_SHORT).show();
-                /*String s1=year+"/"+(month+1)+"/"+dayOfMonth;
-                String currentString = "Fruit: they taste good";
-                String[] separated = currentString.split(":");
-                separated[0];
-                separated[1];*/
+                if(days<0) {
+                    BookingType.setVisibility(View.VISIBLE);
+                    BookingType.setText("Appointment Date Has Already Passed\nChoose A New Date");
+                    BookAndPayButton.setVisibility(View.INVISIBLE);
+                    //Toast.makeText(getBaseContext(), "Appointment Date Has Already Passed", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    BookingType.setVisibility(View.VISIBLE);
+                    BookingType.setText("No. of Days till Appointment : "+days);
+                    BookAndPayButton.setVisibility(View.VISIBLE);
+                    //Toast.makeText(getBaseContext(),"Days Gap "+ days,Toast.LENGTH_SHORT).show();
+                }
+
             }
         };
 
-        BookAndPayButton = findViewById(R.id.bookAndPay_Button);
+
         BookAndPayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -206,7 +211,7 @@ public class AppointmentActivity extends AppCompatActivity {
         //second_name=etSecondName.getText().toString();
         email=Email.getText().toString();
         phone= Phone.getText().toString();
-        date1=day+" "+(month+1)+" "+year;
+        date1=day+"/"+(month+1)+"/"+year;
         data= new HashMap<>();
         data.put("Name", first_name);
         data.put("Email", email);
@@ -225,6 +230,7 @@ public class AppointmentActivity extends AppCompatActivity {
                 toConfirm.putExtra("Name",first_name);
                 toConfirm.putExtra("Email",email);
                 toConfirm.putExtra("Phone",phone);
+                toConfirm.putExtra("Date",selectedDate);
                 startActivity (toConfirm);
             }
         });
@@ -253,8 +259,6 @@ public class AppointmentActivity extends AppCompatActivity {
                 Email.setText(rEmail);
                 Phone.setText(rPhone);
                 progress.dismiss();
-                //ok
-
             }
 
             @Override
@@ -282,8 +286,4 @@ public class AppointmentActivity extends AppCompatActivity {
 
 
 }
-
-
-
-
 }

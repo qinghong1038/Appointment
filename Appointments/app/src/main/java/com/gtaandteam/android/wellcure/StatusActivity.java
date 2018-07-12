@@ -11,9 +11,9 @@ import android.widget.TextView;
 public class StatusActivity extends AppCompatActivity {
 
     Button GoBackbutton;
-    TextView StatusHeader, StatusMessage, BookingID, TimeOfBooking;
+    TextView StatusHeader, StatusMessage, BookingID, TimeOfBooking,TimeOfAppointment;
     ImageView StatusView;
-    String bookedDate,orderID,tokenID,paymentID;
+    String bookingDate,orderID,tokenID,paymentID,appointmentDate;
     Boolean status;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +24,7 @@ public class StatusActivity extends AppCompatActivity {
                     /*
     There are three PNG files in the drawables folder: one each for success, error and pending.
     TODO: Depending on what the status returned by payTM is, set the appropriate image and display status message
-
-
      */
-
 
         GoBackbutton = findViewById(R.id.GoBackButton);
 
@@ -39,7 +36,9 @@ public class StatusActivity extends AppCompatActivity {
         BookingID = findViewById(R.id.ID_value);
         StatusView = findViewById(R.id.payment_status);
         TimeOfBooking = findViewById(R.id.BookingDateLabel);
-        bookedDate=AppointmentActivity.selectedDate;
+        TimeOfAppointment = findViewById(R.id.AppointmentDateValue);
+        bookingDate=AppointmentActivity.todaysDate;
+        appointmentDate=AppointmentActivity.selectedDate;
         if(status==true)
         {
             StatusView.setImageResource(R.drawable.success);
@@ -47,8 +46,9 @@ public class StatusActivity extends AppCompatActivity {
             paymentID=getStatus.getStringExtra("PaymentID");
             tokenID=getStatus.getStringExtra("PaymentToken");
             BookingID.setText(paymentID);
-            TimeOfBooking.setText(bookedDate);
-            StatusMessage.setText("You have successfully made a booking");
+            TimeOfBooking.setText(bookingDate);
+            TimeOfAppointment.setText(appointmentDate);
+            StatusMessage.setText("You have Successfully Made a Booking!");
             StatusHeader.setText("SUCCESS!");
         }
         else
@@ -68,12 +68,5 @@ public class StatusActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
-
-
-
-
-
-
 }
