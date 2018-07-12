@@ -18,13 +18,17 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class RegisterActivity extends AppCompatActivity {
-    Button LoginButton;
-    EditText editTextUserName, PhoneNumber;
-    EditText editTextPass, ConfirmPassword;
+    Button LoginButton,
+            RegisterButton;
+    EditText UsernameET,
+            PhoneNumberET,
+            PasswordET,
+            ConfirmPasswordET;
     private ProgressDialog progress;
     private FirebaseAuth firebaseAuth;
-    Button registerButton;
+
     TextView textViewLog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,19 +51,19 @@ public class RegisterActivity extends AppCompatActivity {
 
             }
         });
-        editTextUserName=(EditText)findViewById(R.id.username_editText2);
-        editTextPass=(EditText)findViewById(R.id.password_editText2);
+        UsernameET =(EditText)findViewById(R.id.username_editText2);
+        PasswordET =(EditText)findViewById(R.id.password_editText2);
         progress=new ProgressDialog(this);
-        registerButton=findViewById(R.id.reg_button);
-        registerButton.setOnClickListener(new View.OnClickListener() {
+        RegisterButton =findViewById(R.id.reg_button);
+        RegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 registerUser();
             }
         });
         textViewLog = findViewById(R.id.textViewReg);
-        PhoneNumber = findViewById(R.id.phone_editText); // <------ NEW!
-        ConfirmPassword = findViewById(R.id.password_confirm); // <------ NEW!
+        PhoneNumberET = findViewById(R.id.phone_editText); // <------ NEW!
+        ConfirmPasswordET = findViewById(R.id.password_confirm); // <------ NEW!
         textViewLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,9 +75,9 @@ public class RegisterActivity extends AppCompatActivity {
     }
     private void registerUser()
     {
-        String email=editTextUserName.getText().toString().trim();
-        String pass=editTextPass.getText().toString();
-        String confirm_pass = ConfirmPassword.getText().toString();
+        String email= UsernameET.getText().toString().trim();
+        String pass= PasswordET.getText().toString();
+        String confirm_pass = ConfirmPasswordET.getText().toString();
 
         if(TextUtils.isEmpty(email)){
             // is empty

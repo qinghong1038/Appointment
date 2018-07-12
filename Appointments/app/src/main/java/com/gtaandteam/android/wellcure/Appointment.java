@@ -2,9 +2,6 @@ package com.gtaandteam.android.wellcure;
 
 public class Appointment {
 
-    /*
-
-     */
 
     public static final int NO_IMAGE_PROVIDED = -1;
 
