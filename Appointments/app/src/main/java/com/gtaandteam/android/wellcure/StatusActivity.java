@@ -37,8 +37,8 @@ public class StatusActivity extends AppCompatActivity {
         StatusView = findViewById(R.id.payment_status);
         TimeOfBooking = findViewById(R.id.BookingDateLabel);
         TimeOfAppointment = findViewById(R.id.AppointmentDateValue);
-        bookingDate=AppointmentActivity.todaysDate;
-        appointmentDate=AppointmentActivity.selectedDate;
+        bookingDate=AppointmentActivity.TodaysDate;
+        appointmentDate=AppointmentActivity.SelectedDate;
         if(status==true)
         {
             StatusView.setImageResource(R.drawable.success);

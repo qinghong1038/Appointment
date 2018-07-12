@@ -17,9 +17,9 @@ public class DetailsPopUp extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.details_pop_up);
 
-        //String CurrentName = getIntent().getStringExtra("Name");
+        //String CurrentName = getIntent().getStringExtra("NameET");
         String CurrentDoctor = getIntent().getStringExtra("Doctor");
-        String CurrentDate = getIntent().getStringExtra("Date");
+        String CurrentDate = getIntent().getStringExtra("DateTV");
         int CurrentDoctorImage = getIntent().getIntExtra("DoctorImage", -1);
         // float CurrentFees = getIntent().getFloatExtra("Fees", 0);
 
@@ -33,7 +33,7 @@ public class DetailsPopUp extends Activity {
         Date.setText(CurrentDate);
         DoctorImage.setImageResource(CurrentDoctorImage);
 
-        //Name.setText(CurrentName);
+        //NameET.setText(CurrentName);
         //Fees.setText(CurrentFees);
     }
 }

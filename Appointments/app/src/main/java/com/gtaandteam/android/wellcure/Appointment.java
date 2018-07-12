@@ -2,6 +2,8 @@ package com.gtaandteam.android.wellcure;
 
 public class Appointment {
 
+//This class will be used to store information regarding a patient's Appointments in a well structured format
+    //TODO: Remove the temporary constructors when no lonoger needed
 
     public static final int NO_IMAGE_PROVIDED = -1;
 

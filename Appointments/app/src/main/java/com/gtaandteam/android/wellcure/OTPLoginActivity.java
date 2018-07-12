@@ -18,9 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
@@ -45,9 +43,11 @@ public class OTPLoginActivity extends AppCompatActivity {
     private PhoneAuthProvider.ForceResendingToken resendToken;
     Boolean loginMode;
     private ProgressDialog progress;
-
     final String LOG_TAG = this.getClass().getSimpleName();
-    
+
+    Button PopSendOTP;
+
+    Boolean RED = false; //TODO: Delete Later. Temporary Variable For detecting which button was pressed. (Red/Green)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,16 +59,62 @@ public class OTPLoginActivity extends AppCompatActivity {
         SendOTPButton = findViewById(R.id.SendOTP_button);
         ResendOTP = findViewById(R.id.ResendOTP_textView);
         fbAuth = FirebaseAuth.getInstance();
+        PopSendOTP = findViewById(R.id.OTP_PopUp);
 
         PhoneOTP = findViewById(R.id.PhoneOTP_editText);
         PhoneOTP.setText("+91 ");
         Selection.setSelection(PhoneOTP.getText(), PhoneOTP.getText().length());
 
+
+        //TODO: Make this activity only handle taking Phone Number as Input
+        //TODO: Switch the OTP Codes to OTPopUp class
+        //The Following Block of Code is Experimental
+        PopSendOTP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RED = true;
+                PhoneNumber = PhoneOTP.getText().toString().trim().replaceAll(" ", "" );
+
+                if(PhoneNumber.length()==13)
+                {
+                    if(PhoneNumber.startsWith("+91"))
+                    {
+                        //OTP will be sent now
+                        progress.setMessage("Sending OTP");
+                        progress.show();
+                        sendCode();
+
+
+                    }
+                    else
+                    {
+                        Toast.makeText(OTPLoginActivity.this, "Please Enter A Valid Phone Number after the +91", Toast.LENGTH_LONG).show();
+                        PhoneOTP.setText("+91 ");
+                        Selection.setSelection(PhoneOTP.getText(), PhoneOTP.getText().length());
+
+                    }
+                }
+                else
+                {
+                    Toast.makeText(OTPLoginActivity.this, "Please Enter A Valid Phone Number after the +91", Toast.LENGTH_LONG).show();
+                    PhoneOTP.setText("+91 ");
+                    Selection.setSelection(PhoneOTP.getText(), PhoneOTP.getText().length());
+
+
+                }
+
+
+            }
+        });
+
+
+
+
         SwitchToEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                Intent intent = new Intent(getApplicationContext(), EmailLoginActivity.class);
+                startActivity(intent);
                 finish();
             }
         });
@@ -78,6 +124,7 @@ public class OTPLoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                RED = false;
                 PhoneNumber = PhoneOTP.getText().toString().trim().replaceAll(" ", "" );
                 Log.v(LOG_TAG, PhoneNumber);
 
@@ -85,7 +132,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                 {
                     /*
                     Currently in Phone number mode.
-                    TODO: Handle invalid phone numbers. Done by Glenn. Testing pending.
+                    TODO: Handle invalid PhoneNumber numbers. Done by Glenn. Testing pending.
                     If input is valid, set OTP to True
 
 
@@ -103,7 +150,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                             sendCode();
                             PhoneOTP.setText("");
                             Log.v(LOG_TAG, "Phone Number Accepted");
-                            Toast.makeText(OTPLoginActivity.this, "Function to Send OTP", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(OTPLoginActivity.this, "Function to Send OTP", Toast.LENGTH_SHORT).show();
                             OTP = true;
                         }
                         else
@@ -208,8 +255,15 @@ public class OTPLoginActivity extends AppCompatActivity {
                         resendToken = token;
                         SendOTPButton.setText("Verify OTP");
                         PhoneOTPLayout.setHint("Enter OTP:");
-                        ResendOTP.setVisibility(View.VISIBLE);
 
+                        // ResendOTP.setVisibility(View.VISIBLE); //<------Temporarily commented
+                        //TODO: The Following Code is Temporary
+
+                        if(RED) {
+                            Intent intent = new Intent(OTPLoginActivity.this, OTPopUp.class);
+                            intent.putExtra("PhoneNumber", PhoneNumber);
+                            startActivity(intent);
+                        }
                         /*verifyButton.setEnabled(true);
                         sendButton.setEnabled(false);
                         resendButton.setEnabled(true);*/

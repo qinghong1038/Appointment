@@ -18,23 +18,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity {
-    /*
-    TODO: Homepage
-    Doctor's Name and Photograph
-    Book appointment button:
-    Enter patient details
-    Book & Pay button
-    Displays pop up to confirm details
-    Confirm button
-    Takes you to Payment
-    */
-    Button LoginButton;
-    EditText editTextUserName;
-    EditText editTextPass;
-    private ProgressDialog progress;
-    private FirebaseAuth firebaseAuth;
-    Button registerButton;
+public class EmailLoginActivity extends AppCompatActivity {
+
+    EditText UsernameET,
+            PasswordET;
+    private ProgressDialog Progress;
+    private FirebaseAuth FbAuth;
+    Button RegisterButton,
+            LoginButton;
     TextView textViewReg,forgotPasswordTextView;
 
     @Override
@@ -54,13 +45,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        if(firebaseAuth.getCurrentUser()!=null)
+        FbAuth = FirebaseAuth.getInstance();
+        if(FbAuth.getCurrentUser()!=null)
         {
-            //user already logged in .. previous login credentials stored in phone
+            //user already logged in .. previous login credentials stored in PhoneNumber
             //then skip login and directly go to choosing doctor page
             finish();
-            Intent i =new Intent(MainActivity.this, DoctorsActivity.class);
+            Intent i =new Intent(EmailLoginActivity.this, DoctorsActivity.class);
             i.putExtra("loginMode",1);
             startActivity(i);
         }
@@ -73,15 +64,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        editTextUserName=(EditText)findViewById(R.id.username_editText);
-        editTextPass=(EditText)findViewById(R.id.password_editText);
-        progress=new ProgressDialog(this);
-        registerButton=findViewById(R.id.register_button);
-        registerButton.setOnClickListener(new View.OnClickListener() {
+        UsernameET =(EditText)findViewById(R.id.username_editText);
+        PasswordET =(EditText)findViewById(R.id.password_editText);
+        Progress =new ProgressDialog(this);
+        RegisterButton =findViewById(R.id.register_button);
+        RegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
-                startActivity(new Intent(MainActivity.this,RegisterActivity.class));
+                startActivity(new Intent(EmailLoginActivity.this,RegisterActivity.class));
             }
         });
         textViewReg = findViewById(R.id.textView);
@@ -89,17 +80,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
-                startActivity(new Intent(MainActivity.this,RegisterActivity.class));
+                startActivity(new Intent(EmailLoginActivity.this,RegisterActivity.class));
             }
         });
         forgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseAuth auth = FirebaseAuth.getInstance();
-                String emailAddress = editTextUserName.getText().toString().trim();
+                String emailAddress = UsernameET.getText().toString().trim();
                 if(emailAddress.equals(""))
                 {
-                    Toast.makeText(MainActivity.this, "Please Enter The Email ID and Try Again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EmailLoginActivity.this, "Please Enter The EmailET ID and Try Again", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
@@ -108,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        Log.d("App", "Email sent.");
-                                        Toast.makeText(MainActivity.this, "Email with Reset Link Sent", Toast.LENGTH_SHORT).show();
+                                        Log.d("App", "EmailET sent.");
+                                        Toast.makeText(EmailLoginActivity.this, "EmailET with Reset Link Sent", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -120,11 +111,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void userLogin(){
-        String email=editTextUserName.getText().toString().trim();
-        String pass=editTextPass.getText().toString().trim();
+        String email= UsernameET.getText().toString().trim();
+        String pass= PasswordET.getText().toString().trim();
         if(TextUtils.isEmpty(email)){
             // is empty
-            Toast.makeText(this,"Please Enter Email Id",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Please Enter EmailET Id",Toast.LENGTH_SHORT).show();
             return;
         }
         if(TextUtils.isEmpty(pass)){
@@ -133,26 +124,26 @@ public class MainActivity extends AppCompatActivity {
             return;
 
         }
-        progress.setMessage("Logging In");
-        progress.show();
-        firebaseAuth.signInWithEmailAndPassword(email,pass)
+        Progress.setMessage("Logging In");
+        Progress.show();
+        FbAuth.signInWithEmailAndPassword(email,pass)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        progress.dismiss();
+                        Progress.dismiss();
                         if(task.isSuccessful())
                         {
                             //user successfully logged in
                             //we start doctor activity here
-                            Toast.makeText(MainActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EmailLoginActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
                             finish();
-                            Intent i =new Intent(MainActivity.this, DoctorsActivity.class);
+                            Intent i =new Intent(EmailLoginActivity.this, DoctorsActivity.class);
                             i.putExtra("loginMode",1);
                             startActivity(i);
                         }
                         else
                         {
-                            Toast.makeText(MainActivity.this,"Couldn't Login. Please Try Again..",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EmailLoginActivity.this,"Couldn't Login. Please Try Again..",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

@@ -66,7 +66,7 @@ public class PastActivity extends AppCompatActivity {
                 //startActivity(new Intent(PastActivity.this, DetailsPopUp.class));
                 Intent intent = new Intent(PastActivity.this, DetailsPopUp.class);
                 intent.putExtra("Doctor", currentAppointment.getmDoctorName());
-                intent.putExtra("Date", currentAppointment.getmDate());
+                intent.putExtra("DateTV", currentAppointment.getmDate());
                 if(currentAppointment.hasImage()) {
                     intent.putExtra("DoctorImage", currentAppointment.getmDoctorImage());
                 }
@@ -74,7 +74,7 @@ public class PastActivity extends AppCompatActivity {
                     intent.putExtra("DoctorImage", R.drawable.headshot);
                 }
 
-                //intent.putExtra("Name", currentAppointment.getmPatientName());
+                //intent.putExtra("NameET", currentAppointment.getmPatientName());
                 //intent.putExtra("Fees", currentAppointment.getmFees());
                 startActivity(intent);
                 }
@@ -104,7 +104,7 @@ public class PastActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 signOut();
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                startActivity(new Intent(getApplicationContext(), EmailLoginActivity.class));
                                 finish();
                                 Toast.makeText(getApplicationContext(), "Signing Out", Toast.LENGTH_LONG).show();
 
