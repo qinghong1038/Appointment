@@ -86,7 +86,11 @@ public class OTPLoginActivity extends AppCompatActivity {
                     TODO: Handle invalid phone numbers. Done by Glenn. Testing pending.
                     If input is valid, set OTP to True
 
+
                     */
+
+                    
+
                     if(PhoneNumber.length()==13)
                     {
                         if(PhoneNumber.startsWith("+91"))

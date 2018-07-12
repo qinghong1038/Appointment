@@ -19,8 +19,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class RegisterActivity extends AppCompatActivity {
     Button LoginButton;
-    EditText editTextUserName;
-    EditText editTextPass;
+    EditText editTextUserName, PhoneNumber;
+    EditText editTextPass, ConfirmPassword;
     private ProgressDialog progress;
     private FirebaseAuth firebaseAuth;
     Button registerButton;
@@ -58,6 +58,8 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
         textViewLog = findViewById(R.id.textViewReg);
+        PhoneNumber = findViewById(R.id.phone_editText); // <------ NEW!
+        ConfirmPassword = findViewById(R.id.password_confirm); // <------ NEW!
         textViewLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,7 +72,9 @@ public class RegisterActivity extends AppCompatActivity {
     private void registerUser()
     {
         String email=editTextUserName.getText().toString().trim();
-        String pass=editTextPass.getText().toString().trim();
+        String pass=editTextPass.getText().toString();
+        String confirm_pass = ConfirmPassword.getText().toString();
+
         if(TextUtils.isEmpty(email)){
             // is empty
             Toast.makeText(this,"Please Enter Email Id",Toast.LENGTH_SHORT).show();
@@ -81,6 +85,12 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this,"Please Enter Password",Toast.LENGTH_SHORT).show();
             return;
 
+        }
+
+        if((pass != confirm_pass)){
+            // is empty
+            Toast.makeText(this,"Passwords do not match.",Toast.LENGTH_SHORT).show();
+            return;
         }
 
         // if validations are ok we show a progress bar
