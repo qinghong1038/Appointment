@@ -43,6 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
             verificationCallbacks;
     final String LOG_TAG = this.getClass().getSimpleName();
+    Boolean emailCredentialCreated,phoneCredentialCreated;
 
 
 
@@ -58,6 +59,8 @@ public class RegisterActivity extends AppCompatActivity {
         RegisterButton =findViewById(R.id.reg_button);
         FbAuth = FirebaseAuth.getInstance();
         PhoneNumberET.setText("+91 ");
+        emailCredentialCreated = false;
+        phoneCredentialCreated = false;
 
         if(FbAuth.getCurrentUser()!=null)
         {
@@ -143,7 +146,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         // if validations are ok we show a progress bar
 
-            progress.setMessage("Registering User..");
+            progress.setMessage("Registering Email ID ..");
             progress.show();
             FbAuth.createUserWithEmailAndPassword(email, pass)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -153,20 +156,26 @@ public class RegisterActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 //user successfully registered
                                 //we start profile activity here
-                                Toast.makeText(RegisterActivity.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
-                                finish();
-                                startActivity(new Intent(getApplicationContext(), EmailLoginActivity.class));
-
+                                Toast.makeText(RegisterActivity.this, "Email Registered Successfully", Toast.LENGTH_SHORT).show();
+                                //finish();
+                                //startActivity(new Intent(getApplicationContext(), EmailLoginActivity.class));
+                                emailCredentialCreated = true;
 
                             } else {
                                 Toast.makeText(RegisterActivity.this, "Couldnt Register. Please Try Again..", Toast.LENGTH_SHORT).show();
+                                //TODO: DISPLAY EXCEPTION MESSAGE AS TO WHY REGISTRATION COULDNT OCCUR. I KNOW THE CODE. WILL ADD IT SOON.
                             }
                         }
                     });
 
-            progress.setMessage("Sending OTP");
-            progress.show();
-            sendCode();
+            if(emailCredentialCreated)
+            {
+                Toast.makeText(this, "Proceeding to Link Mobile Number with Email ID", Toast.LENGTH_SHORT).show();
+                progress.setMessage("Sending OTP");
+                progress.show();
+                sendCode();
+            }
+
     }
     
     public void sendCode() {
@@ -188,7 +197,7 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onVerificationCompleted(
                             PhoneAuthCredential credential) {
 
-                        signInWithPhoneAuthCredential(credential);
+                        //signInWithPhoneAuthCredential(credential);
                     }
 
                     @Override
@@ -228,7 +237,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+    /*private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
 
         FbAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -255,6 +264,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                 });
-    }
+    }*/
 
 }
+
