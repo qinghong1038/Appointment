@@ -32,7 +32,7 @@ public class OTPopUp extends Activity {
             verificationCallbacks;
     private PhoneAuthProvider.ForceResendingToken resendToken;
     String PhoneNumber;
-    private FirebaseAuth fbAuth;
+    FirebaseAuth fbAuth;
     private String phoneVerificationId;
     final String LOG_TAG = this.getClass().getSimpleName();
     String UserId; //Stores the user input as a String.
@@ -46,9 +46,10 @@ public class OTPopUp extends Activity {
 
         OTPET = findViewById(R.id.OTP);
         ResendButton = findViewById(R.id.ResendOTP);
-
+        fbAuth = FirebaseAuth.getInstance();
         PhoneNumber = getIntent().getStringExtra("PhoneNumber");
-
+        phoneVerificationId = getIntent().getStringExtra("phoneVerificationId");
+        resendToken = (PhoneAuthProvider.ForceResendingToken) getIntent().getSerializableExtra("resendToken");
         ResendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
