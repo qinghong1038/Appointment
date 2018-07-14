@@ -31,7 +31,7 @@ public class OTPLoginActivity extends AppCompatActivity {
 
     TextInputLayout PhoneOTPLayout;
     Button SendOTPButton;
-    TextView SwitchToEmail, ResendOTP;
+    TextView SwitchToEmail;
     Boolean OTP = false;//This variable will be used to check if the activity is currently in OTP mode or Phone number mode
     String UserId; //Stores the user input as a String.
     String PhoneNumber;
@@ -56,8 +56,6 @@ public class OTPLoginActivity extends AppCompatActivity {
         progress=new ProgressDialog(this);
         SwitchToEmail = findViewById(R.id.SwitchToEmail);
         PhoneOTPLayout = findViewById(R.id.PhoneOTPLayout);
-        SendOTPButton = findViewById(R.id.SendOTP_button);
-        ResendOTP = findViewById(R.id.ResendOTP_textView);
         fbAuth = FirebaseAuth.getInstance();
         PopSendOTP = findViewById(R.id.OTP_PopUp);
 
@@ -65,10 +63,6 @@ public class OTPLoginActivity extends AppCompatActivity {
         PhoneOTP.setText("+91 ");
         Selection.setSelection(PhoneOTP.getText(), PhoneOTP.getText().length());
 
-
-        //TODO: Make this activity only handle taking Phone Number as Input
-        //TODO: Switch the OTP Codes to OTPopUp class
-        //The Following Block of Code is Experimental
         PopSendOTP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,91 +112,6 @@ public class OTPLoginActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
-        SendOTPButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                RED = false;
-                PhoneNumber = PhoneOTP.getText().toString().trim().replaceAll(" ", "" );
-                Log.v(LOG_TAG, PhoneNumber);
-
-                if(!OTP)
-                {
-                    /*
-                    Currently in Phone number mode.
-                    TODO: Handle invalid PhoneNumber numbers. Done by Glenn. Testing pending.
-                    If input is valid, set OTP to True
-
-
-                    */
-
-                    
-
-                    if(PhoneNumber.length()==13)
-                    {
-                        if(PhoneNumber.startsWith("+91"))
-                        {
-                            //OTP will be sent now
-                            progress.setMessage("Sending OTP");
-                            progress.show();
-                            sendCode();
-                            PhoneOTP.setText("");
-                            Log.v(LOG_TAG, "Phone Number Accepted");
-                            //Toast.makeText(OTPLoginActivity.this, "Function to Send OTP", Toast.LENGTH_SHORT).show();
-                            OTP = true;
-                        }
-                        else
-                        {
-                            Toast.makeText(OTPLoginActivity.this, "Please Enter A Valid Phone Number after the +91", Toast.LENGTH_LONG).show();
-                            PhoneOTP.setText("+91 ");
-                            Selection.setSelection(PhoneOTP.getText(), PhoneOTP.getText().length());
-
-                        }
-                    }
-                    else
-                    {
-                        Toast.makeText(OTPLoginActivity.this, "Please Enter A Valid Phone Number after the +91", Toast.LENGTH_LONG).show();
-                        PhoneOTP.setText("+91 ");
-                        Selection.setSelection(PhoneOTP.getText(), PhoneOTP.getText().length());
-
-
-                    }
-
-
-                }
-                else {
-                    /*
-                    Currently in OTP Mode.
-                    TODO: Handle invalid OTPs. Function added. Need to test if working.
-                    */
-                    verifyCode();
-                    Log.v(LOG_TAG, "OTP Sent");
-
-                }
-
-            }
-        });
-
-
-        ResendOTP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(view.getVisibility() == View.VISIBLE)
-                {
-                    //TODO: Handle resending of OTPs. Function added. Need to test if working.
-                    progress.setMessage("Resending OTP");
-                    progress.show();
-                    resendCode();
-                    Toast.makeText(OTPLoginActivity.this, "Resending OTP", Toast.LENGTH_LONG).show();
-                    Log.v(LOG_TAG, "Resending OTP");
-                }
-
-            }
-        });
-
-
 
 
 
@@ -256,28 +165,14 @@ public class OTPLoginActivity extends AppCompatActivity {
                         SendOTPButton.setText("Verify OTP");
                         PhoneOTPLayout.setHint("Enter OTP:");
 
-                        // ResendOTP.setVisibility(View.VISIBLE); //<------Temporarily commented
-                        //TODO: The Following Code is Temporary
+                        Intent intent = new Intent(OTPLoginActivity.this, OTPopUp.class);
+                        intent.putExtra("PhoneNumber", PhoneNumber);
+                        startActivity(intent);
 
-                        if(RED) {
-                            Intent intent = new Intent(OTPLoginActivity.this, OTPopUp.class);
-                            intent.putExtra("PhoneNumber", PhoneNumber);
-                            startActivity(intent);
-                        }
-                        /*verifyButton.setEnabled(true);
-                        sendButton.setEnabled(false);
-                        resendButton.setEnabled(true);*/
                     }
                 };
     }
-    public void verifyCode() {
 
-        String code = PhoneOTP.getText().toString().trim();
-
-        PhoneAuthCredential credential =
-                PhoneAuthProvider.getCredential(phoneVerificationId, code);
-        signInWithPhoneAuthCredential(credential);
-    }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
 
@@ -308,28 +203,9 @@ public class OTPLoginActivity extends AppCompatActivity {
                 });
     }
 
-    public void resendCode() {
-
-        //String phoneNumber = phoneText.getText().toString();
-
-        setUpVerificationCallbacks();
-
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                PhoneNumber,
-                60,
-                TimeUnit.SECONDS,
-                this,
-                verificationCallbacks,
-                resendToken);
-    }
 
     public void signOut() {
         fbAuth.signOut();
-        /*
-        TODO: Call this function when signOut is clicked. I dont think we need this function here. What say?
-         */
-        /*statusText.setText("Signed Out");
-        signoutButton.setEnabled(false);
-        sendButton.setEnabled(true);*/
+
     }
 }
