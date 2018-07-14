@@ -41,7 +41,6 @@ public class OTPLoginActivity extends AppCompatActivity {
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
             verificationCallbacks;
     private PhoneAuthProvider.ForceResendingToken resendToken;
-    Boolean loginMode;
     private ProgressDialog progress;
     final String LOG_TAG = this.getClass().getSimpleName();
 
@@ -162,11 +161,13 @@ public class OTPLoginActivity extends AppCompatActivity {
                         Toast.makeText(OTPLoginActivity.this, "OTP Sent", Toast.LENGTH_SHORT).show();
                         phoneVerificationId = verificationId;
                         resendToken = token;
-                        SendOTPButton.setText("Verify OTP");
-                        PhoneOTPLayout.setHint("Enter OTP:");
+
 
                         Intent intent = new Intent(OTPLoginActivity.this, OTPopUp.class);
                         intent.putExtra("PhoneNumber", PhoneNumber);
+                        intent.putExtra("phoneVerificationId", phoneVerificationId);
+                        intent.putExtra("resendToken", resendToken);
+
                         startActivity(intent);
 
                     }
