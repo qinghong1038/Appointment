@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Selection;
 import android.util.Log;
@@ -29,81 +28,78 @@ import java.util.concurrent.TimeUnit;
 
 public class OTPLoginActivity extends AppCompatActivity {
 
-    TextInputLayout PhoneOTPLayout;
-    Button SendOTPButton;
-    TextView SwitchToEmail;
-    Boolean OTP = false;//This variable will be used to check if the activity is currently in OTP mode or Phone number mode
+    /**Data Structures*/
     String UserId; //Stores the user input as a String.
     String PhoneNumber;
-    private FirebaseAuth fbAuth;
-    EditText PhoneOTP;
-    private String phoneVerificationId;
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks
-            verificationCallbacks;
+    Boolean OTP = false;//This variable will be used to check if the activity is currently in OTP mode or Phone number mode
+    private String PhoneVerificationId;
+
+    /**Views*/
+    TextView SwitchToEmailTV;
+    EditText PhoneOTPTV;
+    private ProgressDialog Progress;
+    Button SendOTPBTN; //Send OTP Button
+
+    /**Firebase*/
+    private FirebaseAuth FbAuth;
     private PhoneAuthProvider.ForceResendingToken resendToken;
-    private ProgressDialog progress;
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks verificationCallbacks;
+
     final String LOG_TAG = this.getClass().getSimpleName();
-
-    Button PopSendOTP;
-
-    Boolean RED = false; //TODO: Delete Later. Temporary Variable For detecting which button was pressed. (Red/Green)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otplogin);
-        progress=new ProgressDialog(this);
-        SwitchToEmail = findViewById(R.id.SwitchToEmail);
-        PhoneOTPLayout = findViewById(R.id.PhoneOTPLayout);
-        fbAuth = FirebaseAuth.getInstance();
-        PopSendOTP = findViewById(R.id.OTP_PopUp);
 
-        PhoneOTP = findViewById(R.id.PhoneOTP_editText);
-        PhoneOTP.setText("+91 ");
-        Selection.setSelection(PhoneOTP.getText(), PhoneOTP.getText().length());
+        //Linking to views
+        SwitchToEmailTV = findViewById(R.id.SwitchToEmailTV);
+        SendOTPBTN = findViewById(R.id.SendOTPBTN);
+        PhoneOTPTV = findViewById(R.id.PhoneNumberET);
 
-        PopSendOTP.setOnClickListener(new View.OnClickListener() {
+        Progress =new ProgressDialog(this);
+        FbAuth = FirebaseAuth.getInstance();
+
+        PhoneOTPTV.setText("+91 ");
+        Selection.setSelection(PhoneOTPTV.getText(), PhoneOTPTV.getText().length());
+
+        SendOTPBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RED = true;
-                PhoneNumber = PhoneOTP.getText().toString().trim().replaceAll(" ", "" );
+                PhoneNumber = PhoneOTPTV.getText().toString().trim().replaceAll(" ", "" );
 
                 if(PhoneNumber.length()==13)
                 {
                     if(PhoneNumber.startsWith("+91"))
                     {
                         //OTP will be sent now
-                        progress.setMessage("Sending OTP");
-                        progress.show();
+                        Progress.setMessage("Sending OTP");
+                        Progress.show();
                         sendCode();
 
 
                     }
                     else
                     {
-                        Toast.makeText(OTPLoginActivity.this, "Please Enter A Valid Phone Number after the +91", Toast.LENGTH_LONG).show();
-                        PhoneOTP.setText("+91 ");
-                        Selection.setSelection(PhoneOTP.getText(), PhoneOTP.getText().length());
+                        Toast.makeText(OTPLoginActivity.this, "Please enter a valid phone number after the +91", Toast.LENGTH_LONG).show();
+                        PhoneOTPTV.setText("+91 ");
+                        Selection.setSelection(PhoneOTPTV.getText(), PhoneOTPTV.getText().length());
 
                     }
                 }
                 else
                 {
-                    Toast.makeText(OTPLoginActivity.this, "Please Enter A Valid Phone Number after the +91", Toast.LENGTH_LONG).show();
-                    PhoneOTP.setText("+91 ");
-                    Selection.setSelection(PhoneOTP.getText(), PhoneOTP.getText().length());
-
-
+                    Toast.makeText(OTPLoginActivity.this, "Please enter a valid phone number after the +91", Toast.LENGTH_LONG).show();
+                    PhoneOTPTV.setText("+91 ");
+                    Selection.setSelection(PhoneOTPTV.getText(), PhoneOTPTV.getText().length());
                 }
-
-
             }
         });
 
 
 
 
-        SwitchToEmail.setOnClickListener(new View.OnClickListener() {
+        SwitchToEmailTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), EmailLoginActivity.class);
@@ -149,7 +145,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                         } else if (e instanceof FirebaseTooManyRequestsException) {
                             // SMS quota exceeded
                             Log.d(LOG_TAG, "SMS Quota exceeded.");
-                            Toast.makeText(OTPLoginActivity.this, "Unable to send OTP. Please try to Login using Email", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OTPLoginActivity.this, "Unable to send OTP. Please try logging in using Email", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -157,15 +153,15 @@ public class OTPLoginActivity extends AppCompatActivity {
                     public void onCodeSent(String verificationId,
                                            PhoneAuthProvider.ForceResendingToken token) {
 
-                        progress.dismiss();
+                        Progress.dismiss();
                         Toast.makeText(OTPLoginActivity.this, "OTP Sent", Toast.LENGTH_SHORT).show();
-                        phoneVerificationId = verificationId;
+                        PhoneVerificationId = verificationId;
                         resendToken = token;
 
 
                         Intent intent = new Intent(OTPLoginActivity.this, OTPopUp.class);
                         intent.putExtra("PhoneNumber", PhoneNumber);
-                        intent.putExtra("phoneVerificationId", phoneVerificationId);
+                        intent.putExtra("phoneVerificationId", PhoneVerificationId);
                         intent.putExtra("resendToken", resendToken);
 
                         startActivity(intent);
@@ -177,7 +173,7 @@ public class OTPLoginActivity extends AppCompatActivity {
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
 
-        fbAuth.signInWithCredential(credential)
+        FbAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -205,8 +201,4 @@ public class OTPLoginActivity extends AppCompatActivity {
     }
 
 
-    public void signOut() {
-        fbAuth.signOut();
-
-    }
 }

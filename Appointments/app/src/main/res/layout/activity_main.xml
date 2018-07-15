@@ -7,7 +7,7 @@
     tools:context="com.gtaandteam.android.wellcure.EmailLoginActivity">
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/LoginLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="128dp"
@@ -27,10 +27,10 @@
             android:textSize="18dp">
 
             <EditText
-                android:id="@+id/username_editText"
+                android:id="@+id/UsernameET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email: "
+                android:hint="Email ID "
                 android:inputType="textEmailAddress"
                 android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
@@ -39,87 +39,73 @@
             android:id="@+id/password_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:textSize="18dp">
 
             <EditText
-                android:id="@+id/password_editText"
+                android:id="@+id/PasswordET"
                 android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:hint="Password:"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                style="@style/ETStyle"
                 android:inputType="textPassword"
                 android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
     <Button
-        android:id="@+id/login_button"
+        android:id="@+id/LoginBTN"
         style="@style/ButtonStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="84dp"
         android:fontFamily="sans-serif-condensed"
         android:text="Login"
-        app:layout_constraintEnd_toEndOf="@+id/register_button"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/register_button"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintEnd_toEndOf="@+id/RegisterBTN"
+        app:layout_constraintStart_toStartOf="@+id/RegisterBTN"
+        app:layout_constraintTop_toBottomOf="@+id/LoginLayout" />
 
     <TextView
-        android:id="@+id/forgot_password"
+        android:id="@+id/ForgotPasswordTV"
+        style="@style/ETStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:textSize="16dp"
-        android:fontFamily="sans-serif-condensed"
+        android:textSize="16sp"
         android:text="Forgot password?"
         android:textColor="@color/colorPrimary"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintStart_toStartOf="@+id/LoginLayout"
+        app:layout_constraintTop_toBottomOf="@+id/LoginLayout" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/NoAccountTV"
+        style="@style/ETStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:textSize="14dp"
-        android:fontFamily="sans-serif-condensed"
         android:text="Dont Have An Account?"
-        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        android:textColor="@color/colorPrimary"
-        app:layout_constraintEnd_toEndOf="@+id/register_button"
-        app:layout_constraintStart_toStartOf="@+id/register_button"
-        app:layout_constraintTop_toBottomOf="@+id/login_button" />
+        app:layout_constraintEnd_toEndOf="@+id/RegisterBTN"
+        app:layout_constraintStart_toStartOf="@+id/RegisterBTN"
+        app:layout_constraintTop_toBottomOf="@+id/LoginBTN" />
 
     <Button
-        android:id="@+id/register_button"
+        android:id="@+id/RegisterBTN"
         style="@style/ButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:background="@android:color/holo_blue_dark"
-        android:fontFamily="sans-serif-condensed"
+        android:background="@color/blue"
         android:text="Register"
-        android:textColorLink="@color/common_google_signin_btn_text_dark_focused"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/NoAccountTV" />
 
     <TextView
-        android:id="@+id/OTP_login"
+        android:id="@+id/SwitchToOTPTV"
+        style="@style/ETStyle"
         android:layout_width="wrap_content"
-        android:textColor="@android:color/holo_blue_dark"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:textSize="16dp"
-        android:fontFamily="sans-serif-condensed"
         android:text="Login using OTP?"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        android:textColor="@color/blue"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/LoginLayout"
+        app:layout_constraintTop_toBottomOf="@+id/LoginLayout" />
 
 </android.support.constraint.ConstraintLayout>

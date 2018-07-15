@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,17 +19,17 @@ import instamojo.library.InstapayListener;
 
 public class ConfirmActivity extends AppCompatActivity {
 
+    /**Data Structures*/
+    String Name, Date, Email, Purpose, Amount, Phone;
 
-    Button ConfirmButton;
-    TextView DoctorNameTV,
-            DateTV,
-            PatientNameTV,
-            EmailTV,
-            AmountTV;
-    ImageView DoctorPhoto;
-    String name,date,email,purpose,amount,phone;
+    /**Views*/
+    Button ConfirmBTN;
+    TextView DoctorNameTV, DateTV, PatientNameTV, EmailTV, AmountTV;
+    ImageView DoctorIV;
 
+    InstapayListener listener;
 
+    final String LOG_TAG = this.getClass().getSimpleName();
 
     private void callInstamojoPay(String email, String phone, String amount, String purpose, String buyername) {
         final Activity activity = this;
@@ -37,21 +38,21 @@ public class ConfirmActivity extends AppCompatActivity {
         registerReceiver(instamojoPay, filter);
         JSONObject pay = new JSONObject();
         try {
-            pay.put("EmailTV", email);
+            pay.put("Email", email);
             pay.put("PhoneNumber", phone);
-            pay.put("purpose", purpose);
-            pay.put("amount", amount);
-            pay.put("name", buyername);
+            pay.put("Purpose", purpose);
+            pay.put("Amount", amount);
+            pay.put("Name", buyername);
             pay.put("send_sms", true);
             pay.put("send_email", true);
  } catch (JSONException e) {
+            Log.e("APP", "JSONException was caught");
             e.printStackTrace();
         }
         initListener();
         instamojoPay.start(activity, pay, listener);
     }
     
-    InstapayListener listener;
 
     
     private void initListener() {
@@ -64,7 +65,6 @@ public class ConfirmActivity extends AppCompatActivity {
                 String paymentToken[]=payInfo[4].split("=");;
 
                 //Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-
 
                 Intent onSuccess = new Intent(ConfirmActivity.this, StatusActivity.class);
                 onSuccess.putExtra("Status",true);
@@ -91,33 +91,34 @@ public class ConfirmActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm);
 
-        ConfirmButton = findViewById(R.id.PayButton);
-        DoctorNameTV = findViewById(R.id.DoctorName);
-        DateTV = findViewById(R.id.DateValue); //DateTV of appointment
-        PatientNameTV = findViewById(R.id.NameValue);
-        EmailTV = findViewById(R.id.EmailValue);
-        AmountTV = findViewById(R.id.Amount); //AmountTV to be paid
-        DoctorPhoto = findViewById(R.id.profile_photo);
+        //Linking to views
+        ConfirmBTN = findViewById(R.id.PayBTN);
+        DoctorNameTV = findViewById(R.id.DoctorNameTV);
+        DateTV = findViewById(R.id.DateET); //DateTV of appointment
+        PatientNameTV = findViewById(R.id.NameET);
+        EmailTV = findViewById(R.id.EmailET);
+        AmountTV = findViewById(R.id.AmountTV); //AmountTV to be paid
+        DoctorIV = findViewById(R.id.DoctorIV);
 
         Intent getDetails = getIntent();
 
-        name=getDetails.getStringExtra("NameET");
-        date=getDetails.getStringExtra("DateTV");
-        phone=getDetails.getStringExtra("PhoneET");
-        email=getDetails.getStringExtra("EmailET");
+        Name =getDetails.getStringExtra("Name");
+        Date =getDetails.getStringExtra("Date");
+        Phone =getDetails.getStringExtra("Phone");
+        Email =getDetails.getStringExtra("Email");
 
-        PatientNameTV.setText(name);
-        EmailTV.setText(email);
-        DateTV.setText(date);
+        PatientNameTV.setText(Name);
+        EmailTV.setText(Email);
+        DateTV.setText(Date);
 
-        purpose = "Wellcure Clinic Appointment Fee";
-        amount ="10";
+        Purpose = "Wellcure Clinic Appointment Fee";
+        Amount ="10";
 
-        ConfirmButton.setOnClickListener(new View.OnClickListener() {
+        ConfirmBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                callInstamojoPay(email,phone,amount,purpose,name);
+                callInstamojoPay(Email, Phone, Amount, Purpose, Name);
             }
         });
     }

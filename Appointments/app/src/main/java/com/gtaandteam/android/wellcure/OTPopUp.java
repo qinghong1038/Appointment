@@ -25,39 +25,48 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import java.util.concurrent.TimeUnit;
 
 public class OTPopUp extends Activity {
-    EditText OTPET;
-    Button ResendButton;
-    private ProgressDialog progress;
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks
-            verificationCallbacks;
-    private PhoneAuthProvider.ForceResendingToken resendToken;
-    String PhoneNumber;
-    FirebaseAuth fbAuth;
-    private String phoneVerificationId;
-    final String LOG_TAG = this.getClass().getSimpleName();
+
+    /**Data Structures*/
     String UserId; //Stores the user input as a String.
+    private String phoneVerificationId;
+    String PhoneNumber;
+
+    /**Views*/
+    EditText OTPET; // OTP EditText
+    Button ResendBTN;
+    private ProgressDialog Progress;
+
+
+    /**Firebase*/
+    FirebaseAuth FbAuth;
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks verificationCallbacks;
+    private PhoneAuthProvider.ForceResendingToken ResendToken;
+
+    final String LOG_TAG = this.getClass().getSimpleName();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otpup);
-        progress=new ProgressDialog(this);
 
-        OTPET = findViewById(R.id.OTP);
-        ResendButton = findViewById(R.id.ResendOTP);
-        fbAuth = FirebaseAuth.getInstance();
+        //Linking to views
+        OTPET = findViewById(R.id.OTPBTN);
+        ResendBTN = findViewById(R.id.ResendOTPBTN);
+
+        Progress =new ProgressDialog(this);
+        FbAuth = FirebaseAuth.getInstance();
         PhoneNumber = getIntent().getStringExtra("PhoneNumber");
         phoneVerificationId = getIntent().getStringExtra("phoneVerificationId");
-        resendToken = (PhoneAuthProvider.ForceResendingToken) getIntent().getSerializableExtra("resendToken");
-        ResendButton.setOnClickListener(new View.OnClickListener() {
+        ResendToken = (PhoneAuthProvider.ForceResendingToken) getIntent().getSerializableExtra("resendToken");
+
+        ResendBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(view.getVisibility() == View.VISIBLE)
                 {
-                    //TODO: Handle resending of OTPs. Function added. Need to test if working.
-                    progress.setMessage("Resending OTP");
-                    progress.show();
+                    Progress.setMessage("Resending OTP");
+                    Progress.show();
                     resendCode();
                     Toast.makeText(OTPopUp.this, "Resending OTP", Toast.LENGTH_LONG).show();
                 }
@@ -69,8 +78,6 @@ public class OTPopUp extends Activity {
 
     public void resendCode() {
 
-        //String phoneNumber = phoneText.getText().toString();
-
         setUpVerificationCallbacks();
 
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
@@ -79,7 +86,7 @@ public class OTPopUp extends Activity {
                 TimeUnit.SECONDS,
                 this,
                 verificationCallbacks,
-                resendToken);
+                ResendToken);
     }
 
     private void setUpVerificationCallbacks() {
@@ -113,22 +120,18 @@ public class OTPopUp extends Activity {
                     public void onCodeSent(String verificationId,
                                            PhoneAuthProvider.ForceResendingToken token) {
 
-                        progress.dismiss();
+                        Progress.dismiss();
                         Toast.makeText(OTPopUp.this, "OTP Sent", Toast.LENGTH_SHORT).show();
                         phoneVerificationId = verificationId;
-                        resendToken = token;
-                        // ResendOTP.setVisibility(View.VISIBLE); //<------Temporarily commented
+                        ResendToken = token;
 
-                        /*verifyButton.setEnabled(true);
-                        sendButton.setEnabled(false);
-                        resendButton.setEnabled(true);*/
                     }
                 };
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
 
-        fbAuth.signInWithCredential(credential)
+        FbAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {

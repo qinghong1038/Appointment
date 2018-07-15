@@ -10,58 +10,60 @@ import android.widget.TextView;
 
 public class StatusActivity extends AppCompatActivity {
 
-    Button GoBackbutton;
-    TextView StatusHeader, StatusMessage, BookingID, TimeOfBooking,TimeOfAppointment;
-    ImageView StatusView;
-    String bookingDate,orderID,tokenID,paymentID,appointmentDate;
-    Boolean status;
+    /**Data Structures*/
+    String BookingDate, OrderID, TokenID, PaymentID, AppointmentDate;
+    Boolean Success;
+
+    /**Views*/
+    Button GoBackBTN;
+    TextView StatusHeaderTV, StatusMessageTV, BookingIDTV, TimeOfBookingTV, TimeOfAppointmentTV;
+    ImageView StatusIV;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status);
-        Intent getStatus = getIntent();
-        status = getStatus.getBooleanExtra("Status",false);
-                    /*
-    There are three PNG files in the drawables folder: one each for success, error and pending.
-    TODO: Depending on what the status returned by payTM is, set the appropriate image and display status message
-     */
 
-        GoBackbutton = findViewById(R.id.GoBackButton);
+        //Linking to views
+        GoBackBTN = findViewById(R.id.BackBTN);
+        StatusIV = findViewById(R.id.StatusIV);
+        StatusHeaderTV = findViewById(R.id.StatusTV);
+        StatusMessageTV = findViewById(R.id.StatusMessageTV);
+        BookingIDTV = findViewById(R.id.BookingIDET);
+        StatusIV = findViewById(R.id.StatusIV);
+        TimeOfBookingTV = findViewById(R.id.BookingDateET);
+        TimeOfAppointmentTV = findViewById(R.id.AppointmentDateET);
 
-        //TODO : Manipulate the following views in accordance with the status returned by PayTM.
         //Side note : prefer to use "hh:mm,  dd-mm-yyyy" for displaying time of completion.
-        StatusView = findViewById(R.id.payment_status);
-        StatusHeader = findViewById(R.id.status_header);
-        StatusMessage = findViewById(R.id.status_message);
-        BookingID = findViewById(R.id.ID_value);
-        StatusView = findViewById(R.id.payment_status);
-        TimeOfBooking = findViewById(R.id.BookingDateLabel);
-        TimeOfAppointment = findViewById(R.id.AppointmentDateValue);
-        bookingDate=AppointmentActivity.TodaysDate;
-        appointmentDate=AppointmentActivity.SelectedDate;
-        if(status==true)
+        Intent getStatus = getIntent();
+        Success = getStatus.getBooleanExtra("Status",false);
+        BookingDate =AppointmentActivity.TodaysDate;
+        AppointmentDate =AppointmentActivity.SelectedDate;
+
+        if(Success)
         {
-            StatusView.setImageResource(R.drawable.success);
-            orderID=getStatus.getStringExtra("OrderID");
-            paymentID=getStatus.getStringExtra("PaymentID");
-            tokenID=getStatus.getStringExtra("PaymentToken");
-            BookingID.setText(paymentID);
-            TimeOfBooking.setText(bookingDate);
-            TimeOfAppointment.setText(appointmentDate);
-            StatusMessage.setText("You have Successfully Made a Booking!");
-            StatusHeader.setText("SUCCESS!");
+            StatusIV.setImageResource(R.drawable.success);
+            OrderID =getStatus.getStringExtra("OrderID");
+            PaymentID =getStatus.getStringExtra("PaymentID");
+            TokenID =getStatus.getStringExtra("PaymentToken");
+            BookingIDTV.setText(PaymentID);
+            TimeOfBookingTV.setText(BookingDate);
+            TimeOfAppointmentTV.setText(AppointmentDate);
+            StatusMessageTV.setText("You have Successfully Made a Booking!");
+            StatusHeaderTV.setText("SUCCESS!");
         }
         else
         {
-            StatusView.setImageResource(R.drawable.error);
-            StatusHeader.setText("ERROR!");
-            StatusMessage.setText("Payment Failed! Please Try Again!");
-            BookingID.setVisibility(View.INVISIBLE);
-            TimeOfBooking.setVisibility(View.INVISIBLE);
+            StatusIV.setImageResource(R.drawable.error);
+            StatusHeaderTV.setText("ERROR!");
+            StatusMessageTV.setText("Payment Failed! Please Try Again!");
+            BookingIDTV.setVisibility(View.INVISIBLE);
+            TimeOfBookingTV.setVisibility(View.INVISIBLE);
         }
 
         //TextView StatusHeader, StatusMessage, BookingID, TimeOfBooking;
-        GoBackbutton.setOnClickListener(new View.OnClickListener() {
+        GoBackBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(StatusActivity.this, DoctorsActivity.class));

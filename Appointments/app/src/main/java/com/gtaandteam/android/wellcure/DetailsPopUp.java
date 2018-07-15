@@ -7,15 +7,23 @@ import android.widget.TextView;
 
 public class DetailsPopUp extends Activity {
 
-    TextView Doctor, Name, Date, Fees;
-    ImageView DoctorImage;
+    /**Views*/
+    TextView DoctorTV, NameTV, DateTV, FeesTV;
+    ImageView DoctorIV;
 
-    //Sorry for inconsistent naming across activities
+    final String LOG_TAG = this.getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.details_pop_up);
+
+        //Linking to Views
+        DoctorTV = findViewById(R.id.DoctorNameTV);
+        NameTV = findViewById(R.id.NameET);
+        DateTV = findViewById(R.id.DateET);
+        FeesTV = findViewById(R.id.AmountTV);
+        DoctorIV = findViewById(R.id.DoctorIV);
 
         //String CurrentName = getIntent().getStringExtra("NameET");
         String CurrentDoctor = getIntent().getStringExtra("Doctor");
@@ -23,15 +31,11 @@ public class DetailsPopUp extends Activity {
         int CurrentDoctorImage = getIntent().getIntExtra("DoctorImage", -1);
         // float CurrentFees = getIntent().getFloatExtra("Fees", 0);
 
-        Doctor = findViewById(R.id.DoctorName);
-        Name = findViewById(R.id.NameValue);
-        Date = findViewById(R.id.DateValue);
-        Fees = findViewById(R.id.Amount);
-        DoctorImage = findViewById(R.id.DoctorImage);
 
-        Doctor.setText(CurrentDoctor);
-        Date.setText(CurrentDate);
-        DoctorImage.setImageResource(CurrentDoctorImage);
+
+        DoctorTV.setText(CurrentDoctor);
+        DateTV.setText(CurrentDate);
+        DoctorIV.setImageResource(CurrentDoctorImage);
 
         //NameET.setText(CurrentName);
         //Fees.setText(CurrentFees);

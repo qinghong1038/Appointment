@@ -7,151 +7,111 @@
     tools:context=".StatusActivity">
 
     <ImageView
-        android:id="@+id/payment_status"
-        android:layout_width="144dp"
-        android:layout_height="144dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:id="@+id/StatusIV"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
         android:src="@drawable/success"
-        app:layout_constraintBottom_toTopOf="@+id/status_header"
+        app:layout_constraintBottom_toTopOf="@+id/StatusTV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/status_message"
+        android:id="@+id/StatusMessageTV"
+        style="@style/ETStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="sans-serif-condensed"
         android:text="Your booking was made successfully! "
-        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/GoBackButton"
+        android:id="@+id/BackBTN"
         style="@style/ButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:fontFamily="sans-serif-condensed"
-        android:layout_marginTop="8dp"
         android:text="Back to home"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/BookingIDLabel" />
-
-    <TextView
-        android:id="@+id/BookingIDLabel"
-        android:layout_width="0dp"
-        style="@style/TabStyle"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="sans-serif-condensed"
-        android:textSize="16sp"
-        android:text="Appt ID"
-        app:layout_constraintEnd_toEndOf="@+id/time_label"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/status_message" />
-
-    <TextView
-        android:id="@+id/status_header"
-        android:fontFamily="sans-serif-condensed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-
-        android:layout_marginStart="8dp"
-        android:text="SUCCESS!"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        app:layout_constraintBottom_toTopOf="@+id/status_message"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/ID_value"
+        android:id="@+id/BookingIDTV"
         android:layout_width="0dp"
+        style="@style/TVStyle"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:fontFamily="sans-serif-condensed"
-        android:text="---"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/BookingIDLabel"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/BookingIDLabel" />
-
-    <TextView
-        android:id="@+id/time_label"
-        style="@style/TabStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:fontFamily="sans-serif-condensed"
-        android:text="Booked"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/AppointmentDateLabel"
+        android:text="Appt ID"
+        app:layout_constraintEnd_toEndOf="@+id/BookingDateTV"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/BookingIDLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/StatusMessageTV" />
 
     <TextView
-        android:id="@+id/BookingDateLabel"
-        android:layout_width="0dp"
+        android:id="@+id/StatusTV"
+        style="@style/ETStyle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:fontFamily="sans-serif-condensed"
-        android:text="---"
-        android:textColor="#000000"
-
-        android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/time_label"
+        android:text="SUCCESS!"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        app:layout_constraintBottom_toTopOf="@+id/StatusMessageTV"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/time_label" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/AppointmentDateLabel"
+        android:id="@+id/BookingIDET"
+        style="@style/ETStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:text="---"
+        app:layout_constraintBaseline_toBaselineOf="@+id/BookingIDTV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/BookingIDTV" />
+
+    <TextView
+        android:id="@+id/BookingDateTV"
+        style="@style/TVStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Booked"
+        app:layout_constraintEnd_toEndOf="@+id/AppointmentDateTV"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/BookingIDTV" />
+
+    <TextView
+        android:id="@+id/BookingDateET"
+        style="@style/ETStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="---"
+        app:layout_constraintBaseline_toBaselineOf="@+id/BookingDateTV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/BookingDateTV" />
+
+    <TextView
+        android:id="@+id/AppointmentDateTV"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Appt ON"
-        style="@style/TabStyle"
-
-        android:fontFamily="sans-serif-condensed"
-        android:textSize="16sp"
+        style="@style/TVStyle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/time_label" />
+        app:layout_constraintTop_toBottomOf="@+id/BookingDateTV" />
 
     <TextView
-        android:id="@+id/AppointmentDateValue"
+        android:id="@+id/AppointmentDateET"
+        style="@style/ETStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-
-        android:fontFamily="sans-serif-condensed"
         android:text="---"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/AppointmentDateLabel"
+        app:layout_constraintBaseline_toBaselineOf="@+id/AppointmentDateTV"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/AppointmentDateLabel" />
+        app:layout_constraintStart_toEndOf="@+id/AppointmentDateTV" />
 
 
 </android.support.constraint.ConstraintLayout>

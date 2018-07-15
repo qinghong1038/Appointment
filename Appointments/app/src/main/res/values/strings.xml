@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Wellcure Clinic</string>
+    <string name="rupee">₹</string>
 </resources>

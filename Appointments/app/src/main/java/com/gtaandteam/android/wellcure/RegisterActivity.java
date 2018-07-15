@@ -20,7 +20,6 @@ import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DataSnapshot;
@@ -33,56 +32,60 @@ import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 public class RegisterActivity extends AppCompatActivity {
-    Button LoginButton,
-            RegisterButton;
-    
-    EditText UsernameET,
-            PhoneNumberET,
-            PasswordET,
-            ConfirmPasswordET;
-    private PhoneAuthProvider.ForceResendingToken resendToken;
-    private String phoneVerificationId;
-    String UserId,EmailId;
-    private String pass;
-    private ProgressDialog progress;
-    private FirebaseAuth FbAuth;
-    String PhoneNumber;
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks
-            verificationCallbacks;
-    final String LOG_TAG = "RegisterActivity";
-    Boolean emailCredentialCreated,phoneCredentialCreated,linkingStatus,phoneNumberExists;
-    DatabaseReference userDb1;
-    HashMap<String, String> data;
 
+    /**Data Structures*/
+    private String PhoneVerificationId;
+    private String Password;
+    String EmailId;
+    String PhoneNumber;
+    HashMap<String, String> Data;
+    Boolean EmailCredentialCreated, PhoneCredentialCreated, LinkingStatus, PhoneNumberExists;
+
+    /**Views*/
+    Button LoginBTN, RegisterBTN;
+    EditText UsernameET, PhoneNumberET, PasswordET, ConfirmPasswordET;
+    private ProgressDialog Progress;
+
+    /**Firebase*/
+    private PhoneAuthProvider.ForceResendingToken ResendToken;
+    private FirebaseAuth FbAuth;
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks verificationCallbacks;
+    DatabaseReference UserDb1;
+
+    final String LOG_TAG = this.getClass().getSimpleName();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        //Linking to views
         UsernameET =findViewById(R.id.UserNameET);
         PasswordET =findViewById(R.id.PasswordET);
         ConfirmPasswordET = findViewById(R.id.ConfirmPasswordET);
         PhoneNumberET = findViewById(R.id.PhoneNumberET);
-        progress =new ProgressDialog(this);
-        RegisterButton =findViewById(R.id.reg_button);
+        RegisterBTN =findViewById(R.id.RegisterBTN);
+        LoginBTN = findViewById(R.id.LoginBTN);
+
         FbAuth = FirebaseAuth.getInstance();
         PhoneNumberET.setText("+91 ");
-        emailCredentialCreated = false;
-        phoneCredentialCreated = false;
+        EmailCredentialCreated = false;
+        PhoneCredentialCreated = false;
+        Progress =new ProgressDialog(this);
 
 
         if(FbAuth.getCurrentUser()!=null)
         {
             //user already logged in. go directly to doctor activity
-            Toast.makeText(this, "Already Signed In With Email ID : "+FbAuth.getCurrentUser().getEmail(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Already signed in with Email : "+FbAuth.getCurrentUser().getEmail(), Toast.LENGTH_SHORT).show();
             finish();
             Intent i =new Intent(getApplicationContext(),DoctorsActivity.class);
             i.putExtra("loginMode",0);
             startActivity(i);
         }
-        LoginButton = findViewById(R.id.login_button2);
-        LoginButton.setOnClickListener(new View.OnClickListener() {
+
+        LoginBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
@@ -91,7 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        RegisterButton.setOnClickListener(new View.OnClickListener() {
+        RegisterBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 registerUser();
@@ -103,24 +106,24 @@ public class RegisterActivity extends AppCompatActivity {
     private void registerUser()
     {
         EmailId= UsernameET.getText().toString().trim();
-        pass= PasswordET.getText().toString();
+        Password = PasswordET.getText().toString();
         String confirm_pass = ConfirmPasswordET.getText().toString();
         PhoneNumber = PhoneNumberET.getText().toString().trim().replaceAll(" ", "" );
 
         if(TextUtils.isEmpty(EmailId)){
             // is empty
-            Toast.makeText(this,"Please Enter Email Id",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Please enter Email ID",Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if(TextUtils.isEmpty(pass)){
+        if(TextUtils.isEmpty(Password)){
             // is empty
-            Toast.makeText(this,"Please Enter Password",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Please enter password",Toast.LENGTH_SHORT).show();
             return;
 
         }
 
-        if(!TextUtils.equals(pass, confirm_pass)){
+        if(!TextUtils.equals(Password, confirm_pass)){
             // is empty
             Toast.makeText(this,"Passwords do not match.",Toast.LENGTH_SHORT).show();
             return;
@@ -131,15 +134,15 @@ public class RegisterActivity extends AppCompatActivity {
             if(PhoneNumber.startsWith("+91"))
             {
                 //OTP will be sent now
-                progress.setMessage("Sending OTP");
-                progress.show();
+                Progress.setMessage("Sending OTP");
+                Progress.show();
                 sendCode();
 
 
             }
             else
             {
-                Toast.makeText(RegisterActivity.this, "Please Enter A Valid Phone Number after the +91", Toast.LENGTH_LONG).show();
+                Toast.makeText(RegisterActivity.this, "Please enter a valid phone number after the +91", Toast.LENGTH_LONG).show();
                 PhoneNumberET.setText("+91 ");
                 Selection.setSelection(PhoneNumberET.getText(), PhoneNumberET.getText().length());
 
@@ -147,7 +150,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
         else
         {
-            Toast.makeText(RegisterActivity.this, "Please Enter A Valid Phone Number after the +91", Toast.LENGTH_LONG).show();
+            Toast.makeText(RegisterActivity.this, "Please enter a valid phone number after the +91", Toast.LENGTH_LONG).show();
             PhoneNumberET.setText("+91 ");
             Selection.setSelection(PhoneNumberET.getText(), PhoneNumberET.getText().length());
             return;
@@ -156,42 +159,43 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         // if validations are ok we show a progress bar
-            Log.d(LOG_TAG, "Beginning Registration");
-            progress.setMessage("Registering Email ID ..");
-            progress.show();
-            FbAuth.createUserWithEmailAndPassword(EmailId, pass)
+            Log.d(LOG_TAG, "Starting Registration");
+            Progress.setMessage("Registering Email ID ... ");
+            Progress.show();
+            FbAuth.createUserWithEmailAndPassword(EmailId, Password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            progress.dismiss();
+                            Progress.dismiss();
                             if (task.isSuccessful()) {
                                 //user successfully registered
-                                Log.d(LOG_TAG, "Email Account Successfully Created");
-                                Toast.makeText(RegisterActivity.this, "Email Registered Successfully", Toast.LENGTH_SHORT).show();
+                                Log.d(LOG_TAG, "Email account successfully created.");
+                                Toast.makeText(RegisterActivity.this, "Email registered successfully.", Toast.LENGTH_SHORT).show();
                                 //finish();
                                 //startActivity(new Intent(getApplicationContext(), EmailLoginActivity.class));
-                                emailCredentialCreated = true;
+                                EmailCredentialCreated = true;
 
                             } else {
-                                Toast.makeText(RegisterActivity.this, "Couldnt Register. Please Try Again..", Toast.LENGTH_SHORT).show();
-                                Log.d(LOG_TAG, "Couldnt create Email Account");
+                                Toast.makeText(RegisterActivity.this, "Couldn't register. Please try again.", Toast.LENGTH_SHORT).show();
+                                Log.d(LOG_TAG, "Couldn't create Email Account");
                                 //TODO: DISPLAY EXCEPTION MESSAGE AS TO WHY REGISTRATION COULDNT OCCUR. I KNOW THE CODE. WILL ADD IT SOON.
+                                //TODO: OK.
                             }
                         }
                     });
 
-            if(emailCredentialCreated)
+            if(EmailCredentialCreated)
             {
-                Log.d(LOG_TAG, "Proceeding to Link Mobile Number with Email ID");
-                Toast.makeText(this, "Proceeding to Link Mobile Number with Email ID", Toast.LENGTH_SHORT).show();
-                progress.setMessage("Sending OTP");
-                progress.show();
-                phoneNumberExists=false;
+                Log.d(LOG_TAG, "Proceeding to link Mobile Number with Email ID");
+                Toast.makeText(this, "Proceeding to link mobile number with Email ID", Toast.LENGTH_SHORT).show();
+                Progress.setMessage("Sending OTP");
+                Progress.show();
+                PhoneNumberExists =false;
                 checkPhoneNumberExists();
-                if(phoneNumberExists)
+                if(PhoneNumberExists)
                 {
-                    Log.d(LOG_TAG, "Phone Number Already Registered With Another Account");
-                    Toast.makeText(this, "Phone Number Already Registered With Another Account", Toast.LENGTH_SHORT).show();
+                    Log.d(LOG_TAG, "Phone number already registered with another account");
+                    Toast.makeText(this, "Phone number already registered with another account.", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
@@ -200,7 +204,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
 
             }
-            if(emailCredentialCreated && phoneCredentialCreated && linkingStatus)
+            if(EmailCredentialCreated && PhoneCredentialCreated && LinkingStatus)
             {
                 Log.d(LOG_TAG, "Calling Register to Database");
                 registerToDatabase();
@@ -227,7 +231,7 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onVerificationCompleted(
                             PhoneAuthCredential credential) {
 
-                        phoneCredentialCreated = true;
+                        PhoneCredentialCreated = true;
                         linkMobWithEmail(credential);
 
                         //signInWithPhoneAuthCredential(credential);
@@ -252,16 +256,16 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onCodeSent(String verificationId,
                                            PhoneAuthProvider.ForceResendingToken token) {
 
-                        progress.dismiss();
+                        Progress.dismiss();
                         Toast.makeText(RegisterActivity.this, "OTP Sent", Toast.LENGTH_SHORT).show();
-                        phoneVerificationId = verificationId;
-                        resendToken = token;
+                        PhoneVerificationId = verificationId;
+                        ResendToken = token;
 
 
                         Intent intent = new Intent(RegisterActivity.this, OTPopUp.class);
                         intent.putExtra("PhoneNumber", PhoneNumber);
-                        intent.putExtra("phoneVerificationId", phoneVerificationId);
-                        intent.putExtra("resendToken", resendToken);
+                        intent.putExtra("phoneVerificationId", PhoneVerificationId);
+                        intent.putExtra("resendToken", ResendToken);
 
                         startActivity(intent);
 
@@ -279,9 +283,9 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
 
                             FirebaseUser user = task.getResult().getUser();
-                            String phone = user.getPhoneNumber();
+                            String Phone = user.getPhoneNumber();
                             UserId = user.getUid();
-                            Toast.makeText(RegisterActivity.this,"Login Successful by : "+phone,Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this,"Login Successful by : "+Phone,Toast.LENGTH_SHORT).show();
                             finish();
                             Intent i=new Intent(getApplicationContext(),DoctorsActivity.class);
                             i.putExtra("loginMode",2);
@@ -300,11 +304,11 @@ public class RegisterActivity extends AppCompatActivity {
     }*/
     private void registerToDatabase()
     {
-        data= new HashMap<>();
-        data.put("Email", EmailId);
-        data.put("Phone", PhoneNumber);
-        userDb1 = FirebaseDatabase.getInstance().getReference().child("userDB");
-        userDb1.child(FbAuth.getCurrentUser().getUid()).setValue(data).addOnCompleteListener(this, new OnCompleteListener<Void>() {
+        Data = new HashMap<>();
+        Data.put("Email", EmailId);
+        Data.put("Phone", PhoneNumber);
+        UserDb1 = FirebaseDatabase.getInstance().getReference().child("userDB");
+        UserDb1.child(FbAuth.getCurrentUser().getUid()).setValue(Data).addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 //finish();
@@ -325,7 +329,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
                     //it means user already registered
-                    phoneNumberExists=true;
+                    PhoneNumberExists =true;
                     String ss = dataSnapshot.getKey().toString();
                     String mPhone,mEmail;
                     mPhone="";
@@ -336,12 +340,12 @@ public class RegisterActivity extends AppCompatActivity {
                     {
                         mEmail = dataSnapshot.getValue().toString();
                     }
-                    Toast.makeText(RegisterActivity.this, "Phone Number : "+mPhone+" already linked with Email : "+mEmail, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Phone Number : "+ mPhone +" already linked with Email : "+mEmail, Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
 
-                    Toast.makeText(RegisterActivity.this, "Phone Number not linked to any account ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Phone number not linked to any account ", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -353,8 +357,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
     private void linkMobWithEmail(PhoneAuthCredential credential)
     {
-        linkingStatus = false;
-        FbAuth.signInWithEmailAndPassword(EmailId,pass)
+        LinkingStatus = false;
+        FbAuth.signInWithEmailAndPassword(EmailId, Password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -368,7 +372,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                         else
                         {
-                            Toast.makeText(RegisterActivity.this,"Couldn't Login with new Account...",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this,"Couldn't Login with new Account ...",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -379,7 +383,7 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d("App", "linkWithCredential:success");
                             Toast.makeText(RegisterActivity.this, "Mobile Number has been successfully linked with Email ID", Toast.LENGTH_SHORT).show();
-                            linkingStatus =true;
+                            LinkingStatus =true;
                             //FirebaseUser user = task.getResult().getUser();
                             //updateUI(user);
                         } else {

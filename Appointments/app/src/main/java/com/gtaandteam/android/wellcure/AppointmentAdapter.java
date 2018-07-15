@@ -13,6 +13,9 @@ import java.util.List;
 
 public class AppointmentAdapter extends ArrayAdapter<Appointment> {
 
+    final String LOG_TAG = this.getClass().getSimpleName();
+
+
     public AppointmentAdapter(Context context, List<Appointment> appointments) {
         super(context, 0, appointments);
     }
@@ -32,12 +35,13 @@ public class AppointmentAdapter extends ArrayAdapter<Appointment> {
                     R.layout.past_appointment, parent, false);
         }
         Appointment currentAppointment = getItem(position);
-        TextView Name = listItemView.findViewById(R.id.NameValue);
-        TextView Date = listItemView.findViewById(R.id.DateValue);
-        ImageView DoctorImage = listItemView.findViewById(R.id.DoctorImage);
+        TextView Name = listItemView.findViewById(R.id.NameET);
+        TextView Date = listItemView.findViewById(R.id.DateET);
+        ImageView DoctorImage = listItemView.findViewById(R.id.DoctorIV);
 
         Name.setText(currentAppointment.getmDoctorName());
         Date.setText(currentAppointment.getmDate());
+
         if (currentAppointment.hasImage()) {
             // If an image is available, display the provided image based on the resource ID
             DoctorImage.setImageResource(currentAppointment.getmDoctorImage());

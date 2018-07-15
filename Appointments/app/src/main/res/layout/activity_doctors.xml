@@ -7,7 +7,7 @@
     tools:context="com.gtaandteam.android.wellcure.EmailLoginActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
+        android:id="@+id/MyToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
@@ -15,51 +15,46 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-    <ImageView
-        android:id="@+id/profile_photo"
-        android:layout_width="310sp"
-        android:layout_height="310sp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="8dp"
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/DoctorIV"
+        android:layout_width="247dp"
+        android:layout_height="286dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="44dp"
+        android:src="@drawable/dogtor"
+        app:civ_border_color="@color/colorAccent"
+        app:civ_border_width="3dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.533"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_toolbar"
-        app:srcCompat="@drawable/dogtor" />
+        app:layout_constraintTop_toBottomOf="@+id/MyToolbar" />
 
     <TextView
-        android:id="@+id/doctors_name"
+        android:id="@+id/DoctorsNameTV"
+        style="@style/ETStyle"
         android:layout_width="0dp"
-        android:layout_height="27dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:fontFamily="sans-serif-condensed"
         android:text="Dr. Borkson Woofberg"
         android:textAlignment="center"
         android:textAllCaps="true"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_photo" />
+        app:layout_constraintTop_toBottomOf="@+id/DoctorIV" />
 
 
     <TextView
-        android:id="@+id/doctors_qualifications"
+        android:id="@+id/QualificationsTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:fontFamily="sans-serif-condensed"
         android:gravity="center"
         android:text="MBBS, BMBS, MBChB, MBBCh, Certified good boy"
-        app:layout_constraintEnd_toEndOf="@+id/doctors_name"
-        app:layout_constraintHorizontal_bias="0.333"
-        app:layout_constraintStart_toStartOf="@+id/doctors_name"
-        app:layout_constraintTop_toBottomOf="@+id/doctors_name" />
+        app:layout_constraintEnd_toEndOf="@+id/DoctorsNameTV"
+        app:layout_constraintStart_toStartOf="@+id/DoctorsNameTV"
+        app:layout_constraintTop_toBottomOf="@+id/DoctorsNameTV" />
 
 
     <Button
@@ -68,10 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:text="appointment"
-        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

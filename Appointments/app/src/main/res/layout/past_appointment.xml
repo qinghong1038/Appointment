@@ -10,7 +10,7 @@
 
 
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/DoctorImage"
+        android:id="@+id/DoctorIV"
         android:layout_width="72dp"
         android:layout_height="72dp"
         android:layout_centerHorizontal="true"
@@ -27,8 +27,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/NameLabel"
-        style="@style/TabStyle"
+        android:id="@+id/NameTV"
+        style="@style/TVStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -37,14 +37,14 @@
         android:text="Doctor"
         android:background="@color/blue"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/DoctorImage"
-        app:layout_constraintStart_toEndOf="@+id/DoctorImage"
-        app:layout_constraintTop_toTopOf="@+id/DoctorImage"
+        app:layout_constraintBottom_toBottomOf="@+id/DoctorIV"
+        app:layout_constraintStart_toEndOf="@+id/DoctorIV"
+        app:layout_constraintTop_toTopOf="@+id/DoctorIV"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/DateLabel"
-        style="@style/TabStyle"
+        android:id="@+id/DateTV"
+        style="@style/TVStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -52,12 +52,12 @@
         android:background="@color/blue"
 
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/NameLabel"
-        app:layout_constraintStart_toStartOf="@+id/NameLabel"
-        app:layout_constraintTop_toBottomOf="@+id/NameLabel" />
+        app:layout_constraintEnd_toEndOf="@+id/NameTV"
+        app:layout_constraintStart_toStartOf="@+id/NameTV"
+        app:layout_constraintTop_toBottomOf="@+id/NameTV" />
 
     <TextView
-        android:id="@+id/NameValue"
+        android:id="@+id/NameET"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -66,12 +66,12 @@
         android:text="Borkson Woofberg"
         android:textColor="#000000"
         android:textSize="16sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/NameLabel"
+        app:layout_constraintBaseline_toBaselineOf="@+id/NameTV"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/NameLabel" />
+        app:layout_constraintStart_toEndOf="@+id/NameTV" />
 
     <TextView
-        android:id="@+id/DateValue"
+        android:id="@+id/DateET"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -79,8 +79,8 @@
         android:textSize="16sp"
         android:textColor="#000000"
         android:text="Jun 6, 2018"
-        app:layout_constraintBaseline_toBaselineOf="@+id/DateLabel"
+        app:layout_constraintBaseline_toBaselineOf="@+id/DateTV"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/DateLabel" />
+        app:layout_constraintStart_toEndOf="@+id/DateTV" />
 
 </android.support.constraint.ConstraintLayout>

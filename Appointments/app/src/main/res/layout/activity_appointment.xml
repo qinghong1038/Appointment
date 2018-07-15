@@ -1,117 +1,96 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
+        android:id="@+id/MyToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:elevation="4dp"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
     <TextView
-        android:id="@+id/name_textView"
-        style="@style/TabStyle"
+        android:id="@+id/NameTV"
+        style="@style/TVStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Name"
-        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        android:layout_marginTop="16dp"
+        android:text="  Name "
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/MyToolbar" />
 
     <EditText
-        android:id="@+id/name_editText"
+        android:id="@+id/NameET"
+        style="@style/ETStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:ems="10"
-        android:fontFamily="sans-serif-condensed"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_textView" />
+        app:layout_constraintTop_toBottomOf="@+id/NameTV" />
 
     <EditText
-        android:id="@+id/phone_editText"
+        android:id="@+id/PhoneET"
+        style="@style/ETStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:ems="10"
-        android:fontFamily="sans-serif-condensed"
         android:inputType="phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phone_textView" />
+        app:layout_constraintTop_toBottomOf="@+id/PhoneTV" />
 
     <TextView
-        android:id="@+id/phone_textView"
-        style="@style/TabStyle"
-        android:layout_width="0dp"
+        android:id="@+id/PhoneTV"
+        style="@style/TVStyle"
+        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="16dp"
-        android:text="Phone"
-        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        android:text="Phone "
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_editText" />
+        app:layout_constraintTop_toBottomOf="@+id/NameET" />
 
     <TextView
-        android:id="@+id/email_textView"
-        style="@style/TabStyle"
-        android:layout_width="0dp"
+        android:id="@+id/EmailTV"
+        style="@style/TVStyle"
+        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="16dp"
-        android:text="Email"
-        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        android:text=" Email "
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phone_editText" />
+        app:layout_constraintTop_toBottomOf="@+id/PhoneET" />
 
     <EditText
-        android:id="@+id/email_editText"
+        android:id="@+id/EmailET"
+        style="@style/ETStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:ems="10"
-        android:fontFamily="sans-serif-condensed"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email_textView" />
+        app:layout_constraintTop_toBottomOf="@+id/EmailTV" />
 
     <TextView
-        android:id="@+id/date_textView"
-        style="@style/TabStyle"
+        android:id="@+id/DateTV"
+        style="@style/TVStyle"
+        android:layout_marginTop="8dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="16dp"
-        android:text="Date"
-        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        android:text="  Date  "
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email_editText" />
+        app:layout_constraintTop_toBottomOf="@+id/EmailET" />
 
     <EditText
-        android:id="@+id/date_editText"
+        android:id="@+id/DateET"
+        style="@style/ETStyle"
         android:layout_width="0dp"
-        android:layout_height="49dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:ems="10"
+        android:layout_height="wrap_content"
         android:focusable="false"
-        android:fontFamily="sans-serif-condensed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_textView" />
+        app:layout_constraintTop_toBottomOf="@+id/DateTV" />
 
     <Button
         android:id="@+id/bookAndPay_Button"
@@ -119,9 +98,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-
         android:text="Book and pay"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -133,23 +109,15 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-
         android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-condensed"
-        android:text="Dr. Borkson Woofberg"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_editText" />
+        app:layout_constraintTop_toBottomOf="@+id/DateET" />
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="88dp" />
+
 </android.support.constraint.ConstraintLayout>

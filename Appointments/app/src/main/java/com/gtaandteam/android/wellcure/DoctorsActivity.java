@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,21 +27,38 @@ public class DoctorsActivity extends AppCompatActivity {
     todo: and then choose one to go to that doctor's page
      */
 
-    Button AppointmentButton;
-    Toolbar toolbar;
-    private FirebaseAuth fbAuth;
-    DatabaseReference userDb1;
-    Boolean userExists;
-    FirebaseUser user;
+    /**Data Structures*/
+    Boolean UserExists;
+
+    /**Views*/
+    Button AppointmentBTN;
+    Toolbar MyToolbar;
+
+    /**Firebase*/
+    DatabaseReference UserDb1;
+    FirebaseUser FbUser;
+    private FirebaseAuth FbAuth;
+
+    final String LOG_TAG = this.getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctors);
-        fbAuth = FirebaseAuth.getInstance();
-        user = fbAuth.getCurrentUser();
+
+        //Linking to views
+        MyToolbar = findViewById(R.id.MyToolbar);
+        AppointmentBTN = findViewById(R.id.get_appointment);
+
+
+        FbAuth = FirebaseAuth.getInstance();
+        FbUser = FbAuth.getCurrentUser();
+        setSupportActionBar(MyToolbar);
+
+
         //Toast.makeText(this, user.getEmail(), Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, user.getPhoneNumber(), Toast.LENGTH_LONG).show();
+        Log.d(LOG_TAG, "" + FbUser.getPhoneNumber());
+
         /*AuthCredential newCredential = EmailAuthProvider.getCredential("banana1@gmail.com","12345678");
 
         fbAuth.getCurrentUser().linkWithCredential(newCredential)
@@ -61,27 +79,23 @@ public class DoctorsActivity extends AppCompatActivity {
                         // ...
                     }
                 });*/
-        Intent n3=getIntent();	//gives the ref to the destn intent
-        final int i = n3.getIntExtra("loginMode",0);	//loginMode is given in EmailLoginActivity and OTPLoginAcitivty
+        
+        Intent intent = getIntent();	//gives the reference to the destination intent
+        final int loginMode = intent .getIntExtra("loginMode",0);	//loginMode is given in EmailLoginActivity and OTPLoginAcitivty
 
 
-
-        AppointmentButton = findViewById(R.id.get_appointment);
-        AppointmentButton.setOnClickListener(new View.OnClickListener() {
+        AppointmentBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 checkUserExists();
                 Intent intent = new Intent(DoctorsActivity.this, AppointmentActivity.class);
-                intent.putExtra("loginMode",i);
-                intent.putExtra("userExists",userExists);
+                intent.putExtra("loginMode",loginMode);
+                intent.putExtra("UserExists", UserExists);
                 startActivity(intent);
 
 
             }
         });
-
-        toolbar = findViewById(R.id.my_toolbar);
-        setSupportActionBar(toolbar);
 
 
     }
@@ -97,7 +111,6 @@ public class DoctorsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_SignOut:
-                // TODO: Handle user sign out.
                 AlertDialog.Builder builder = new AlertDialog.Builder(
                         new ContextThemeWrapper(DoctorsActivity.this, R.style.AlertDialogCustom));
                 builder.setCancelable(true);
@@ -138,20 +151,20 @@ public class DoctorsActivity extends AppCompatActivity {
         }
     }
     public void signOut() {
-        fbAuth.signOut();
+        FbAuth.signOut();
     }
 
     private void checkUserExists()
     {
-        userDb1 = FirebaseDatabase.getInstance().getReference().child("users");
+        UserDb1 = FirebaseDatabase.getInstance().getReference().child("users");
         try
         {
-            userDb1.child(fbAuth.getCurrentUser().getUid());
-            userExists = true;
+            UserDb1.child(FbAuth.getCurrentUser().getUid());
+            UserExists = true;
         }
         catch (Exception e)
         {
-            userExists = false;
+            UserExists = false;
         }
     }
 }

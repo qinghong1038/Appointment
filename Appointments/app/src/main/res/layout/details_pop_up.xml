@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/DetailsLabel"
-        style="@style/TabStyle"
+        style="@style/TVStyle"
         android:background="@color/blue"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -22,8 +22,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/DoctorImage"
+        android:id="@+id/DoctorIV"
         android:layout_width="127dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
@@ -43,100 +44,82 @@
 
 
     <TextView
-        android:id="@+id/DateLabel"
-        style="@style/TabStyle"
+        android:id="@+id/DateTV"
+        style="@style/TVStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:background="@color/blue"
         android:layout_marginTop="28dp"
         android:text="  Date  "
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/DoctorName" />
+        app:layout_constraintTop_toBottomOf="@+id/DoctorNameTV" />
 
     <TextView
-        android:id="@+id/NameLabel"
-        style="@style/TabStyle"
-        android:background="@color/blue"
+        android:id="@+id/NameTV"
+        style="@style/TVStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:background="@color/blue"
         android:text="Name"
-        app:layout_constraintEnd_toStartOf="@+id/NameValue"
+        app:layout_constraintEnd_toEndOf="@+id/DateTV"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/DateLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/DateTV" />
 
     <TextView
-        android:id="@+id/EmailLabel"
-        style="@style/TabStyle"
+        android:id="@+id/EmailTV"
+        style="@style/TVStyle"
         android:layout_width="0dp"
         android:background="@color/blue"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Fees"
-        app:layout_constraintEnd_toEndOf="@+id/NameLabel"
+        app:layout_constraintEnd_toEndOf="@+id/NameTV"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/NameLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/NameTV" />
 
     <TextView
-        android:id="@+id/DoctorName"
+        android:id="@+id/DoctorNameTV"
+        style="@style/ETStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:textSize="18sp"
         android:textAllCaps="true"
-
-        android:fontFamily="sans-serif-condensed"
         android:textStyle="bold"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:text="Dr. Borkson Woofberg"
-        android:textColor="#000000"
-        app:layout_constraintEnd_toEndOf="@+id/DoctorImage"
-        app:layout_constraintStart_toStartOf="@+id/DoctorImage"
-        app:layout_constraintTop_toBottomOf="@+id/DoctorImage" />
+        app:layout_constraintEnd_toEndOf="@+id/DoctorIV"
+        app:layout_constraintStart_toStartOf="@+id/DoctorIV"
+        app:layout_constraintTop_toBottomOf="@+id/DoctorIV" />
 
     <TextView
-        android:id="@+id/Amount"
+        android:id="@+id/AmountTV"
+        style="@style/ETStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:fontFamily="sans-serif"
         android:text="₹420"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/EmailLabel"
+        app:layout_constraintBaseline_toBaselineOf="@+id/EmailTV"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/EmailLabel" />
+        app:layout_constraintStart_toStartOf="@+id/DateET" />
 
     <TextView
-        android:id="@+id/DateValue"
+        android:id="@+id/DateET"
+        style="@style/ETStyle"
         android:layout_width="0dp"
         android:layout_height="28dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:fontFamily="sans-serif-condensed"
         android:text="16/12/1991"
-        android:textSize="18sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/DateLabel"
+        app:layout_constraintBaseline_toBaselineOf="@+id/DateTV"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/DateLabel" />
+        app:layout_constraintStart_toEndOf="@+id/DateTV" />
 
     <TextView
-        android:id="@+id/NameValue"
+        android:id="@+id/NameET"
+        style="@style/ETStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:textSize="18sp"
-        android:fontFamily="sans-serif-condensed"
         android:text="Glenn Thomax Alex"
-        app:layout_constraintBaseline_toBaselineOf="@+id/NameLabel"
+        app:layout_constraintBaseline_toBaselineOf="@+id/NameTV"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/DateLabel" />
+        app:layout_constraintStart_toStartOf="@+id/DateET" />
 
 </android.support.constraint.ConstraintLayout>

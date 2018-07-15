@@ -20,22 +20,33 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class EmailLoginActivity extends AppCompatActivity {
 
-    EditText UsernameET,
-            PasswordET;
+    /**Views*/
+    EditText UsernameET, PasswordET;
+    Button RegisterBTN, LoginBTN;
+    TextView RegisterTV, ForgotPasswordTV;
     private ProgressDialog Progress;
+
+    /**Firebase*/
     private FirebaseAuth FbAuth;
-    Button RegisterButton,
-            LoginButton;
-    TextView textViewReg,forgotPasswordTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        forgotPasswordTextView = findViewById(R.id.forgot_password);
+        //Linking to views
+        ForgotPasswordTV = findViewById(R.id.ForgotPasswordTV);
+        LoginBTN = findViewById(R.id.LoginBTN);
+        UsernameET =findViewById(R.id.UsernameET);
+        PasswordET =findViewById(R.id.PasswordET);
+        RegisterTV = findViewById(R.id.NoAccountTV);
+        RegisterBTN =findViewById(R.id.RegisterBTN);
+        final TextView OTPLogin =  findViewById(R.id.SwitchToOTPTV);
 
-        final TextView OTPLogin =  findViewById(R.id.OTP_login);
+        FbAuth = FirebaseAuth.getInstance();
+        Progress =new ProgressDialog(this);
+
+
         OTPLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,18 +56,16 @@ public class EmailLoginActivity extends AppCompatActivity {
             }
         });
 
-        FbAuth = FirebaseAuth.getInstance();
         if(FbAuth.getCurrentUser()!=null)
         {
-            //user already logged in .. previous login credentials stored in PhoneNumber
+            //User already logged in, previous login credentials stored in PhoneNumber
             //then skip login and directly go to choosing doctor page
             finish();
             Intent i =new Intent(EmailLoginActivity.this, DoctorsActivity.class);
             i.putExtra("loginMode",1);
             startActivity(i);
         }
-        LoginButton = findViewById(R.id.login_button);
-        LoginButton.setOnClickListener(new View.OnClickListener() {
+        LoginBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 userLogin();
@@ -64,26 +73,22 @@ public class EmailLoginActivity extends AppCompatActivity {
             }
         });
 
-        UsernameET =(EditText)findViewById(R.id.username_editText);
-        PasswordET =(EditText)findViewById(R.id.password_editText);
-        Progress =new ProgressDialog(this);
-        RegisterButton =findViewById(R.id.register_button);
-        RegisterButton.setOnClickListener(new View.OnClickListener() {
+
+        RegisterBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
                 startActivity(new Intent(EmailLoginActivity.this,RegisterActivity.class));
             }
         });
-        textViewReg = findViewById(R.id.textView);
-        textViewReg.setOnClickListener(new View.OnClickListener() {
+        RegisterTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
                 startActivity(new Intent(EmailLoginActivity.this,RegisterActivity.class));
             }
         });
-        forgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
+        ForgotPasswordTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseAuth auth = FirebaseAuth.getInstance();

@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/DetailsLabel"
-        style="@style/TabStyle"
+        style="@style/TVStyle"
         android:background="@color/colorPrimaryDark"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -21,16 +21,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/OTP"
+        android:id="@+id/OTPBTN"
+        style="@style/ETStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
+        android:ems="6"
         android:inputType="number"
         android:hint="Enter OTP"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
@@ -39,19 +37,17 @@
         app:layout_constraintVertical_bias="0.36" />
 
     <Button
-        android:id="@+id/ResendOTP"
+        android:id="@+id/ResendOTPBTN"
         style="@style/ButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:paddingRight="16dp"
         android:paddingLeft="16dp"
         android:layout_marginTop="24dp"
         android:text="Re-Send OTP"
-        app:layout_constraintEnd_toEndOf="@+id/OTP"
-        app:layout_constraintStart_toStartOf="@+id/OTP"
-        app:layout_constraintTop_toBottomOf="@+id/OTP" />
+        app:layout_constraintEnd_toEndOf="@+id/OTPBTN"
+        app:layout_constraintStart_toStartOf="@+id/OTPBTN"
+        app:layout_constraintTop_toBottomOf="@+id/OTPBTN" />
 
 
 </android.support.constraint.ConstraintLayout>

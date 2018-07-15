@@ -21,8 +21,11 @@ import java.util.ArrayList;
 
 public class PastActivity extends AppCompatActivity {
 
-    Toolbar toolbar;
-    private FirebaseAuth fbAuth;
+    /**Views*/
+    Toolbar MyToolbar;
+
+    /**FIrebase*/
+    private FirebaseAuth FbAuth;
 
 
     @Override
@@ -30,14 +33,15 @@ public class PastActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_past);
 
-        toolbar = findViewById(R.id.my_toolbar);
-        setSupportActionBar(toolbar);
-        fbAuth = FirebaseAuth.getInstance();
+        //Linking to views
+        MyToolbar = findViewById(R.id.MyToolbar);
+        ListView AppointmentListView = findViewById(R.id.List);
+
+        setSupportActionBar(MyToolbar);
+        FbAuth = FirebaseAuth.getInstance();
 
 
-        //TODO: Major FireBase changes/additions to be made in order to access past appointment data from the particular ACCOUNT only
-
-
+        //TODO: Major FireBase changes/additions to be made in order to access past appointment Data from the particular ACCOUNT only
         //Following ArrayList is a temporary placeholder.
         ArrayList<Appointment> appointments = new ArrayList<>();
         appointments.add(new Appointment("Borkson Woofberg","Jan 26, 2018", R.drawable.dogtor));
@@ -47,14 +51,8 @@ public class PastActivity extends AppCompatActivity {
         appointments.add(new Appointment("Test for no Image"," Jan 01, 1970"));
 
 
-
-        ListView AppointmentListView = findViewById(R.id.List);
-
         AppointmentAdapter adapter =new AppointmentAdapter(PastActivity.this, appointments);
-
-
         AppointmentListView.setAdapter(adapter);
-
         AppointmentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
@@ -62,8 +60,6 @@ public class PastActivity extends AppCompatActivity {
 
                 Appointment currentAppointment = (Appointment)parent.getAdapter().getItem(position);
 
-                //TODO: Display a dialog-ish thing to display more info about appointment
-                //startActivity(new Intent(PastActivity.this, DetailsPopUp.class));
                 Intent intent = new Intent(PastActivity.this, DetailsPopUp.class);
                 intent.putExtra("Doctor", currentAppointment.getmDoctorName());
                 intent.putExtra("DateTV", currentAppointment.getmDate());
@@ -74,6 +70,7 @@ public class PastActivity extends AppCompatActivity {
                     intent.putExtra("DoctorImage", R.drawable.headshot);
                 }
 
+                //TODO: DO NOT DELETE:
                 //intent.putExtra("NameET", currentAppointment.getmPatientName());
                 //intent.putExtra("Fees", currentAppointment.getmFees());
                 startActivity(intent);
@@ -134,10 +131,8 @@ public class PastActivity extends AppCompatActivity {
     }
 
     public void signOut() {
-        fbAuth.signOut();
+        FbAuth.signOut();
     }
-
-
 
 }
 
