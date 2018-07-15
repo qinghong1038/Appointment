@@ -49,7 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
     String PhoneNumber;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
             verificationCallbacks;
-    final String LOG_TAG = this.getClass().getSimpleName();
+    final String LOG_TAG = "RegisterActivity";
     Boolean emailCredentialCreated,phoneCredentialCreated,linkingStatus,phoneNumberExists;
     DatabaseReference userDb1;
     HashMap<String, String> data;
@@ -156,7 +156,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         // if validations are ok we show a progress bar
-
+            Log.d(LOG_TAG, "Beginning Registration");
             progress.setMessage("Registering Email ID ..");
             progress.show();
             FbAuth.createUserWithEmailAndPassword(EmailId, pass)
@@ -166,7 +166,7 @@ public class RegisterActivity extends AppCompatActivity {
                             progress.dismiss();
                             if (task.isSuccessful()) {
                                 //user successfully registered
-                                //we start profile activity here
+                                Log.d(LOG_TAG, "Email Account Successfully Created");
                                 Toast.makeText(RegisterActivity.this, "Email Registered Successfully", Toast.LENGTH_SHORT).show();
                                 //finish();
                                 //startActivity(new Intent(getApplicationContext(), EmailLoginActivity.class));
@@ -174,6 +174,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             } else {
                                 Toast.makeText(RegisterActivity.this, "Couldnt Register. Please Try Again..", Toast.LENGTH_SHORT).show();
+                                Log.d(LOG_TAG, "Couldnt create Email Account");
                                 //TODO: DISPLAY EXCEPTION MESSAGE AS TO WHY REGISTRATION COULDNT OCCUR. I KNOW THE CODE. WILL ADD IT SOON.
                             }
                         }
@@ -181,6 +182,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             if(emailCredentialCreated)
             {
+                Log.d(LOG_TAG, "Proceeding to Link Mobile Number with Email ID");
                 Toast.makeText(this, "Proceeding to Link Mobile Number with Email ID", Toast.LENGTH_SHORT).show();
                 progress.setMessage("Sending OTP");
                 progress.show();
@@ -188,16 +190,19 @@ public class RegisterActivity extends AppCompatActivity {
                 checkPhoneNumberExists();
                 if(phoneNumberExists)
                 {
+                    Log.d(LOG_TAG, "Phone Number Already Registered With Another Account");
                     Toast.makeText(this, "Phone Number Already Registered With Another Account", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
+                    Log.d(LOG_TAG, "Calling OTP Function");
                     sendCode();
                 }
 
             }
             if(emailCredentialCreated && phoneCredentialCreated && linkingStatus)
             {
+                Log.d(LOG_TAG, "Calling Register to Database");
                 registerToDatabase();
             }
 
@@ -320,8 +325,6 @@ public class RegisterActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
                     //it means user already registered
-                    //Add code to show your prompt
-                    //showPrompt();
                     phoneNumberExists=true;
                     String ss = dataSnapshot.getKey().toString();
                     String mPhone,mEmail;
