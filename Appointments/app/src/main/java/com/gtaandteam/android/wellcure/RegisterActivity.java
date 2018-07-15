@@ -23,7 +23,13 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -36,14 +42,17 @@ public class RegisterActivity extends AppCompatActivity {
             ConfirmPasswordET;
     private PhoneAuthProvider.ForceResendingToken resendToken;
     private String phoneVerificationId;
-    String UserId;
+    String UserId,EmailId;
+    private String pass;
     private ProgressDialog progress;
     private FirebaseAuth FbAuth;
     String PhoneNumber;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
             verificationCallbacks;
     final String LOG_TAG = this.getClass().getSimpleName();
-    Boolean emailCredentialCreated,phoneCredentialCreated;
+    Boolean emailCredentialCreated,phoneCredentialCreated,linkingStatus,phoneNumberExists;
+    DatabaseReference userDb1;
+    HashMap<String, String> data;
 
 
 
@@ -62,9 +71,11 @@ public class RegisterActivity extends AppCompatActivity {
         emailCredentialCreated = false;
         phoneCredentialCreated = false;
 
+
         if(FbAuth.getCurrentUser()!=null)
         {
             //user already logged in. go directly to doctor activity
+            Toast.makeText(this, "Already Signed In With Email ID : "+FbAuth.getCurrentUser().getEmail(), Toast.LENGTH_SHORT).show();
             finish();
             Intent i =new Intent(getApplicationContext(),DoctorsActivity.class);
             i.putExtra("loginMode",0);
@@ -91,12 +102,12 @@ public class RegisterActivity extends AppCompatActivity {
     }
     private void registerUser()
     {
-        String email= UsernameET.getText().toString().trim();
-        String pass= PasswordET.getText().toString();
+        EmailId= UsernameET.getText().toString().trim();
+        pass= PasswordET.getText().toString();
         String confirm_pass = ConfirmPasswordET.getText().toString();
         PhoneNumber = PhoneNumberET.getText().toString().trim().replaceAll(" ", "" );
 
-        if(TextUtils.isEmpty(email)){
+        if(TextUtils.isEmpty(EmailId)){
             // is empty
             Toast.makeText(this,"Please Enter Email Id",Toast.LENGTH_SHORT).show();
             return;
@@ -148,7 +159,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             progress.setMessage("Registering Email ID ..");
             progress.show();
-            FbAuth.createUserWithEmailAndPassword(email, pass)
+            FbAuth.createUserWithEmailAndPassword(EmailId, pass)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -173,7 +184,21 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(this, "Proceeding to Link Mobile Number with Email ID", Toast.LENGTH_SHORT).show();
                 progress.setMessage("Sending OTP");
                 progress.show();
-                sendCode();
+                phoneNumberExists=false;
+                checkPhoneNumberExists();
+                if(phoneNumberExists)
+                {
+                    Toast.makeText(this, "Phone Number Already Registered With Another Account", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    sendCode();
+                }
+
+            }
+            if(emailCredentialCreated && phoneCredentialCreated && linkingStatus)
+            {
+                registerToDatabase();
             }
 
     }
@@ -196,6 +221,9 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onVerificationCompleted(
                             PhoneAuthCredential credential) {
+
+                        phoneCredentialCreated = true;
+                        linkMobWithEmail(credential);
 
                         //signInWithPhoneAuthCredential(credential);
                     }
@@ -265,6 +293,102 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 });
     }*/
+    private void registerToDatabase()
+    {
+        data= new HashMap<>();
+        data.put("Email", EmailId);
+        data.put("Phone", PhoneNumber);
+        userDb1 = FirebaseDatabase.getInstance().getReference().child("userDB");
+        userDb1.child(FbAuth.getCurrentUser().getUid()).setValue(data).addOnCompleteListener(this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                //finish();
+                //go to page which shows users details
+                Log.v("App","Adding to User Database");
+                Toast.makeText(getApplicationContext(),"Stored User Data to UserDatabase",Toast.LENGTH_SHORT).show();
 
+            }
+        });
+    }
+
+    private void checkPhoneNumberExists()
+    {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("userDB");
+        userRef.orderByChild("Phone").equalTo(PhoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    //it means user already registered
+                    //Add code to show your prompt
+                    //showPrompt();
+                    phoneNumberExists=true;
+                    String ss = dataSnapshot.getKey().toString();
+                    String mPhone,mEmail;
+                    mPhone="";
+                    mEmail="";
+                    if (ss.equals("Phone")) {
+                        mPhone = dataSnapshot.getValue().toString();
+                    } else if (ss.equals("Email"))
+                    {
+                        mEmail = dataSnapshot.getValue().toString();
+                    }
+                    Toast.makeText(RegisterActivity.this, "Phone Number : "+mPhone+" already linked with Email : "+mEmail, Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+
+                    Toast.makeText(RegisterActivity.this, "Phone Number not linked to any account ", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void linkMobWithEmail(PhoneAuthCredential credential)
+    {
+        linkingStatus = false;
+        FbAuth.signInWithEmailAndPassword(EmailId,pass)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        if(task.isSuccessful())
+                        {
+                            //user successfully logged in
+                            //we start doctor activity here
+                            Toast.makeText(RegisterActivity.this,"Login with New Account Successful",Toast.LENGTH_SHORT).show();
+
+                        }
+                        else
+                        {
+                            Toast.makeText(RegisterActivity.this,"Couldn't Login with new Account...",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+        FbAuth.getCurrentUser().linkWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("App", "linkWithCredential:success");
+                            Toast.makeText(RegisterActivity.this, "Mobile Number has been successfully linked with Email ID", Toast.LENGTH_SHORT).show();
+                            linkingStatus =true;
+                            //FirebaseUser user = task.getResult().getUser();
+                            //updateUI(user);
+                        } else {
+                            Log.w("App", "linkWithCredential:failure", task.getException());
+                            Toast.makeText(RegisterActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            //updateUI(null);
+                        }
+
+                        // ...
+                    }
+                });
+    }
 }
 
