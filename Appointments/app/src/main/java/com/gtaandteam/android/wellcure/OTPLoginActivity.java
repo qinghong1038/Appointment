@@ -113,6 +113,8 @@ public class OTPLoginActivity extends AppCompatActivity {
 
     }
     public void sendCode() {
+        Log.d(LOG_TAG, "Entered sendCode()");
+
 
         setUpVerificationCallbacks();
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
@@ -121,8 +123,11 @@ public class OTPLoginActivity extends AppCompatActivity {
                 TimeUnit.SECONDS,   // Unit of timeout
                 this,               // Activity (for callback binding)
                 verificationCallbacks);
+        Log.d(LOG_TAG, "All done. Exiting sendCode()");
+
     }
     private void setUpVerificationCallbacks() {
+        Log.d(LOG_TAG, "Entered setUpVerificationCallbacks()");
 
         verificationCallbacks =
                 new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -130,12 +135,15 @@ public class OTPLoginActivity extends AppCompatActivity {
                     @Override
                     public void onVerificationCompleted(
                             PhoneAuthCredential credential) {
+                        Log.d(LOG_TAG, "Verification completed successfully");
 
                         signInWithPhoneAuthCredential(credential);
                     }
 
                     @Override
                     public void onVerificationFailed(FirebaseException e) {
+                        Log.d(LOG_TAG, "Verification Failed");
+
 
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
                             // Invalid request
@@ -152,7 +160,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                     @Override
                     public void onCodeSent(String verificationId,
                                            PhoneAuthProvider.ForceResendingToken token) {
-
+                        Log.d(LOG_TAG, "Entered onCodeSent()");
                         Progress.dismiss();
                         Toast.makeText(OTPLoginActivity.this, "OTP Sent", Toast.LENGTH_SHORT).show();
                         PhoneVerificationId = verificationId;
@@ -163,7 +171,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                         intent.putExtra("PhoneNumber", PhoneNumber);
                         intent.putExtra("phoneVerificationId", PhoneVerificationId);
                         intent.putExtra("resendToken", resendToken);
-
+                        Log.d(LOG_TAG, "All good. Code sent.  Exiting onCodeSent()");
                         startActivity(intent);
 
                     }
@@ -172,6 +180,8 @@ public class OTPLoginActivity extends AppCompatActivity {
 
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+        Log.d(LOG_TAG, "Entered signInWithPhoneAuthCredential()");
+
 
         FbAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -186,6 +196,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                             finish();
                             Intent i=new Intent(getApplicationContext(),DoctorsActivity.class);
                             i.putExtra("loginMode",2);
+                            Log.d(LOG_TAG, "All good. Exiting signInWithPhoneAuthCredential()");
                             startActivity(i);
 
                         } else {
@@ -193,6 +204,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                                     FirebaseAuthInvalidCredentialsException) {
                                 // The verification code entered was invalid
                                 Toast.makeText(OTPLoginActivity.this,"Invalid OTP. Try Again.",Toast.LENGTH_SHORT).show();
+                                Log.d(LOG_TAG, "Failed. Exiting signInWithPhoneAuthCredential()");
 
                             }
                         }

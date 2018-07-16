@@ -42,7 +42,7 @@ public class OTPopUp extends Activity {
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks verificationCallbacks;
     private PhoneAuthProvider.ForceResendingToken ResendToken;
 
-    final String LOG_TAG = this.getClass().getSimpleName();
+    final String LOG_TAG = "OTP POP UP FUNCTION";
 
 
     @Override
@@ -77,6 +77,8 @@ public class OTPopUp extends Activity {
     }
 
     public void resendCode() {
+        Log.d(LOG_TAG, "Entered resendCode() ");
+
 
         setUpVerificationCallbacks();
 
@@ -87,9 +89,14 @@ public class OTPopUp extends Activity {
                 this,
                 verificationCallbacks,
                 ResendToken);
+
+        Log.d(LOG_TAG, "Done. Exiting Completed ");
+
     }
 
     private void setUpVerificationCallbacks() {
+        Log.d(LOG_TAG, "Entered setUpVerificationCallbacks() ");
+
 
         verificationCallbacks =
                 new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -97,6 +104,8 @@ public class OTPopUp extends Activity {
                     @Override
                     public void onVerificationCompleted(
                             PhoneAuthCredential credential) {
+                        Log.d(LOG_TAG, "Verification Completed Successfully");
+
 
                         signInWithPhoneAuthCredential(credential);
                     }
@@ -105,6 +114,8 @@ public class OTPopUp extends Activity {
                     public void onVerificationFailed(FirebaseException e) {
 
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
+                            Log.d(LOG_TAG, "Verification Failed");
+
                             // Invalid request
                             Log.d(LOG_TAG, "Invalid credential: "
                                     + e.getLocalizedMessage());
@@ -119,14 +130,22 @@ public class OTPopUp extends Activity {
                     @Override
                     public void onCodeSent(String verificationId,
                                            PhoneAuthProvider.ForceResendingToken token) {
+                        Log.d(LOG_TAG, "Entered onCodeSent() ");
+
 
                         Progress.dismiss();
                         Toast.makeText(OTPopUp.this, "OTP Sent", Toast.LENGTH_SHORT).show();
                         phoneVerificationId = verificationId;
                         ResendToken = token;
+                        Log.d(LOG_TAG, "All good. Code sent. Exiting onCodeSent() ");
+
+
 
                     }
                 };
+
+        Log.d(LOG_TAG, "Done. Exiting setUpVerificationCallbacks() ");
+
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {

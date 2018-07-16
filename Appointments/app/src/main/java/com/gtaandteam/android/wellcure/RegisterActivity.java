@@ -52,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks verificationCallbacks;
     DatabaseReference UserDb1;
 
-    final String LOG_TAG = this.getClass().getSimpleName();
+    final String LOG_TAG = "REGISTER ACTIVITY FUNCTION";
 
 
     @Override
@@ -105,6 +105,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
     private void registerUser()
     {
+        Log.d(LOG_TAG, "Entered regitserUser()");
         EmailId= UsernameET.getText().toString().trim();
         Password = PasswordET.getText().toString();
         String confirm_pass = ConfirmPasswordET.getText().toString();
@@ -113,12 +114,14 @@ public class RegisterActivity extends AppCompatActivity {
         if(TextUtils.isEmpty(EmailId)){
             // is empty
             Toast.makeText(this,"Please enter Email ID",Toast.LENGTH_SHORT).show();
+            Log.d(LOG_TAG, "No Email ID Entered, Exiting regitserUser()");
             return;
         }
 
         if(TextUtils.isEmpty(Password)){
             // is empty
             Toast.makeText(this,"Please enter password",Toast.LENGTH_SHORT).show();
+            Log.d(LOG_TAG, "No Password Entered, Exiting regitserUser()");
             return;
 
         }
@@ -126,6 +129,8 @@ public class RegisterActivity extends AppCompatActivity {
         if(!TextUtils.equals(Password, confirm_pass)){
             // is empty
             Toast.makeText(this,"Passwords do not match.",Toast.LENGTH_SHORT).show();
+            Log.d(LOG_TAG, "Passwords do not match, Exiting regitserUser()");
+
             return;
         }
 
@@ -136,6 +141,7 @@ public class RegisterActivity extends AppCompatActivity {
                 //OTP will be sent now
                 Progress.setMessage("Sending OTP");
                 Progress.show();
+                Log.d(LOG_TAG, "Phone Number is good.");
                 sendCode();
 
 
@@ -145,6 +151,8 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(RegisterActivity.this, "Please enter a valid phone number after the +91", Toast.LENGTH_LONG).show();
                 PhoneNumberET.setText("+91 ");
                 Selection.setSelection(PhoneNumberET.getText(), PhoneNumberET.getText().length());
+                Log.d(LOG_TAG, "Invalid Phone Number, Exiting regitserUser()");
+                return;
 
             }
         }
@@ -153,13 +161,14 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(RegisterActivity.this, "Please enter a valid phone number after the +91", Toast.LENGTH_LONG).show();
             PhoneNumberET.setText("+91 ");
             Selection.setSelection(PhoneNumberET.getText(), PhoneNumberET.getText().length());
+            Log.d(LOG_TAG, "Invalid Phone Number, Exiting regitserUser()");
             return;
 
         }
 
 
         // if validations are ok we show a progress bar
-            Log.d(LOG_TAG, "Starting Registration");
+            Log.d(LOG_TAG, "All good, Starting Registration");
             Progress.setMessage("Registering Email ID ... ");
             Progress.show();
             FbAuth.createUserWithEmailAndPassword(EmailId, Password)
@@ -199,7 +208,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    Log.d(LOG_TAG, "Calling OTP Function");
+                    Log.d(LOG_TAG, "All good, Calling OTP Function sendCode()");
                     sendCode();
                 }
 
@@ -213,6 +222,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
     
     public void sendCode() {
+        Log.d(LOG_TAG, "Entered sendCode())");
 
         setUpVerificationCallbacks();
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
@@ -223,6 +233,8 @@ public class RegisterActivity extends AppCompatActivity {
                 verificationCallbacks);
     }
     private void setUpVerificationCallbacks() {
+        Log.d(LOG_TAG, "Entered setUpVerificationCallbacks() ");
+
 
         verificationCallbacks =
                 new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -230,6 +242,7 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onVerificationCompleted(
                             PhoneAuthCredential credential) {
+                        Log.d(LOG_TAG, "Verification Completed Successfully ");
 
                         PhoneCredentialCreated = true;
                         linkMobWithEmail(credential);
@@ -241,6 +254,8 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onVerificationFailed(FirebaseException e) {
 
                         if (e instanceof FirebaseAuthInvalidCredentialsException) {
+                            Log.d(LOG_TAG, "Verification Failed ");
+
                             // Invalid request
                             Log.d(LOG_TAG, "Invalid credential: "
                                     + e.getLocalizedMessage());
@@ -266,11 +281,12 @@ public class RegisterActivity extends AppCompatActivity {
                         intent.putExtra("PhoneNumber", PhoneNumber);
                         intent.putExtra("phoneVerificationId", PhoneVerificationId);
                         intent.putExtra("resendToken", ResendToken);
-
+                        Log.d(LOG_TAG, "Done. Exiting setUpVerificationCallbacks() ");
                         startActivity(intent);
 
                     }
                 };
+
     }
 
 
