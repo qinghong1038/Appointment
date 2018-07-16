@@ -42,7 +42,7 @@ public class OTPopUp extends Activity {
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks verificationCallbacks;
     private PhoneAuthProvider.ForceResendingToken ResendToken;
 
-    final String LOG_TAG = "OTP POP UP FUNCTION";
+    final String LOG_TAG = "OTP POP UP";
 
 
     @Override

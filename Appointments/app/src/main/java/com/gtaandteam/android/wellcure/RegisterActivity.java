@@ -52,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks verificationCallbacks;
     DatabaseReference UserDb1;
 
-    final String LOG_TAG = "REGISTER ACTIVITY FUNCTION";
+    final String LOG_TAG = "REGISTER ACTIVITY";
 
 
     @Override
