@@ -15,12 +15,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseException;
-import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,7 +25,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -52,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks verificationCallbacks;
     DatabaseReference UserDb1;
 
-    final String LOG_TAG = "REGISTER ACTIVITY";
+    final String LOG_TAG = this.getClass().getSimpleName();
 
 
     @Override
@@ -139,11 +134,9 @@ public class RegisterActivity extends AppCompatActivity {
             if(PhoneNumber.startsWith("+91"))
             {
                 //OTP will be sent now
-                Progress.setMessage("Sending OTP");
-                Progress.show();
-                Log.d(LOG_TAG, "Phone Number is good.");
-                sendCode();
 
+                Log.d(LOG_TAG, "Phone Number is good.");
+                //sendCode();
 
             }
             else
@@ -182,7 +175,27 @@ public class RegisterActivity extends AppCompatActivity {
                                 Toast.makeText(RegisterActivity.this, "Email registered successfully.", Toast.LENGTH_SHORT).show();
                                 //finish();
                                 //startActivity(new Intent(getApplicationContext(), EmailLoginActivity.class));
-                                EmailCredentialCreated = true;
+
+                                Log.d(LOG_TAG, "Proceeding to link Mobile Number with Email ID");
+                                Toast.makeText(RegisterActivity.this, "Proceeding to link mobile number with Email ID", Toast.LENGTH_SHORT).show();
+                                Progress.setMessage("Sending OTP");
+                                Progress.show();
+                                PhoneNumberExists =false;
+                                checkPhoneNumberExists();
+                                if(PhoneNumberExists)
+                                {
+                                    Log.d(LOG_TAG, "Phone number already registered with another account");
+                                    Toast.makeText(RegisterActivity.this, "Phone number already registered with another account.", Toast.LENGTH_SHORT).show();
+                                }
+                                else
+                                {
+                                    Log.d(LOG_TAG, "All good, Calling OTP Function sendCode()");
+                                    Intent intent = new Intent(RegisterActivity.this, OTPopUp.class);
+                                    intent.putExtra("PhoneNumber", PhoneNumber);
+                                    intent.putExtra("Parent", LOG_TAG);
+                                    Log.d(LOG_TAG, "Done. Exiting setUpVerificationCallbacks() ");
+                                    startActivity(intent);
+                                }
 
                             } else {
                                 Toast.makeText(RegisterActivity.this, "Couldn't register. Please try again.", Toast.LENGTH_SHORT).show();
@@ -193,26 +206,6 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     });
 
-            if(EmailCredentialCreated)
-            {
-                Log.d(LOG_TAG, "Proceeding to link Mobile Number with Email ID");
-                Toast.makeText(this, "Proceeding to link mobile number with Email ID", Toast.LENGTH_SHORT).show();
-                Progress.setMessage("Sending OTP");
-                Progress.show();
-                PhoneNumberExists =false;
-                checkPhoneNumberExists();
-                if(PhoneNumberExists)
-                {
-                    Log.d(LOG_TAG, "Phone number already registered with another account");
-                    Toast.makeText(this, "Phone number already registered with another account.", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    Log.d(LOG_TAG, "All good, Calling OTP Function sendCode()");
-                    sendCode();
-                }
-
-            }
             if(EmailCredentialCreated && PhoneCredentialCreated && LinkingStatus)
             {
                 Log.d(LOG_TAG, "Calling Register to Database");
@@ -220,104 +213,76 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
     }
-    
-    public void sendCode() {
-        Log.d(LOG_TAG, "Entered sendCode())");
+//
+//    public void sendCode() {
+//        Log.d(LOG_TAG, "Entered sendCode())");
+//
+//        setUpVerificationCallbacks();
+//        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+//                PhoneNumber,        // Phone number to verify
+//                60,                 // Timeout duration
+//                TimeUnit.SECONDS,   // Unit of timeout
+//                this,               // Activity (for callback binding)
+//                verificationCallbacks);
+//    }
+//    private void setUpVerificationCallbacks() {
+//        Log.d(LOG_TAG, "Entered setUpVerificationCallbacks() ");
+//
+//
+//        verificationCallbacks =
+//                new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+//
+//                    @Override
+//                    public void onVerificationCompleted(
+//                            PhoneAuthCredential credential) {
+//                        Log.d(LOG_TAG, "Verification Completed Successfully ");
+//
+//                        PhoneCredentialCreated = true;
+//                        linkMobWithEmail(credential);
+//
+//                        //signInWithPhoneAuthCredential(credential);
+//                    }
+//
+//                    @Override
+//                    public void onVerificationFailed(FirebaseException e) {
+//
+//                        if (e instanceof FirebaseAuthInvalidCredentialsException) {
+//                            Log.d(LOG_TAG, "Verification Failed ");
+//
+//                            // Invalid request
+//                            Log.d(LOG_TAG, "Invalid credential: "
+//                                    + e.getLocalizedMessage());
+//                            Toast.makeText(RegisterActivity.this, "Invalid Request", Toast.LENGTH_SHORT).show();
+//                        } else if (e instanceof FirebaseTooManyRequestsException) {
+//                            // SMS quota exceeded
+//                            Log.d(LOG_TAG, "SMS Quota exceeded.");
+//                            Toast.makeText(RegisterActivity.this, "Unable to send OTP", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCodeSent(String verificationId,
+//                                           PhoneAuthProvider.ForceResendingToken token) {
+//
+//                        Progress.dismiss();
+//                        Toast.makeText(RegisterActivity.this, "OTP Sent", Toast.LENGTH_SHORT).show();
+//                        PhoneVerificationId = verificationId;
+//                        ResendToken = token;
+//
+//
+//                        Intent intent = new Intent(RegisterActivity.this, OTPopUp.class);
+//                        intent.putExtra("PhoneNumber", PhoneNumber);
+//                        intent.putExtra("Parent", LOG_TAG);
+//                        intent.putExtra("EmailId", EmailId);
+//                        intent.putExtra("Password", Password);
+//                        Log.d(LOG_TAG, "Done. Exiting setUpVerificationCallbacks() ");
+//                        startActivity(intent);
+//
+//                    }
+//                };
+//
+//    }
 
-        setUpVerificationCallbacks();
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                PhoneNumber,        // Phone number to verify
-                60,                 // Timeout duration
-                TimeUnit.SECONDS,   // Unit of timeout
-                this,               // Activity (for callback binding)
-                verificationCallbacks);
-    }
-    private void setUpVerificationCallbacks() {
-        Log.d(LOG_TAG, "Entered setUpVerificationCallbacks() ");
-
-
-        verificationCallbacks =
-                new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-
-                    @Override
-                    public void onVerificationCompleted(
-                            PhoneAuthCredential credential) {
-                        Log.d(LOG_TAG, "Verification Completed Successfully ");
-
-                        PhoneCredentialCreated = true;
-                        linkMobWithEmail(credential);
-
-                        //signInWithPhoneAuthCredential(credential);
-                    }
-
-                    @Override
-                    public void onVerificationFailed(FirebaseException e) {
-
-                        if (e instanceof FirebaseAuthInvalidCredentialsException) {
-                            Log.d(LOG_TAG, "Verification Failed ");
-
-                            // Invalid request
-                            Log.d(LOG_TAG, "Invalid credential: "
-                                    + e.getLocalizedMessage());
-                            Toast.makeText(RegisterActivity.this, "Invalid Request", Toast.LENGTH_SHORT).show();
-                        } else if (e instanceof FirebaseTooManyRequestsException) {
-                            // SMS quota exceeded
-                            Log.d(LOG_TAG, "SMS Quota exceeded.");
-                            Toast.makeText(RegisterActivity.this, "Unable to send OTP", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onCodeSent(String verificationId,
-                                           PhoneAuthProvider.ForceResendingToken token) {
-
-                        Progress.dismiss();
-                        Toast.makeText(RegisterActivity.this, "OTP Sent", Toast.LENGTH_SHORT).show();
-                        PhoneVerificationId = verificationId;
-                        ResendToken = token;
-
-
-                        Intent intent = new Intent(RegisterActivity.this, OTPopUp.class);
-                        intent.putExtra("PhoneNumber", PhoneNumber);
-                        intent.putExtra("phoneVerificationId", PhoneVerificationId);
-                        intent.putExtra("resendToken", ResendToken);
-                        Log.d(LOG_TAG, "Done. Exiting setUpVerificationCallbacks() ");
-                        startActivity(intent);
-
-                    }
-                };
-
-    }
-
-
-    /*private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-
-        FbAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-
-                            FirebaseUser user = task.getResult().getUser();
-                            String Phone = user.getPhoneNumber();
-                            UserId = user.getUid();
-                            Toast.makeText(RegisterActivity.this,"Login Successful by : "+Phone,Toast.LENGTH_SHORT).show();
-                            finish();
-                            Intent i=new Intent(getApplicationContext(),DoctorsActivity.class);
-                            i.putExtra("loginMode",2);
-                            startActivity(i);
-
-                        } else {
-                            if (task.getException() instanceof
-                                    FirebaseAuthInvalidCredentialsException) {
-                                // The verification code entered was invalid
-                                Toast.makeText(RegisterActivity.this,"Invalid OTP. Try Again.",Toast.LENGTH_SHORT).show();
-
-                            }
-                        }
-                    }
-                });
-    }*/
     private void registerToDatabase()
     {
         Data = new HashMap<>();
@@ -371,47 +336,47 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
-    private void linkMobWithEmail(PhoneAuthCredential credential)
-    {
-        LinkingStatus = false;
-        FbAuth.signInWithEmailAndPassword(EmailId, Password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-                        if(task.isSuccessful())
-                        {
-                            //user successfully logged in
-                            //we start doctor activity here
-                            Toast.makeText(RegisterActivity.this,"Login with New Account Successful",Toast.LENGTH_SHORT).show();
-
-                        }
-                        else
-                        {
-                            Toast.makeText(RegisterActivity.this,"Couldn't Login with new Account ...",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-        FbAuth.getCurrentUser().linkWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("App", "linkWithCredential:success");
-                            Toast.makeText(RegisterActivity.this, "Mobile Number has been successfully linked with Email ID", Toast.LENGTH_SHORT).show();
-                            LinkingStatus =true;
-                            //FirebaseUser user = task.getResult().getUser();
-                            //updateUI(user);
-                        } else {
-                            Log.w("App", "linkWithCredential:failure", task.getException());
-                            Toast.makeText(RegisterActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
-                        }
-
-                        // ...
-                    }
-                });
-    }
+//    private void linkMobWithEmail(PhoneAuthCredential credential)
+//    {
+//        LinkingStatus = false;
+//        FbAuth.signInWithEmailAndPassword(EmailId, Password)
+//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//
+//                        if(task.isSuccessful())
+//                        {
+//                            //user successfully logged in
+//                            //we start doctor activity here
+//                            Toast.makeText(RegisterActivity.this,"Login with New Account Successful",Toast.LENGTH_SHORT).show();
+//
+//                        }
+//                        else
+//                        {
+//                            Toast.makeText(RegisterActivity.this,"Couldn't Login with new Account ...",Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+//        FbAuth.getCurrentUser().linkWithCredential(credential)
+//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if (task.isSuccessful()) {
+//                            Log.d("App", "linkWithCredential:success");
+//                            Toast.makeText(RegisterActivity.this, "Mobile Number has been successfully linked with Email ID", Toast.LENGTH_SHORT).show();
+//                            LinkingStatus =true;
+//                            //FirebaseUser user = task.getResult().getUser();
+//                            //updateUI(user);
+//                        } else {
+//                            Log.w("App", "linkWithCredential:failure", task.getException());
+//                            Toast.makeText(RegisterActivity.this, "Authentication failed.",
+//                                    Toast.LENGTH_SHORT).show();
+//                            //updateUI(null);
+//                        }
+//
+//                        // ...
+//                    }
+//                });
+//    }
 }
 

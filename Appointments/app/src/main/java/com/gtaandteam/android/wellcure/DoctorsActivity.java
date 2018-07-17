@@ -139,7 +139,9 @@ public class DoctorsActivity extends AppCompatActivity {
 
                 return true;
             case R.id.action_past:
-                startActivity(new Intent(DoctorsActivity.this, PastActivity.class));
+                Intent intent = new Intent(DoctorsActivity.this, PastActivity.class);
+                intent.putExtra("Parent", LOG_TAG);
+                startActivity(intent);
                 return true;
 
             default:

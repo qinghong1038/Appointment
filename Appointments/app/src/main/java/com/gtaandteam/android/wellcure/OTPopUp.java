@@ -30,10 +30,16 @@ public class OTPopUp extends Activity {
     String UserId; //Stores the user input as a String.
     private String phoneVerificationId;
     String PhoneNumber;
+    String Parent;
+    Boolean EmailCredentialCreated, PhoneCredentialCreated, LinkingStatus, PhoneNumberExists;
+    String EmailId;
+    private String Password;
+
+
 
     /**Views*/
     EditText OTPET; // OTP EditText
-    Button ResendBTN;
+    Button ResendBTN, LoginBTN;
     private ProgressDialog Progress;
 
 
@@ -44,7 +50,6 @@ public class OTPopUp extends Activity {
 
     final String LOG_TAG = "OTP POP UP";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,13 +58,21 @@ public class OTPopUp extends Activity {
         //Linking to views
         OTPET = findViewById(R.id.OTPBTN);
         ResendBTN = findViewById(R.id.ResendOTPBTN);
+        LoginBTN = findViewById(R.id.LoginBTN);
+
 
         Progress =new ProgressDialog(this);
         FbAuth = FirebaseAuth.getInstance();
         PhoneNumber = getIntent().getStringExtra("PhoneNumber");
-        phoneVerificationId = getIntent().getStringExtra("phoneVerificationId");
-        ResendToken = (PhoneAuthProvider.ForceResendingToken) getIntent().getSerializableExtra("resendToken");
+        Parent = getIntent().getStringExtra("Parent");
+        Toast.makeText(this, Parent, Toast.LENGTH_SHORT).show();
 
+        LoginBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                verifyCode();
+            }
+        });
         ResendBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,6 +87,34 @@ public class OTPopUp extends Activity {
             }
         });
 
+        Progress.setMessage("Sending OTP");
+        Progress.show();
+        sendCode();
+
+    }
+
+    public void sendCode() {
+        Log.d(LOG_TAG, "Entered sendCode()");
+
+
+        setUpVerificationCallbacks();
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                PhoneNumber,        // Phone number to verify
+                60,                 // Timeout duration
+                TimeUnit.SECONDS,   // Unit of timeout
+                this,               // Activity (for callback binding)
+                verificationCallbacks);
+        Log.d(LOG_TAG, "All done. Exiting sendCode()");
+
+    }
+
+    public void verifyCode() {
+
+        String code = OTPET.getText().toString();
+
+        PhoneAuthCredential credential =
+                PhoneAuthProvider.getCredential(phoneVerificationId, code);
+        signInWithPhoneAuthCredential(credential);
     }
 
     public void resendCode() {
@@ -81,7 +122,6 @@ public class OTPopUp extends Activity {
 
 
         setUpVerificationCallbacks();
-
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 PhoneNumber,
                 60,
@@ -105,9 +145,14 @@ public class OTPopUp extends Activity {
                     public void onVerificationCompleted(
                             PhoneAuthCredential credential) {
                         Log.d(LOG_TAG, "Verification Completed Successfully");
+                        if(Parent.equals("OTPLoginActivity"))
+                            signInWithPhoneAuthCredential(credential);
+                        else
+                        {
+                            PhoneCredentialCreated = true;
+                            linkMobWithEmail(credential);
+                        }
 
-
-                        signInWithPhoneAuthCredential(credential);
                     }
 
                     @Override
@@ -173,6 +218,52 @@ public class OTPopUp extends Activity {
 
                             }
                         }
+                    }
+                });
+    }
+
+    private void linkMobWithEmail(PhoneAuthCredential credential)
+    {
+        LinkingStatus = false;
+        EmailId = getIntent().getStringExtra("EmailId");
+        Password = getIntent().getStringExtra("Password");
+
+        FbAuth.signInWithEmailAndPassword(EmailId, Password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        if(task.isSuccessful())
+                        {
+                            //user successfully logged in
+                            //we start doctor activity here
+                            Toast.makeText(OTPopUp.this,"Login with New Account Successful",Toast.LENGTH_SHORT).show();
+
+                        }
+                        else
+                        {
+                            Toast.makeText(OTPopUp.this,"Couldn't Login with new Account ...",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+        FbAuth.getCurrentUser().linkWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("App", "linkWithCredential:success");
+                            Toast.makeText(OTPopUp.this, "Mobile Number has been successfully linked with Email ID", Toast.LENGTH_SHORT).show();
+                            LinkingStatus =true;
+                            //FirebaseUser user = task.getResult().getUser();
+                            //updateUI(user);
+                        } else {
+                            Log.w("App", "linkWithCredential:failure", task.getException());
+                            Toast.makeText(OTPopUp.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            //updateUI(null);
+                        }
+
+                        // ...
                     }
                 });
     }
