@@ -274,7 +274,7 @@ public class OTPopUp extends Activity {
                             Log.w("App", "linkWithCredential:failure", task.getException());
                             Toast.makeText(OTPopUp.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
+                            OTPET.setText("");
                         }
 
                         // ...
@@ -296,7 +296,14 @@ public class OTPopUp extends Activity {
                 Log.v("App","Adding to User Database");
                 Toast.makeText(getApplicationContext(),"Stored User Data to UserDatabase",Toast.LENGTH_SHORT).show();
 
+
+
             }
+
         });
+    FbAuth.signOut();
+    startActivity(new Intent(OTPopUp.this, EmailLoginActivity.class));
     }
+
+
 }
