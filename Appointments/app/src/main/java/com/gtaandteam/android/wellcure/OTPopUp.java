@@ -293,17 +293,15 @@ public class OTPopUp extends Activity {
             public void onComplete(@NonNull Task<Void> task) {
                 //finish();
                 //go to page which shows users details
-                Log.v("App","Adding to User Database");
-                Toast.makeText(getApplicationContext(),"Stored User Data to UserDatabase",Toast.LENGTH_SHORT).show();
-
-
+                if(task.isSuccessful())
+                {
+                    Log.v("App","Adding to User Database");
+                    Toast.makeText(getApplicationContext(),"Stored User Data to UserDatabase",Toast.LENGTH_SHORT).show();
+                    FbAuth.signOut();
+                    startActivity(new Intent(OTPopUp.this, EmailLoginActivity.class));
+                }
 
             }
-
         });
-    FbAuth.signOut();
-    startActivity(new Intent(OTPopUp.this, EmailLoginActivity.class));
     }
-
-
 }
