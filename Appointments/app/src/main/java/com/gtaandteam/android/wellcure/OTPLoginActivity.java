@@ -63,7 +63,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                         //OTP will be sent now
 //                        Progress.setMessage("Sending OTP");
 //                        Progress.show();
-
+                        //TODO: Need to check if not in Database
                         Intent intent = new Intent(OTPLoginActivity.this, OTPopUp.class);
                         intent.putExtra("Parent", LOG_TAG);
                         intent.putExtra("PhoneNumber", PhoneNumber);
