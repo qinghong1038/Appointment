@@ -120,7 +120,14 @@ public class OTPopUp extends Activity {
 
         PhoneAuthCredential credential =
                 PhoneAuthProvider.getCredential(phoneVerificationId, code);
-        signInWithPhoneAuthCredential(credential);
+        Log.d(LOG_TAG, "Verification In Progress");
+        if(Parent.equals("OTPLoginActivity"))
+            signInWithPhoneAuthCredential(credential);
+        else
+        {
+            PhoneCredentialCreated = true;
+            linkMobWithEmail(credential);
+        }
     }
 
     public void resendCode() {
@@ -256,12 +263,12 @@ public class OTPopUp extends Activity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Log.d("App", "linkWithCredential:success");
+                            Log.d(LOG_TAG, "linkWithCredential:success");
                             Toast.makeText(OTPopUp.this, "Mobile Number has been successfully linked with Email ID", Toast.LENGTH_SHORT).show();
 
-                                Log.d(LOG_TAG, "Calling Register to Database");
-                                registerToDatabase();
-                             //FirebaseUser user = task.getResult().getUser();
+                            Log.d(LOG_TAG, "Calling Register to Database");
+                            registerToDatabase();
+                            //FirebaseUser user = task.getResult().getUser();
                             //updateUI(user);
                         } else {
                             Log.w("App", "linkWithCredential:failure", task.getException());
