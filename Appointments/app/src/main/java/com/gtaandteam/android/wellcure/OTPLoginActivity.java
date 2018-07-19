@@ -26,8 +26,8 @@ public class OTPLoginActivity extends AppCompatActivity {
     TextView SwitchToEmailTV;
     EditText PhoneOTPTV;
     private ProgressDialog Progress;
-    Button SendOTPBTN; //Send OTP Button
-
+    Button SendOTPBTN;//Send OTP Button
+    Button RegisterBTN;
     /**Firebase*/
     private FirebaseAuth FbAuth;
     private PhoneAuthProvider.ForceResendingToken resendToken;
@@ -44,7 +44,14 @@ public class OTPLoginActivity extends AppCompatActivity {
         SwitchToEmailTV = findViewById(R.id.SwitchToEmailTV);
         SendOTPBTN = findViewById(R.id.SendOTPBTN);
         PhoneOTPTV = findViewById(R.id.PhoneNumberET);
+        RegisterBTN = findViewById(R.id.RegisterBTN);
 
+        RegisterBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(OTPLoginActivity.this, RegisterActivity.class));
+            }
+        });
         Progress =new ProgressDialog(this);
         FbAuth = FirebaseAuth.getInstance();
 
