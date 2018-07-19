@@ -21,7 +21,10 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 public class OTPopUp extends Activity {
@@ -31,9 +34,11 @@ public class OTPopUp extends Activity {
     private String phoneVerificationId;
     String PhoneNumber;
     String Parent;
-    Boolean EmailCredentialCreated, PhoneCredentialCreated, LinkingStatus, PhoneNumberExists;
+    Boolean PhoneCredentialCreated, LinkingStatus;
     String EmailId;
     private String Password;
+    HashMap<String, String> Data;
+
 
 
 
@@ -47,6 +52,7 @@ public class OTPopUp extends Activity {
     FirebaseAuth FbAuth;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks verificationCallbacks;
     private PhoneAuthProvider.ForceResendingToken ResendToken;
+    DatabaseReference UserDb1;
 
     final String LOG_TAG = "OTP POP UP";
 
@@ -178,12 +184,11 @@ public class OTPopUp extends Activity {
                         Log.d(LOG_TAG, "Entered onCodeSent() ");
 
 
-                        Progress.dismiss();
-                        Toast.makeText(OTPopUp.this, "OTP Sent", Toast.LENGTH_SHORT).show();
                         phoneVerificationId = verificationId;
                         ResendToken = token;
                         Log.d(LOG_TAG, "All good. Code sent. Exiting onCodeSent() ");
-
+                        Toast.makeText(OTPopUp.this, "OTP Sent", Toast.LENGTH_SHORT).show();
+                        Progress.dismiss();
 
 
                     }
@@ -253,8 +258,10 @@ public class OTPopUp extends Activity {
                         if (task.isSuccessful()) {
                             Log.d("App", "linkWithCredential:success");
                             Toast.makeText(OTPopUp.this, "Mobile Number has been successfully linked with Email ID", Toast.LENGTH_SHORT).show();
-                            LinkingStatus =true;
-                            //FirebaseUser user = task.getResult().getUser();
+
+                                Log.d(LOG_TAG, "Calling Register to Database");
+                                registerToDatabase();
+                             //FirebaseUser user = task.getResult().getUser();
                             //updateUI(user);
                         } else {
                             Log.w("App", "linkWithCredential:failure", task.getException());
@@ -266,5 +273,23 @@ public class OTPopUp extends Activity {
                         // ...
                     }
                 });
+    }
+
+    private void registerToDatabase()
+    {
+        Data = new HashMap<>();
+        Data.put("Email", EmailId);
+        Data.put("Phone", PhoneNumber);
+        UserDb1 = FirebaseDatabase.getInstance().getReference().child("userDB");
+        UserDb1.child(FbAuth.getCurrentUser().getUid()).setValue(Data).addOnCompleteListener(this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                //finish();
+                //go to page which shows users details
+                Log.v("App","Adding to User Database");
+                Toast.makeText(getApplicationContext(),"Stored User Data to UserDatabase",Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 }
