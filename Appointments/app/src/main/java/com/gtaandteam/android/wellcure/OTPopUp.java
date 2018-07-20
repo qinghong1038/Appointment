@@ -67,6 +67,7 @@ public class OTPopUp extends Activity {
         LoginBTN = findViewById(R.id.LoginBTN);
 
 
+
         Progress =new ProgressDialog(this);
         FbAuth = FirebaseAuth.getInstance();
         PhoneNumber = getIntent().getStringExtra("PhoneNumber");

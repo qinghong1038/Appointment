@@ -25,8 +25,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import static java.lang.System.out;
-
 public class DoctorsActivity extends AppCompatActivity {
 
     /*
@@ -66,26 +64,6 @@ public class DoctorsActivity extends AppCompatActivity {
         //Toast.makeText(this, user.getEmail(), Toast.LENGTH_SHORT).show();
         Log.d(LOG_TAG, "" + FbUser.getPhoneNumber());
 
-        /*AuthCredential newCredential = EmailAuthProvider.getCredential("banana1@gmail.com","12345678");
-
-        fbAuth.getCurrentUser().linkWithCredential(newCredential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("App", "linkWithCredential:success");
-                            FirebaseUser user = task.getResult().getUser();
-                            //updateUI(user);
-                        } else {
-                            Log.w("App", "linkWithCredential:failure", task.getException());
-                            //Toast.makeText(AnonymousAuthActivity.this, "Authentication failed.",
-                                //    Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
-                        }
-
-                        // ...
-                    }
-                });*/
 
         Intent intent = getIntent();	//gives the reference to the destination intent
         final int loginMode = intent .getIntExtra("loginMode",0);	//loginMode is given in EmailLoginActivity and OTPLoginAcitivty
