@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +36,7 @@ public class OTPopUp extends Activity {
     private String phoneVerificationId;
     String PhoneNumber;
     String Parent;
+    String OTP;
     Boolean PhoneCredentialCreated, LinkingStatus;
     String EmailId;
     private String Password;
@@ -65,21 +68,46 @@ public class OTPopUp extends Activity {
         OTPET = findViewById(R.id.OTPBTN);
         ResendBTN = findViewById(R.id.ResendOTPBTN);
         LoginBTN = findViewById(R.id.LoginBTN);
-
-
-
         Progress =new ProgressDialog(this);
+
+
+        OTPET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                OTP = OTPET.getText().toString();
+                if(OTP.length() == 5)
+                {
+                    Progress.setMessage("Veriying OTP");
+                    Progress.show();
+                    OTPET.setText("");
+                    verifyCode();
+                }
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+
+            }
+        });
+
         FbAuth = FirebaseAuth.getInstance();
         PhoneNumber = getIntent().getStringExtra("PhoneNumber");
         Parent = getIntent().getStringExtra("Parent");
         Toast.makeText(this, Parent, Toast.LENGTH_SHORT).show();
 
-        LoginBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                verifyCode();
-            }
-        });
+//        LoginBTN.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//            }
+//        });
         ResendBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,9 +121,9 @@ public class OTPopUp extends Activity {
 
             }
         });
-
-        Progress.setMessage("Sending OTP");
-        Progress.show();
+//
+//        Progress.setMessage("Sending OTP");
+//        Progress.show();
         sendCode();
 
     }
@@ -196,7 +224,7 @@ public class OTPopUp extends Activity {
                         ResendToken = token;
                         Log.d(LOG_TAG, "All good. Code sent. Exiting onCodeSent() ");
                         Toast.makeText(OTPopUp.this, "OTP Sent", Toast.LENGTH_SHORT).show();
-                        Progress.dismiss();
+                       // Progress.dismiss();
 
 
                     }
@@ -217,6 +245,7 @@ public class OTPopUp extends Activity {
                             FirebaseUser user = task.getResult().getUser();
                             String phone = user.getPhoneNumber();
                             UserId = user.getUid();
+                            Progress.dismiss();
                             Toast.makeText(OTPopUp.this,"Login Successful by : "+phone,Toast.LENGTH_SHORT).show();
                             finish();
                             Intent i=new Intent(getApplicationContext(),DoctorsActivity.class);
@@ -227,7 +256,9 @@ public class OTPopUp extends Activity {
                             if (task.getException() instanceof
                                     FirebaseAuthInvalidCredentialsException) {
                                 // The verification code entered was invalid
+                                Progress.dismiss();
                                 Toast.makeText(OTPopUp.this,"Invalid OTP. Try Again.",Toast.LENGTH_SHORT).show();
+                                OTPET.setText("");
 
                             }
                         }

@@ -135,17 +135,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                 if (dataSnapshot.getValue() != null) {
                     //it means user already registered
                     PhoneNumberExists =true;
-                    String ss = dataSnapshot.getKey().toString();
-                    String mPhone,mEmail;
-                    mPhone="";
-                    mEmail="";
-                    if (ss.equals("Phone")) {
-                        mPhone = dataSnapshot.getValue().toString();
-                    } else if (ss.equals("Email"))
-                    {
-                        mEmail = dataSnapshot.getValue().toString();
-                    }
-                    Toast.makeText(OTPLoginActivity.this, "Phone Number : "+ mPhone +" is linked with Email : "+mEmail, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OTPLoginActivity.this, "Phone Number exists", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
@@ -160,105 +150,5 @@ public class OTPLoginActivity extends AppCompatActivity {
             }
         });
     }
-//    public void sendCode() {
-//        Log.d(LOG_TAG, "Entered sendCode()");
-//
-//
-//        setUpVerificationCallbacks();
-//        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-//                PhoneNumber,        // Phone number to verify
-//                60,                 // Timeout duration
-//                TimeUnit.SECONDS,   // Unit of timeout
-//                this,               // Activity (for callback binding)
-//                verificationCallbacks);
-//        Log.d(LOG_TAG, "All done. Exiting sendCode()");
-//
-//    }
-//    private void setUpVerificationCallbacks() {
-//        Log.d(LOG_TAG, "Entered setUpVerificationCallbacks()");
-//
-//        verificationCallbacks =
-//                new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-//
-//                    @Override
-//                    public void onVerificationCompleted(
-//                            PhoneAuthCredential credential) {
-//                        Log.d(LOG_TAG, "Verification completed successfully");
-//
-//                        signInWithPhoneAuthCredential(credential);
-//                    }
-//
-//                    @Override
-//                    public void onVerificationFailed(FirebaseException e) {
-//                        Log.d(LOG_TAG, "Verification Failed");
-//
-//
-//                        if (e instanceof FirebaseAuthInvalidCredentialsException) {
-//                            // Invalid request
-//                            Log.d(LOG_TAG, "Invalid credential: "
-//                                    + e.getLocalizedMessage());
-//                            Toast.makeText(OTPLoginActivity.this, "Invalid Request", Toast.LENGTH_SHORT).show();
-//                        } else if (e instanceof FirebaseTooManyRequestsException) {
-//                            // SMS quota exceeded
-//                            Log.d(LOG_TAG, "SMS Quota exceeded.");
-//                            Toast.makeText(OTPLoginActivity.this, "Unable to send OTP. Please try logging in using Email", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onCodeSent(String verificationId,
-//                                           PhoneAuthProvider.ForceResendingToken token) {
-//                        Log.d(LOG_TAG, "Entered onCodeSent()");
-//                        Progress.dismiss();
-//                        Toast.makeText(OTPLoginActivity.this, "OTP Sent", Toast.LENGTH_SHORT).show();
-//                        PhoneVerificationId = verificationId;
-//                        resendToken = token;
-//
-//
-//                        Intent intent = new Intent(OTPLoginActivity.this, OTPopUp.class);
-//                        intent.putExtra("PhoneNumber", PhoneNumber);
-//                        intent.putExtra("phoneVerificationId", PhoneVerificationId);
-//                        intent.putExtra("resendToken", resendToken);
-//                        Log.d(LOG_TAG, "All good. Code sent.  Exiting onCodeSent()");
-//                        startActivity(intent);
-//
-//                    }
-//                };
-//    }
-//
-//
-//    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-//        Log.d(LOG_TAG, "Entered signInWithPhoneAuthCredential()");
-//
-//
-//        FbAuth.signInWithCredential(credential)
-//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        if (task.isSuccessful()) {
-//
-//                            FirebaseUser user = task.getResult().getUser();
-//                            String phone = user.getPhoneNumber();
-//                            UserId = user.getUid();
-//                            Toast.makeText(OTPLoginActivity.this,"Login Successful by : "+phone,Toast.LENGTH_SHORT).show();
-//                            finish();
-//                            Intent i=new Intent(getApplicationContext(),DoctorsActivity.class);
-//                            i.putExtra("loginMode",2);
-//                            Log.d(LOG_TAG, "All good. Exiting signInWithPhoneAuthCredential()");
-//                            startActivity(i);
-//
-//                        } else {
-//                            if (task.getException() instanceof
-//                                    FirebaseAuthInvalidCredentialsException) {
-//                                // The verification code entered was invalid
-//                                Toast.makeText(OTPLoginActivity.this,"Invalid OTP. Try Again.",Toast.LENGTH_SHORT).show();
-//                                Log.d(LOG_TAG, "Failed. Exiting signInWithPhoneAuthCredential()");
-//
-//                            }
-//                        }
-//                    }
-//                });
-//    }
-
 
 }

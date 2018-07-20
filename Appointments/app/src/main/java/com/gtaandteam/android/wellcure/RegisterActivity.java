@@ -1,6 +1,5 @@
 package com.gtaandteam.android.wellcure;
 
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -206,6 +205,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void checkPhoneNumberExists()
     {
+        PhoneNumberExists=false;
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("userDB");
         userRef.orderByChild("Phone").equalTo(PhoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
 
@@ -214,22 +214,12 @@ public class RegisterActivity extends AppCompatActivity {
                 if (dataSnapshot.getValue() != null) {
                     //it means user already registered
                     PhoneNumberExists =true;
-                    String ss = dataSnapshot.getKey().toString();
-                    String mPhone,mEmail;
-                    mPhone="";
-                    mEmail="";
-                    if (ss.equals("Phone")) {
-                        mPhone = dataSnapshot.getValue().toString();
-                    } else if (ss.equals("Email"))
-                    {
-                        mEmail = dataSnapshot.getValue().toString();
-                    }
-                    Toast.makeText(RegisterActivity.this, "Phone Number : "+ mPhone +" already linked with Email : "+mEmail, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Phone Number exists", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
 
-                    Toast.makeText(RegisterActivity.this, "Phone number not linked to any account ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Phone number not linked to any account. Please Register. ", Toast.LENGTH_SHORT).show();
                 }
             }
 
