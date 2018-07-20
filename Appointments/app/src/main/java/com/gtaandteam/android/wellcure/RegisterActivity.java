@@ -1,5 +1,6 @@
 package com.gtaandteam.android.wellcure;
 
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -238,6 +239,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
+
 
 }
 

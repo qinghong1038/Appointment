@@ -3,6 +3,7 @@ package com.gtaandteam.android.wellcure;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Selection;
 import android.util.Log;
@@ -14,6 +15,11 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class OTPLoginActivity extends AppCompatActivity {
 
@@ -21,6 +27,7 @@ public class OTPLoginActivity extends AppCompatActivity {
     String UserId; //Stores the user input as a String.
     String PhoneNumber;
     private String PhoneVerificationId;
+    Boolean PhoneNumberExists;
 
     /**Views*/
     TextView SwitchToEmailTV;
@@ -71,12 +78,15 @@ public class OTPLoginActivity extends AppCompatActivity {
 //                        Progress.setMessage("Sending OTP");
 //                        Progress.show();
                         //TODO: Need to check if not in Database
-                        Intent intent = new Intent(OTPLoginActivity.this, OTPopUp.class);
-                        intent.putExtra("Parent", LOG_TAG);
-                        intent.putExtra("PhoneNumber", PhoneNumber);
-                        Log.d(LOG_TAG, "All good. Code sent.  Exiting onCodeSent()");
-                        startActivity(intent);
-                        //sendCode();
+                        checkPhoneNumberExists();
+                        if(PhoneNumberExists) {
+                            Intent intent = new Intent(OTPLoginActivity.this, OTPopUp.class);
+                            intent.putExtra("Parent", LOG_TAG);
+                            intent.putExtra("PhoneNumber", PhoneNumber);
+                            Log.d(LOG_TAG, "All good. Switching to OTPopUp");
+                            startActivity(intent);
+                        }
+
 
 
                     }
@@ -112,6 +122,42 @@ public class OTPLoginActivity extends AppCompatActivity {
 
 
 
+    }
+    private void checkPhoneNumberExists()
+    {
+        PhoneNumberExists=false;
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("userDB");
+        userRef.orderByChild("Phone").equalTo(PhoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    //it means user already registered
+                    PhoneNumberExists =true;
+                    String ss = dataSnapshot.getKey().toString();
+                    String mPhone,mEmail;
+                    mPhone="";
+                    mEmail="";
+                    if (ss.equals("Phone")) {
+                        mPhone = dataSnapshot.getValue().toString();
+                    } else if (ss.equals("Email"))
+                    {
+                        mEmail = dataSnapshot.getValue().toString();
+                    }
+                    Toast.makeText(OTPLoginActivity.this, "Phone Number : "+ mPhone +" is linked with Email : "+mEmail, Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+
+                    Toast.makeText(OTPLoginActivity.this, "Phone number not linked to any account. Please Register. ", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 //    public void sendCode() {
 //        Log.d(LOG_TAG, "Entered sendCode()");

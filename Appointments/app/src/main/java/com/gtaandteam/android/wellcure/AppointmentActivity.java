@@ -18,6 +18,7 @@ import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -81,7 +82,8 @@ public class AppointmentActivity extends AppCompatActivity {
         BookingTypeTV = findViewById(R.id.BookingType);
         BookAndPayBTN = findViewById(R.id.bookAndPay_Button);
         MyToolbar = findViewById(R.id.MyToolbar);
-
+        EmailET.setFocusable(false);
+        
         Intent intent = getIntent();
         UserExists = intent.getBooleanExtra("UserExists",false);
         Progress = new ProgressDialog(this);
@@ -272,8 +274,8 @@ public class AppointmentActivity extends AppCompatActivity {
 
                 }
                 NameET.setText(rName);
-                EmailET.setText(rEmail);
-                PhoneET.setText(rPhone);
+                EmailET.setText(FbAuth.getCurrentUser().getEmail());
+                PhoneET.setText(FbAuth.getCurrentUser().getPhoneNumber());
                 Progress.dismiss();
             }
 
