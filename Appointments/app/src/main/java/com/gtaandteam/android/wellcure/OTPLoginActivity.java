@@ -74,7 +74,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                 {
                     if(PhoneNumber.startsWith("+91"))
                     {
-
+                        PhoneNumberExists=false;
                         //TODO: Need to check if not in Database
                         PhoneNumberExists=checkPhoneNumberExists(); //Commented for Testing
                         //PhoneNumberExists = true;
@@ -82,6 +82,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                         if(PhoneNumberExists==true) {
                             //OTP will be sent now
                             Log.d(LOG_TAG, "Phone Number Exists Confirmed. Hence going to start OTPopUp");
+                            Toast.makeText(OTPLoginActivity.this, "PhoneNumberExists", Toast.LENGTH_SHORT).show();
                             Progress.setMessage("Sending OTP");
                             Progress.show();
                             Intent intent = new Intent(OTPLoginActivity.this, OTPopUp.class);
@@ -89,6 +90,10 @@ public class OTPLoginActivity extends AppCompatActivity {
                             intent.putExtra("PhoneNumber", PhoneNumber);
                             Log.d(LOG_TAG, "All good. Switching to OTPopUp");
                             startActivity(intent);
+                        }
+                        else
+                        {
+                            Toast.makeText(OTPLoginActivity.this, "PhoneNumberDoesntExist", Toast.LENGTH_SHORT).show();
                         }
 
 
@@ -155,7 +160,7 @@ public class OTPLoginActivity extends AppCompatActivity {
     }*/
     private Boolean checkPhoneNumberExists()
     {
-        PhoneNumberExists=false;
+
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("userDB");
         userRef.orderByChild("Phone").equalTo(PhoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
 
