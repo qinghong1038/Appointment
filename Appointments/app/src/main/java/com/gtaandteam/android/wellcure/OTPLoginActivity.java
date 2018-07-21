@@ -13,8 +13,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,7 +24,6 @@ public class OTPLoginActivity extends AppCompatActivity {
     /**Data Structures*/
     String UserId; //Stores the user input as a String.
     String PhoneNumber;
-    private String PhoneVerificationId;
     Boolean PhoneNumberExists;
 
     /**Views*/
@@ -36,11 +33,9 @@ public class OTPLoginActivity extends AppCompatActivity {
     Button SendOTPBTN;//Send OTP Button
     Button RegisterBTN;
     /**Firebase*/
-    private FirebaseAuth FbAuth;
-    private PhoneAuthProvider.ForceResendingToken resendToken;
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks verificationCallbacks;
 
     final String LOG_TAG = this.getClass().getSimpleName();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +55,6 @@ public class OTPLoginActivity extends AppCompatActivity {
             }
         });
         Progress =new ProgressDialog(this);
-        FbAuth = FirebaseAuth.getInstance();
 
         PhoneOTPTV.setText("+91 ");
         Selection.setSelection(PhoneOTPTV.getText(), PhoneOTPTV.getText().length());
@@ -68,33 +62,18 @@ public class OTPLoginActivity extends AppCompatActivity {
         SendOTPBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 PhoneNumber = PhoneOTPTV.getText().toString().trim().replaceAll(" ", "" );
 
                 if(PhoneNumber.length()==13)
                 {
                     if(PhoneNumber.startsWith("+91"))
                     {
-                        PhoneNumberExists=false;
+                        Progress.setMessage("Working on it...");
+                        Progress.show();
                         //TODO: Need to check if not in Database
-                        PhoneNumberExists=checkPhoneNumberExists(); //Commented for Testing
-                        //PhoneNumberExists = true;
-                        Log.d(LOG_TAG, "Returned back after CheckingPhoneExists");
-                        if(PhoneNumberExists==true) {
-                            //OTP will be sent now
-                            Log.d(LOG_TAG, "Phone Number Exists Confirmed. Hence going to start OTPopUp");
-                            Toast.makeText(OTPLoginActivity.this, "PhoneNumberExists", Toast.LENGTH_SHORT).show();
-                            Progress.setMessage("Sending OTP");
-                            Progress.show();
-                            Intent intent = new Intent(OTPLoginActivity.this, OTPopUp.class);
-                            intent.putExtra("Parent", LOG_TAG);
-                            intent.putExtra("PhoneNumber", PhoneNumber);
-                            Log.d(LOG_TAG, "All good. Switching to OTPopUp");
-                            startActivity(intent);
-                        }
-                        else
-                        {
-                            Toast.makeText(OTPLoginActivity.this, "PhoneNumberDoesntExist", Toast.LENGTH_SHORT).show();
-                        }
+                        //Commented for Testing
+                        checkPhoneNumberExists();
 
 
 
@@ -113,7 +92,10 @@ public class OTPLoginActivity extends AppCompatActivity {
                     PhoneOTPTV.setText("+91 ");
                     Selection.setSelection(PhoneOTPTV.getText(), PhoneOTPTV.getText().length());
                 }
+
+
             }
+
         });
 
 
@@ -132,52 +114,40 @@ public class OTPLoginActivity extends AppCompatActivity {
 
 
     }
-    /*private void checkPhoneNumberExists()
+
+    private void checkPhoneNumberExists()
     {
-        PhoneNumberExists=false;
+        Log.d(LOG_TAG, "Entered  checkPhoneNumberExists");
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("userDB");
         userRef.orderByChild("Phone").equalTo(PhoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(LOG_TAG, "Entered onDataChanged() " );
+
                 if (dataSnapshot.getValue() != null) {
                     //it means user already registered
-                    PhoneNumberExists =true;
-                    Toast.makeText(OTPLoginActivity.this, "Phone Number exists", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
+                    Log.d(LOG_TAG, "Phone Number Exists");
+                    //OTP will be sent now
+                    Log.d(LOG_TAG, "Phone Number Exists Confirmed. Hence going to start OTPopUp");
+                    Toast.makeText(OTPLoginActivity.this, "PhoneNumberExists", Toast.LENGTH_SHORT).show();
 
-                    Toast.makeText(OTPLoginActivity.this, "Phone number not linked to any account. Please Register. ", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }*/
-    private Boolean checkPhoneNumberExists()
-    {
-
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("userDB");
-        userRef.orderByChild("Phone").equalTo(PhoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() != null) {
-                    //it means user already registered
-                    PhoneNumberExists = true;
-                    Log.d(LOG_TAG, "Phone Number Exists : incheckPhoneNumberExists");
-                    Toast.makeText(OTPLoginActivity.this, "Phone Number exists", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(OTPLoginActivity.this, OTPopUp.class);
+                    intent.putExtra("Parent", LOG_TAG);
+                    intent.putExtra("PhoneNumber", PhoneNumber);
+                    Log.d(LOG_TAG, "All good. Switching to OTPopUp");
+                    Progress.dismiss();
+                    startActivity(intent);
+                    Log.d(LOG_TAG, "PhoneNumberExists is set to: " + PhoneNumberExists);
+                   // bool = true;
                     return;
                 }
                 else
                 {
-
+                    Log.d(LOG_TAG, "Phone Number Doesn't exist.");
                     Toast.makeText(OTPLoginActivity.this, "Phone number not linked to any account. Please Register. ", Toast.LENGTH_SHORT).show();
                 }
+
             }
 
             @Override
@@ -185,7 +155,7 @@ public class OTPLoginActivity extends AppCompatActivity {
 
             }
         });
-        return  PhoneNumberExists;
+        Log.d(LOG_TAG, "Returning from checkPhoneNumberExists");
     }
 
 }

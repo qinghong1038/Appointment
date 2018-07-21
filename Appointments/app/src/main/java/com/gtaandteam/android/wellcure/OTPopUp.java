@@ -74,17 +74,6 @@ public class OTPopUp extends Activity {
         OTPET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                OTP = OTPET.getText().toString();
-//                if(OTP.length() == 5)
-//                {
-//                    Progress.setMessage("Veriying OTP");
-//                    Progress.show();
-//                    //OTPET.setText("");
-//                    verifyCode();
-//                }
-//                Log.d(LOG_TAG, "beforeTextChanged OTP");
-
-
             }
 
             @Override
@@ -129,8 +118,8 @@ public class OTPopUp extends Activity {
             }
         });
 //
-//        Progress.setMessage("Sending OTP");
-//        Progress.show();
+        Progress.setMessage("Sending OTP");
+        Progress.show();
         sendCode();
     }
 
