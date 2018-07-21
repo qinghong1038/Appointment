@@ -76,7 +76,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                     {
 
                         //TODO: Need to check if not in Database
-                        checkPhoneNumberExists(); //Commented for Testing
+                        PhoneNumberExists=checkPhoneNumberExists(); //Commented for Testing
                         //PhoneNumberExists = true;
                         Log.d(LOG_TAG, "Returned back after CheckingPhoneExists");
                         if(PhoneNumberExists==true) {
@@ -153,7 +153,7 @@ public class OTPLoginActivity extends AppCompatActivity {
             }
         });
     }*/
-    private void checkPhoneNumberExists()
+    private Boolean checkPhoneNumberExists()
     {
         PhoneNumberExists=false;
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("userDB");
@@ -163,8 +163,8 @@ public class OTPLoginActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
                     //it means user already registered
-                    PhoneNumberExists =true;
-                    Log.d(LOG_TAG, "Phone Number Exists");
+                    PhoneNumberExists = true;
+                    Log.d(LOG_TAG, "Phone Number Exists : incheckPhoneNumberExists");
                     Toast.makeText(OTPLoginActivity.this, "Phone Number exists", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -180,6 +180,7 @@ public class OTPLoginActivity extends AppCompatActivity {
 
             }
         });
+        return  PhoneNumberExists;
     }
 
 }
