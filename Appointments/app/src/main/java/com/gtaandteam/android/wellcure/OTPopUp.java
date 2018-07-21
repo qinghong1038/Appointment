@@ -57,7 +57,7 @@ public class OTPopUp extends Activity {
     private PhoneAuthProvider.ForceResendingToken ResendToken;
     DatabaseReference UserDb1;
 
-    final String LOG_TAG = "OTP POP UP";
+    final String LOG_TAG = this.getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +77,8 @@ public class OTPopUp extends Activity {
                 OTP = OTPET.getText().toString();
                 if(OTP.length() == 5)
                 {
-                    Progress.setMessage("Veriying OTP");
-                    Progress.show();
+//                    Progress.setMessage("Veriying OTP");
+//                    Progress.show();
                     OTPET.setText("");
                     verifyCode();
                 }
@@ -101,13 +101,8 @@ public class OTPopUp extends Activity {
         FbAuth = FirebaseAuth.getInstance();
         PhoneNumber = getIntent().getStringExtra("PhoneNumber");
         Parent = getIntent().getStringExtra("Parent");
-        Toast.makeText(this, Parent, Toast.LENGTH_SHORT).show();
+        Log.d(LOG_TAG,  "Parent ativity: " + Parent);
 
-//        LoginBTN.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//            }
-//        });
         ResendBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -125,7 +120,6 @@ public class OTPopUp extends Activity {
 //        Progress.setMessage("Sending OTP");
 //        Progress.show();
         sendCode();
-
     }
 
     public void sendCode() {

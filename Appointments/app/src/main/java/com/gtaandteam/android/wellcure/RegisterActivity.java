@@ -91,7 +91,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
     private void registerUser()
     {
-        Log.d(LOG_TAG, "Entered regitserUser()");
+        Log.d(LOG_TAG, "Entered registerUser()");
+
         EmailId= UsernameET.getText().toString().trim();
         Password = PasswordET.getText().toString();
         String confirm_pass = ConfirmPasswordET.getText().toString();
@@ -169,8 +170,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                             Log.d(LOG_TAG, "Proceeding to link Mobile Number with Email ID");
                             Toast.makeText(RegisterActivity.this, "Proceeding to link mobile number with Email ID", Toast.LENGTH_SHORT).show();
-                            Progress.setMessage("Sending OTP");
-                            Progress.show();
+//                            Progress.setMessage("Sending OTP");
+//                            Progress.show();
                             PhoneNumberExists =false;
                             checkPhoneNumberExists();
                             if(PhoneNumberExists)
@@ -193,7 +194,7 @@ public class RegisterActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(RegisterActivity.this, "Couldn't register. Please try again.", Toast.LENGTH_SHORT).show();
                             Log.d(LOG_TAG, "Couldn't create Email Account");
-                            //TODO: DISPLAY EXCEPTION MESSAGE AS TO WHY REGISTRATION COULDNT OCCUR. I KNOW THE CODE. WILL ADD IT SOON.
+                            //TODO: DISPLAY EXCEPTION MESSAGE AS TO WHY REGISTRATION COULDN'T OCCUR. I KNOW THE CODE. WILL ADD IT SOON.
                             //TODO: OK.
                         }
                     }
