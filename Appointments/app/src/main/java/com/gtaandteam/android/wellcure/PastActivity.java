@@ -44,10 +44,10 @@ public class PastActivity extends AppCompatActivity {
         //TODO: Major FireBase changes/additions to be made in order to access past appointment Data from the particular ACCOUNT only
         //Following ArrayList is a temporary placeholder.
         ArrayList<Appointment> appointments = new ArrayList<>();
-        appointments.add(new Appointment("Borkson Woofberg","Jan 26, 2018", R.drawable.dogtor));
-        appointments.add(new Appointment("Dildo Lovegood","Aug 15, 2018", R.drawable.dildo));
-        appointments.add(new Appointment("Cocksucker McGee","October 2, 2018", R.drawable.cocksucker));
-        appointments.add(new Appointment("Meowette Furrington","July 28, 2018",R.drawable.cator));
+        appointments.add(new Appointment("Ritu Jain","Jan 26, 2018", R.drawable.doctor));
+        appointments.add(new Appointment("Ritu Jain","Aug 15, 2018", R.drawable.doctor));
+        appointments.add(new Appointment("Ritu Jain","October 2, 2018", R.drawable.doctor));
+        appointments.add(new Appointment("Ritu Jain","July 28, 2018",R.drawable.doctor));
         appointments.add(new Appointment("Test for no Image"," Jan 01, 1970"));
 
 
