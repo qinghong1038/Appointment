@@ -36,7 +36,7 @@ public class OTPopUp extends Activity {
     private String phoneVerificationId;
     String PhoneNumber;
     String Parent;
-    String OTP;
+    String OTP,Code;
     Boolean PhoneCredentialCreated, LinkingStatus;
     String EmailId;
     private String Password;
@@ -74,26 +74,38 @@ public class OTPopUp extends Activity {
         OTPET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                OTP = OTPET.getText().toString();
-                if(OTP.length() == 5)
-                {
+//                OTP = OTPET.getText().toString();
+//                if(OTP.length() == 5)
+//                {
 //                    Progress.setMessage("Veriying OTP");
 //                    Progress.show();
-                    OTPET.setText("");
-                    verifyCode();
-                }
+//                    //OTPET.setText("");
+//                    verifyCode();
+//                }
+//                Log.d(LOG_TAG, "beforeTextChanged OTP");
+
 
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Log.d(LOG_TAG, "onTextChangedOTP");
 
 
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                Log.d(LOG_TAG, "afterTextChangedOTP");
+                OTP = OTPET.getText().toString();
+                if(OTP.length() == 6)
+                {
+                    Code=OTP;
+                    Progress.setMessage("Verifying OTP");
+                    Progress.show();
+                    OTPET.setText("");
+                    verifyCode();
+                }
 
             }
         });
@@ -139,10 +151,9 @@ public class OTPopUp extends Activity {
 
     public void verifyCode() {
 
-        String code = OTPET.getText().toString();
-
+        Log.d(LOG_TAG, "Displaying OTP Value :"+Code);
         PhoneAuthCredential credential =
-                PhoneAuthProvider.getCredential(phoneVerificationId, code);
+                PhoneAuthProvider.getCredential(phoneVerificationId, Code);
         Log.d(LOG_TAG, "Verification In Progress");
         if(Parent.equals("OTPLoginActivity"))
             signInWithPhoneAuthCredential(credential);
@@ -289,6 +300,7 @@ public class OTPopUp extends Activity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            Progress.dismiss();
                             Log.d(LOG_TAG, "linkWithCredential:success");
                             Toast.makeText(OTPopUp.this, "Mobile Number has been successfully linked with Email ID", Toast.LENGTH_SHORT).show();
 
@@ -298,6 +310,7 @@ public class OTPopUp extends Activity {
                             //updateUI(user);
                         } else {
                             Log.w("App", "linkWithCredential:failure", task.getException());
+                            Progress.dismiss();
                             Toast.makeText(OTPopUp.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             OTPET.setText("");

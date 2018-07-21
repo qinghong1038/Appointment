@@ -76,9 +76,12 @@ public class OTPLoginActivity extends AppCompatActivity {
                     {
 
                         //TODO: Need to check if not in Database
-                        checkPhoneNumberExists();
-                        if(PhoneNumberExists) {
+                        checkPhoneNumberExists(); //Commented for Testing
+                        //PhoneNumberExists = true;
+                        Log.d(LOG_TAG, "Returned back after CheckingPhoneExists");
+                        if(PhoneNumberExists==true) {
                             //OTP will be sent now
+                            Log.d(LOG_TAG, "Phone Number Exists Confirmed. Hence going to start OTPopUp");
                             Progress.setMessage("Sending OTP");
                             Progress.show();
                             Intent intent = new Intent(OTPLoginActivity.this, OTPopUp.class);
@@ -124,7 +127,7 @@ public class OTPLoginActivity extends AppCompatActivity {
 
 
     }
-    private void checkPhoneNumberExists()
+    /*private void checkPhoneNumberExists()
     {
         PhoneNumberExists=false;
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("userDB");
@@ -136,6 +139,34 @@ public class OTPLoginActivity extends AppCompatActivity {
                     //it means user already registered
                     PhoneNumberExists =true;
                     Toast.makeText(OTPLoginActivity.this, "Phone Number exists", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+
+                    Toast.makeText(OTPLoginActivity.this, "Phone number not linked to any account. Please Register. ", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }*/
+    private void checkPhoneNumberExists()
+    {
+        PhoneNumberExists=false;
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("userDB");
+        userRef.orderByChild("Phone").equalTo(PhoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    //it means user already registered
+                    PhoneNumberExists =true;
+                    Log.d(LOG_TAG, "Phone Number Exists");
+                    Toast.makeText(OTPLoginActivity.this, "Phone Number exists", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 else
                 {
