@@ -222,9 +222,9 @@ public class AppointmentActivity extends AppCompatActivity {
         PhoneNumber = PhoneET.getText().toString();
         Date = Day +"/"+(Month +1)+"/"+ Year;
         Data = new HashMap<>();
-        Data.put("NameET", FirstName);
-        Data.put("EmailET", Email);
-        Data.put("PhoneET", PhoneNumber);
+        Data.put("Name", FirstName);
+        Data.put("Email", Email);
+        Data.put("Phone", PhoneNumber);
         Data.put("LoginDate", Date);
         Log.v("APP","Hashmap Done");
         UserDb1 = FirebaseDatabase.getInstance().getReference().child("users");

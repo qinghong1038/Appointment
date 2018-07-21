@@ -34,6 +34,7 @@ public class DoctorsActivity extends AppCompatActivity {
 
     /**Data Structures*/
     Boolean UserExists;
+    static String DoctorName = "Ritu Jain";
 
     /**Views*/
     Button AppointmentBTN;

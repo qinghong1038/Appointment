@@ -71,6 +71,9 @@ public class ConfirmActivity extends AppCompatActivity {
                 onSuccess.putExtra("OrderID",orderID[1]);
                 onSuccess.putExtra("PaymentID",paymentID[1]);
                 onSuccess.putExtra("PaymentToken",paymentToken[1]);
+                onSuccess.putExtra("Amount",Amount);
+                onSuccess.putExtra("Name",Name);
+
                 startActivity(onSuccess);
                 finish();
             }

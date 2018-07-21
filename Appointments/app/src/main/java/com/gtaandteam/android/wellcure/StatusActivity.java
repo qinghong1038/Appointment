@@ -2,29 +2,47 @@ package com.gtaandteam.android.wellcure;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class StatusActivity extends AppCompatActivity {
 
     /**Data Structures*/
-    String BookingDate, OrderID, TokenID, PaymentID, AppointmentDate;
+    String BookingDate, OrderID, TokenID, PaymentID, AppointmentDate, Name, Amount;
     Boolean Success;
+    HashMap<String, String> Data;
 
     /**Views*/
     Button GoBackBTN;
     TextView StatusHeaderTV, StatusMessageTV, BookingIDTV, TimeOfBookingTV, TimeOfAppointmentTV;
     ImageView StatusIV;
+    Appointment newAppointment;
+
+    DatabaseReference UserDb1;
+    private FirebaseAuth FbAuth;
+
+    final String LOG_TAG = this.getClass().getSimpleName();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status);
-
+        FbAuth = FirebaseAuth.getInstance();
         //Linking to views
         GoBackBTN = findViewById(R.id.BackBTN);
         StatusIV = findViewById(R.id.StatusIV);
@@ -38,6 +56,9 @@ public class StatusActivity extends AppCompatActivity {
         //Side note : prefer to use "hh:mm,  dd-mm-yyyy" for displaying time of completion.
         Intent getStatus = getIntent();
         Success = getStatus.getBooleanExtra("Status",false);
+        Name = getStatus.getStringExtra("Name");
+        Amount=getStatus.getStringExtra("Amount");
+
         BookingDate =AppointmentActivity.TodaysDate;
         AppointmentDate =AppointmentActivity.SelectedDate;
 
@@ -52,6 +73,7 @@ public class StatusActivity extends AppCompatActivity {
             TimeOfAppointmentTV.setText(AppointmentDate);
             StatusMessageTV.setText("You have Successfully Made a Booking!");
             StatusHeaderTV.setText("SUCCESS!");
+
         }
         else
         {
@@ -71,4 +93,35 @@ public class StatusActivity extends AppCompatActivity {
             }
         });
     }
+    private void addAppointmentToDatabase()
+    {
+        String AppointmentDate,PatientName,DoctorName;
+        Float Fees;
+        Toast.makeText(this, "Appointment Details Stored To AppointmentDatabase", Toast.LENGTH_SHORT).show();
+        AppointmentDate = AppointmentActivity.SelectedDate;
+        PatientName = Name;
+        DoctorName = DoctorsActivity.DoctorName;
+        Fees = Float.parseFloat(Amount);
+        Log.d(LOG_TAG, "Amount is "+Fees);
+        //Data=new HashMap<>();
+        //Data.put("")
+
+        newAppointment = new Appointment(PatientName,DoctorName,AppointmentDate,Fees);
+
+        UserDb1 = FirebaseDatabase.getInstance().getReference().child("appointmentDB");
+        UserDb1.child(FbAuth.getCurrentUser().getUid()).setValue(newAppointment).addOnCompleteListener(this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task)
+            {
+                //finish();
+                //go to page which shows users details
+                Log.v("APP","Done Shit");
+                Toast.makeText(getApplicationContext(),"Stored Appointment Data",Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
+    }
+
 }

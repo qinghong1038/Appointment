@@ -69,7 +69,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                 {
                     if(PhoneNumber.startsWith("+91"))
                     {
-                        Progress.setMessage("Working on it...");
+                        Progress.setMessage("Validating Mobile Number");
                         Progress.show();
                         //TODO: Need to check if not in Database
                         //Commented for Testing
@@ -146,6 +146,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                 {
                     Log.d(LOG_TAG, "Phone Number Doesn't exist.");
                     Toast.makeText(OTPLoginActivity.this, "Phone number not linked to any account. Please Register. ", Toast.LENGTH_SHORT).show();
+                    Progress.dismiss();
                 }
 
             }

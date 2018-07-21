@@ -34,6 +34,8 @@ public class Appointment {
         mDoctorName =  Dr +DoctorName;
         mDate = Date;
         mFees = Fees;
+        if(DoctorName.equals("Ritu Jain"))
+            mDoctorImage = R.drawable.doctor;
 
     }
 
@@ -45,6 +47,8 @@ public class Appointment {
         mDoctorImage = DoctorImage;
 
     }
+
+
 
     public Float getmFees() {
         return mFees;

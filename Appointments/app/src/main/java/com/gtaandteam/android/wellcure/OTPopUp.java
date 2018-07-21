@@ -218,7 +218,7 @@ public class OTPopUp extends Activity {
                         ResendToken = token;
                         Log.d(LOG_TAG, "All good. Code sent. Exiting onCodeSent() ");
                         Toast.makeText(OTPopUp.this, "OTP Sent", Toast.LENGTH_SHORT).show();
-                       // Progress.dismiss();
+                        Progress.dismiss();
 
 
                     }
