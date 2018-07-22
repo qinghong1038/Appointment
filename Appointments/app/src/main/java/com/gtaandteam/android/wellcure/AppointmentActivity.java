@@ -302,6 +302,22 @@ public class AppointmentActivity extends AppCompatActivity {
 
         });
 
-
+ 
 }
+    public void getLatestAppointment(){
+        //Not tested yet....(Change to Direction.Acending if required)
+        DatabaseReference databaseReference = Firebase.getInstance().getReference()
+            .databaseReference.child("appointment").orderBy("date",Direction.DECENTING)
+            .limit(1).addListenerForSingleValueEvent(new ValueEventListener() {
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) {
+        String message = dataSnapshot.child("message").getValue().toString();
+    }
+
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
+        //Handle possible errors.
+    }
+});
+    }
 }
