@@ -141,6 +141,33 @@ public class DoctorsActivity extends AppCompatActivity {
     }
 
     private void checkUserExists() {
+        DatabaseReference dbobj= FirebaseDatabase.getInstance().getReference("user");
+            rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+              @Override
+              void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.childExists(FbAuth.getCurrentUser().getUid())) {
+                            UserExists=true;
+                            Log.d(LOG_TAG, "UserExists. Show Progress Bar after this");
+                            Intent intent = new Intent(DoctorsActivity.this, AppointmentActivity.class);
+                            //intent.putExtra("loginMode",loginMode);
+                            intent.putExtra("UserExists", UserExists);
+                            //finish();
+                            Log.d(LOG_TAG, "Value of UserExists : "+UserExists);
+                            startActivity(intent);
+                }
+                  else{
+                      UserExists = false;
+            Log.d(LOG_TAG, "User doesnt Exist. Dont Show Progress Bar after this");
+            Intent intent = new Intent(DoctorsActivity.this, AppointmentActivity.class);
+            //intent.putExtra("loginMode",loginMode);
+            intent.putExtra("UserExists", UserExists);
+            //finish();
+            Log.d(LOG_TAG, "Value of UserExists : "+UserExists);
+            startActivity(intent);
+              }
+            });
+        
+        /*
         Log.d(LOG_TAG, "Inside checkUser");
         try
         {
@@ -188,7 +215,7 @@ public class DoctorsActivity extends AppCompatActivity {
                 }
 
 
-            });
+            });*/
         }
         catch (Exception e)
         {
