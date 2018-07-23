@@ -74,10 +74,8 @@ public class DoctorsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 checkUserExists();
-                Intent intent = new Intent(DoctorsActivity.this, AppointmentActivity.class);
-                intent.putExtra("loginMode",loginMode);
-                intent.putExtra("UserExists", UserExists);
-                startActivity(intent);
+
+
 
 
             }
@@ -158,6 +156,12 @@ public class DoctorsActivity extends AppCompatActivity {
                             name = dataSnapshot.getValue().toString();
                             UserExists=true;
                             Log.d(LOG_TAG, "UserExists. Show Progress Bar after this");
+                            Intent intent = new Intent(DoctorsActivity.this, AppointmentActivity.class);
+                            //intent.putExtra("loginMode",loginMode);
+                            intent.putExtra("UserExists", UserExists);
+                            //finish();
+                            Log.d(LOG_TAG, "Value of UserExists : "+UserExists);
+                            startActivity(intent);
                             break;
 
                     }
@@ -190,6 +194,13 @@ public class DoctorsActivity extends AppCompatActivity {
         {
             UserExists = false;
             Log.d(LOG_TAG, "User doesnt Exist. Dont Show Progress Bar after this");
+            Intent intent = new Intent(DoctorsActivity.this, AppointmentActivity.class);
+            //intent.putExtra("loginMode",loginMode);
+            intent.putExtra("UserExists", UserExists);
+            //finish();
+            Log.d(LOG_TAG, "Value of UserExists : "+UserExists);
+            startActivity(intent);
         }
+
     }
 }
