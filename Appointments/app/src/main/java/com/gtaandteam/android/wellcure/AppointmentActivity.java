@@ -149,6 +149,7 @@ public class AppointmentActivity extends AppCompatActivity {
         BookAndPayBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODO: Calculate Amount To Be Paid based on Past Appointments.
                 Log.v("APP","Clicked Submit");
                 FirstName = NameET.getText().toString().trim();
                 if (TextUtils.isEmpty(FirstName)) {
