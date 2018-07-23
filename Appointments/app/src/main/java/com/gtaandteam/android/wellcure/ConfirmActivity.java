@@ -104,7 +104,7 @@ public class ConfirmActivity extends AppCompatActivity {
         DoctorIV = findViewById(R.id.DoctorIV);
 
         Intent getDetails = getIntent();
-
+        AppointmentActivity.Progress2.dismiss();
         Name =getDetails.getStringExtra("Name");
         Date =getDetails.getStringExtra("Date");
         Phone =getDetails.getStringExtra("Phone");

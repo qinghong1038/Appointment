@@ -3,8 +3,6 @@ package com.gtaandteam.android.wellcure;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,11 +17,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class DoctorsActivity extends AppCompatActivity {
 
@@ -73,9 +67,11 @@ public class DoctorsActivity extends AppCompatActivity {
         AppointmentBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkUserExists();
-
-
+                //checkUserExists();
+                Intent intent = new Intent(DoctorsActivity.this, AppointmentActivity.class);
+                intent.putExtra("loginMode",loginMode);
+                intent.putExtra("UserExists", UserExists);
+                startActivity(intent);
 
 
             }
@@ -140,34 +136,7 @@ public class DoctorsActivity extends AppCompatActivity {
         FbAuth.signOut();
     }
 
-    private void checkUserExists() {
-        DatabaseReference dbobj= FirebaseDatabase.getInstance().getReference("user");
-            rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-              @Override
-              void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.childExists(FbAuth.getCurrentUser().getUid())) {
-                            UserExists=true;
-                            Log.d(LOG_TAG, "UserExists. Show Progress Bar after this");
-                            Intent intent = new Intent(DoctorsActivity.this, AppointmentActivity.class);
-                            //intent.putExtra("loginMode",loginMode);
-                            intent.putExtra("UserExists", UserExists);
-                            //finish();
-                            Log.d(LOG_TAG, "Value of UserExists : "+UserExists);
-                            startActivity(intent);
-                }
-                  else{
-                      UserExists = false;
-            Log.d(LOG_TAG, "User doesnt Exist. Dont Show Progress Bar after this");
-            Intent intent = new Intent(DoctorsActivity.this, AppointmentActivity.class);
-            //intent.putExtra("loginMode",loginMode);
-            intent.putExtra("UserExists", UserExists);
-            //finish();
-            Log.d(LOG_TAG, "Value of UserExists : "+UserExists);
-            startActivity(intent);
-              }
-            });
-        
-        /*
+    /*private void checkUserExists() {
         Log.d(LOG_TAG, "Inside checkUser");
         try
         {
@@ -182,13 +151,8 @@ public class DoctorsActivity extends AppCompatActivity {
                         case "Name":
                             name = dataSnapshot.getValue().toString();
                             UserExists=true;
+                            Toast.makeText(DoctorsActivity.this, "Value of UserExists inside OnChild: "+UserExists, Toast.LENGTH_SHORT).show();
                             Log.d(LOG_TAG, "UserExists. Show Progress Bar after this");
-                            Intent intent = new Intent(DoctorsActivity.this, AppointmentActivity.class);
-                            //intent.putExtra("loginMode",loginMode);
-                            intent.putExtra("UserExists", UserExists);
-                            //finish();
-                            Log.d(LOG_TAG, "Value of UserExists : "+UserExists);
-                            startActivity(intent);
                             break;
 
                     }
@@ -215,19 +179,12 @@ public class DoctorsActivity extends AppCompatActivity {
                 }
 
 
-            });*/
+            });
         }
         catch (Exception e)
         {
             UserExists = false;
             Log.d(LOG_TAG, "User doesnt Exist. Dont Show Progress Bar after this");
-            Intent intent = new Intent(DoctorsActivity.this, AppointmentActivity.class);
-            //intent.putExtra("loginMode",loginMode);
-            intent.putExtra("UserExists", UserExists);
-            //finish();
-            Log.d(LOG_TAG, "Value of UserExists : "+UserExists);
-            startActivity(intent);
         }
-
-    }
+    }*/
 }

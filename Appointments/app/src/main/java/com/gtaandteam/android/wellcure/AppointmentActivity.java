@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -31,9 +30,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -44,9 +40,7 @@ import java.util.HashMap;
 
 public class AppointmentActivity extends AppCompatActivity {
 
-    /**
-     * Data Structures
-     */
+    /**Data Structures*/
     int Year, Month, Day;
     String FirstName, Email, PhoneNumber, Date;
     String rName, rEmail, rPhone, rDate; //retrieved files from database
@@ -54,19 +48,16 @@ public class AppointmentActivity extends AppCompatActivity {
     static String SelectedDate, TodaysDate;
     Boolean UserExists;
 
-    /**
-     * Views
-     */
+    /**Views*/
     EditText DateET, NameET, PhoneET, EmailET;
     TextView BookingTypeTV;
     Button BookAndPayBTN;
     Toolbar MyToolbar;
 
-    /**
-     * Firebase
-     */
+    /**Firebase*/
     FirebaseUser NewUser;
     private ProgressDialog Progress;
+    static ProgressDialog Progress2;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private FirebaseAuth FbAuth;
     DatabaseReference UserDb1, UserDb2, AppointmentDb;
@@ -81,7 +72,7 @@ public class AppointmentActivity extends AppCompatActivity {
 
         //Linking to views
         FbAuth = FirebaseAuth.getInstance();
-        NewUser = FirebaseAuth.getInstance().getCurrentUser();
+        NewUser =FirebaseAuth.getInstance().getCurrentUser();
         NameET = findViewById(R.id.NameET);
         PhoneET = findViewById(R.id.PhoneET);
         EmailET = findViewById(R.id.EmailET);
@@ -93,22 +84,53 @@ public class AppointmentActivity extends AppCompatActivity {
         PhoneET.setFocusable(false);
 
         Intent intent = getIntent();
-        UserExists = intent.getBooleanExtra("UserExists", false);
+        UserExists = intent.getBooleanExtra("UserExists",false);
         Progress = new ProgressDialog(this);
+        Progress2 = new ProgressDialog(this);
+        //Toast.makeText(AppointmentActivity.this, "Value of UserExists : "+UserExists, Toast.LENGTH_SHORT).show();
+        Progress.setMessage("Loading Details of User");
+        Progress.show();
 
-        if (UserExists) {
-            Log.d(LOG_TAG, "User Exists. Hence calling retrieve function");
-            Progress.setMessage("Loading Existing Details of User");
-            Progress.show();
-            retrieve();
-        } else {
-            Log.d(LOG_TAG, "User Not Exists. Hence only setting EmailET and PhoneET");
-            Progress.setMessage("Loading Details of New User");
-            Progress.show();
-            EmailET.setText(FbAuth.getCurrentUser().getEmail());
-            PhoneET.setText(FbAuth.getCurrentUser().getPhoneNumber().substring(3));
-            Progress.dismiss();
-        }
+        BookAndPayBTN.setVisibility(View.GONE); //In order to avoid invalid inputs
+        DateET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                Year = cal.get(Calendar.YEAR);
+                Month = cal.get(Calendar.MONTH);
+                Day = cal.get(Calendar.DAY_OF_MONTH);
+                TodaysDate = Day +"/"+(Month +1)+"/"+ Year;
+                DatePickerDialog dialog = new DatePickerDialog(
+                        AppointmentActivity.this, android.R.style.Theme_Holo_Dialog,mDateSetListener, Year, Month, Day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+
+            }
+        });
+
+
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                String date = dayOfMonth+"/"+(month+1)+"/"+year;
+                DateET.setText(date);
+                SelectedDate =dayOfMonth+"/"+(month+1)+"/"+year;
+                Date endDate = new Date(year+"/"+(month+1)+"/"+dayOfMonth); //Deprecation Warning [Date].
+                Date startDate = Calendar.getInstance().getTime();
+                long duration  = endDate.getTime() - startDate.getTime();
+                long diffday = duration/(24 * 60 * 60 * 1000) +1;
+                int days =(int)diffday-1;
+                if(days<0) {
+                    BookingTypeTV.setText("Appointment Date has already passed\nChoose A New Date");
+                    BookAndPayBTN.setVisibility(View.INVISIBLE);
+                }
+                else {
+                    BookingTypeTV.setText("Number of Days till Appointment: "+days);
+                    BookAndPayBTN.setVisibility(View.VISIBLE);
+                }
+
+            }
+        };
 
         EmailET.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,51 +146,10 @@ public class AppointmentActivity extends AppCompatActivity {
             }
         });
 
-        BookAndPayBTN.setVisibility(View.GONE); //In order to avoid invalid inputs
-        DateET.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
-                Year = cal.get(Calendar.YEAR);
-                Month = cal.get(Calendar.MONTH);
-                Day = cal.get(Calendar.DAY_OF_MONTH);
-                TodaysDate = Day + "/" + (Month + 1) + "/" + Year;
-                DatePickerDialog dialog = new DatePickerDialog(
-                        AppointmentActivity.this, android.R.style.Theme_Holo_Dialog, mDateSetListener, Year, Month, Day);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
-
-            }
-        });
-
-
-        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String date = dayOfMonth + "/" + (month + 1) + "/" + year;
-                DateET.setText(date);
-                SelectedDate = dayOfMonth + "/" + (month + 1) + "/" + year;
-                Date endDate = new Date(year + "/" + (month + 1) + "/" + dayOfMonth); //Deprecation Warning [Date].
-                Date startDate = Calendar.getInstance().getTime();
-                long duration = endDate.getTime() - startDate.getTime();
-                long diffday = duration / (24 * 60 * 60 * 1000) + 1;
-                int days = (int) diffday - 1;
-                if (days < 0) {
-                    BookingTypeTV.setText("Appointment Date has already passed\nChoose A New Date");
-                    BookAndPayBTN.setVisibility(View.INVISIBLE);
-                } else {
-                    BookingTypeTV.setText("Number of Days till Appointment: " + days);
-                    BookAndPayBTN.setVisibility(View.VISIBLE);
-                }
-
-            }
-        };
-
-
         BookAndPayBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.v("APP", "Clicked Submit");
+                Log.v("APP","Clicked Submit");
                 FirstName = NameET.getText().toString().trim();
                 if (TextUtils.isEmpty(FirstName)) {
                     // is empty
@@ -178,7 +159,6 @@ public class AppointmentActivity extends AppCompatActivity {
                 } else {
                     storeData();
                 }
-
             }
         });
 
@@ -188,7 +168,7 @@ public class AppointmentActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
-        //retrieve();
+        retrieve();
 
     }
 
@@ -238,8 +218,7 @@ public class AppointmentActivity extends AppCompatActivity {
             case R.id.action_past:
                 Intent intent = new Intent(AppointmentActivity.this, PastActivity.class);
                 intent.putExtra("Parent", LOG_TAG);
-                startActivity(intent);
-                return true;
+                startActivity(intent);                return true;
 
             default:
                 // If we got here, the user's action was not recognized.
@@ -248,63 +227,47 @@ public class AppointmentActivity extends AppCompatActivity {
 
         }
     }
-
     public void signOut() {
         FbAuth.signOut();
     }
 
-    public void storeData() {
+    public void storeData(){
         /**Stores user data in the database*/
 
-        Log.v("APP", "Entered FUnction");
-
+        Log.d(LOG_TAG,"Entered storeData() Function");
+        //FirstName = NameET.getText().toString().trim();
         //second_name=etSecondName.getText().toString();
-        if (!UserExists) {
+        Progress2.setMessage("Loading Confirmation");
+        Progress2.show();
+
+        if(rName.equals(""))
+        {
             updateDisplayName(FirstName);
         }
-        Email = EmailET.getText().toString();
-        PhoneNumber = PhoneET.getText().toString();
-        Date = Day + "/" + (Month + 1) + "/" + Year;
+        Date = Day +"/"+(Month +1)+"/"+ Year;
         Data = new HashMap<>();
         Data.put("Name", FirstName);
         Data.put("Email", Email);
         Data.put("Phone", PhoneNumber);
         Data.put("LoginDate", Date);
-        Log.v("APP", "Hashmap Done");
+        Log.d(LOG_TAG,"Hashmap Done");
         UserDb1 = FirebaseDatabase.getInstance().getReference().child("users");
         UserDb1.child(FbAuth.getCurrentUser().getUid()).setValue(Data).addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
+            public void onComplete(@NonNull Task<Void> task)
+            {
                 //finish();
                 //go to page which shows users details
-                Log.v("APP", "Done Shit");
-                Toast.makeText(getApplicationContext(), "Stored Data", Toast.LENGTH_SHORT).show();
+                Log.d(LOG_TAG,"Stored to Database");
+                Toast.makeText(getApplicationContext(),"Stored Data",Toast.LENGTH_SHORT).show();
                 Intent toConfirm = new Intent(AppointmentActivity.this, ConfirmActivity.class);
                 toConfirm.putExtra("Name", FirstName);
                 toConfirm.putExtra("Email", Email);
                 toConfirm.putExtra("Phone", PhoneNumber);
                 toConfirm.putExtra("Date", SelectedDate);
-                startActivity(toConfirm);
+                startActivity (toConfirm);
             }
         });
-    }
-
-    private void updateDisplayName(String name) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(name)
-                .build();
-
-        user.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(LOG_TAG, "User profile updated.");
-                        }
-                    }
-                });
     }
 
 
@@ -312,30 +275,33 @@ public class AppointmentActivity extends AppCompatActivity {
 
         /**Function to Auto-fill information about a previously registered user.*/
 
-        UserDb2 = FirebaseDatabase.getInstance().getReference("users").child(FbAuth.getCurrentUser().getUid());
+        rName="";
+        /*UserDb2 = FirebaseDatabase.getInstance().getReference("users").child(FbAuth.getCurrentUser().getUid());
         UserDb2.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                 String ss = dataSnapshot.getKey();
-                switch (ss) {
+                switch (ss)
+                {
                     case "Name":
-                        rName = dataSnapshot.getValue().toString();
+                        rName= dataSnapshot.getValue().toString();
                         break;
                     case "Email":
-                        rName = dataSnapshot.getValue().toString();
+                        rName= dataSnapshot.getValue().toString();
                         break;
                     case "Phone":
-                        rPhone = dataSnapshot.getValue().toString();
+                        rPhone= dataSnapshot.getValue().toString();
                         break;
                     case "Date":
-                        rDate = dataSnapshot.getValue().toString();
+                        rDate= dataSnapshot.getValue().toString();
                         break;
 
                 }
-                NameET.setText("123");
+                //NameET.setText(rName);
+               // Progress.dismiss();
+                //Toast.makeText(AppointmentActivity.this, "Value of UserExists : "+UserExists, Toast.LENGTH_SHORT).show();
 
-                Progress.dismiss();
             }
 
             @Override
@@ -360,25 +326,33 @@ public class AppointmentActivity extends AppCompatActivity {
 
 
         });
+        */
+        rName=FbAuth.getCurrentUser().getDisplayName();
+        PhoneNumber = FbAuth.getCurrentUser().getPhoneNumber().substring(3);
+        Email=FbAuth.getCurrentUser().getEmail();
+        NameET.setText(rName);
+        EmailET.setText(Email);
+        PhoneET.setText(PhoneNumber);
+        Progress.dismiss();
 
 
+    }
+
+    private void updateDisplayName(String name) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(name)
+                .build();
+
+        user.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(LOG_TAG, "User profile updated.");
+                        }
+                    }
+                });
     }
 }
-
-    /*public void getLatestAppointment(){
-        //Not tested yet....(Change to Direction.Acending if required)
-        DatabaseReference databaseReference = Firebase.getInstance().getReference()
-            .databaseReference.child("appointment").orderBy("date",Direction.DECENTING)
-            .limit(1).addListenerForSingleValueEvent(new ValueEventListener() {
-    @Override
-    public void onDataChange(DataSnapshot dataSnapshot) {
-        String message = dataSnapshot.child("message").getValue().toString();
-    }
-
-    @Override
-    public void onCancelled(DatabaseError databaseError) {
-        //Handle possible errors.
-    }
-});
-    }
-*/
