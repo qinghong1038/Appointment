@@ -142,7 +142,7 @@ public class DoctorsActivity extends AppCompatActivity {
 
     private void checkUserExists() {
         DatabaseReference dbobj= FirebaseDatabase.getInstance().getReference("user");
-            rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            dbobj.addListenerForSingleValueEvent(new ValueEventListener() {
               @Override
               void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.childExists(FbAuth.getCurrentUser().getUid())) {
