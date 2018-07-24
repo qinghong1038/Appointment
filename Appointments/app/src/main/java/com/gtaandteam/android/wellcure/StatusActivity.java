@@ -110,7 +110,7 @@ public class StatusActivity extends AppCompatActivity {
         newAppointment = new Appointment(PatientName,DoctorName,AppointmentDate,Fees);
 
         UserDb1 = FirebaseDatabase.getInstance().getReference().child("appointmentDB");
-        UserDb1.child(FbAuth.getCurrentUser().getUid()).setValue(newAppointment).addOnCompleteListener(this, new OnCompleteListener<Void>() {
+        UserDb1.child(FbAuth.getCurrentUser().getUid()).child(AppointmentDate).setValue(newAppointment).addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task)
             {
