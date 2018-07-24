@@ -71,6 +71,9 @@
             android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar.MinWidth">
 
         </activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="80547909762a12903a49cd9f0b3e3467762a2231" />
     </application>
 
 </manifest>

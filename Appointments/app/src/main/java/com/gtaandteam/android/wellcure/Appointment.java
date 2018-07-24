@@ -10,13 +10,13 @@ public class Appointment {
     private String mPatientName, mDoctorName, mDate;
     private Float mFees;
     private int mDoctorImage = NO_IMAGE_PROVIDED;
-    //final String Dr = "Dr. ";
+    final String Dr = "Dr. ";
 
 
 
     //Temporary Constructor:
     public Appointment(String DoctorName, String Date, int DoctorImage){
-        mDoctorName =  "Dr. " + DoctorName;
+        mDoctorName =  Dr + DoctorName;
         mDate = Date;
         mDoctorImage = DoctorImage;
     }
@@ -24,14 +24,14 @@ public class Appointment {
 
     //Temporary Constructor:
     public Appointment(String DoctorName, String Date){
-        mDoctorName = "Dr. " +DoctorName;
+        mDoctorName =  Dr +DoctorName;
         mDate = Date;
 
     }
 
     public Appointment(String PatientName,String DoctorName, String Date, Float Fees){
         mPatientName = PatientName;
-        mDoctorName =  "Dr. " +DoctorName;
+        mDoctorName =  Dr +DoctorName;
         mDate = Date;
         mFees = Fees;
         if(DoctorName.equals("Ritu Jain"))
@@ -41,7 +41,7 @@ public class Appointment {
 
     public Appointment(String PatientName,String DoctorName, String Date, Float Fees, int DoctorImage){
         mPatientName = PatientName;
-        mDoctorName =  "Dr. " +DoctorName;
+        mDoctorName =  Dr +DoctorName;
         mDate = Date;
         mFees = Fees;
         mDoctorImage = DoctorImage;
@@ -70,10 +70,8 @@ public class Appointment {
         return mDoctorImage;
     }
 
-    /*public boolean getmDoctorImage() {
+    public boolean hasImage() {
         return mDoctorImage != NO_IMAGE_PROVIDED;
-    }*/
+    }
 
 }
-
-
