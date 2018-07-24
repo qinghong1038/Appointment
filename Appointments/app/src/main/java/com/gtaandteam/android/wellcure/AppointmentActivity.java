@@ -50,6 +50,8 @@ public class AppointmentActivity extends AppCompatActivity {
     HashMap<String, String> Data;
     static String SelectedDate, TodaysDate;
     Boolean UserExists;
+    String mPatientName, mDoctorName, mDate;
+    Float mFees;
 
     /**Views*/
     EditText DateET, NameET, PhoneET, EmailET;
@@ -337,7 +339,9 @@ public class AppointmentActivity extends AppCompatActivity {
         NameET.setText(rName);
         EmailET.setText(Email);
         PhoneET.setText(PhoneNumber);
+        getLatestAppointment();
         Progress.dismiss();
+
 
 
     }
@@ -363,12 +367,25 @@ public class AppointmentActivity extends AppCompatActivity {
         //Not tested yet....(Change to Direction.Acending if required)
        /*DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("userDB");
        userRef.orderByChild("Phone").equalTo(PhoneNumber).addListenerForSingleValueEvent(new ValueEventListener() { */
-
-       UserDb2 = FirebaseDatabase.getInstance().getReference("users").child(FbAuth.getCurrentUser().getUid());
-        UserDb2.orderByChild("date").limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
+        /* String mPatientName, mDoctorName, mDate;
+    Float mFees;   */
+       UserDb2 = FirebaseDatabase.getInstance().getReference("appointmentDB").child(FbAuth.getCurrentUser().getUid());
+        UserDb2.orderByChild("mDate").limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String ss = dataSnapshot.getKey();
+                switch (ss)
+                {
+                    case "mDate":
+                        mDate= dataSnapshot.getValue().toString();
+                        break;
+                    case "mPatientName":
+                        mPatientName= dataSnapshot.getValue().toString();
+                        break;
 
+                }
+                Log.d(LOG_TAG, "Latest Appointment Date : "+mDate);
+                Log.d(LOG_TAG, "Latest Patient Name : "+mPatientName);
             }
 
             @Override
