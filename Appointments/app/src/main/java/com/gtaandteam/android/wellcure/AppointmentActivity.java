@@ -30,11 +30,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -337,6 +337,7 @@ public class AppointmentActivity extends AppCompatActivity {
         NameET.setText(rName);
         EmailET.setText(Email);
         PhoneET.setText(PhoneNumber);
+        getLatestAppointment();
         Progress.dismiss();
 
 
@@ -361,12 +362,14 @@ public class AppointmentActivity extends AppCompatActivity {
     }
     String latestDate;
     public void getLatestAppointment() {
-        
-        UserDb2 = FirebaseDatabase.getInstance().getReference("appointmentDb").child(FbAuth.getCurrentUser().getUid());
+        Log.d(LOG_TAG,"Inside getLatestAppointment");
+        UserDb2 = FirebaseDatabase.getInstance().getReference("appointmentDB").child(FbAuth.getCurrentUser().getUid());
         UserDb2.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 latestDate=dataSnapshot.getKey();
+                Log.d(LOG_TAG,"Latest Date is "+latestDate);
+                Toast.makeText(AppointmentActivity.this, "Latest Appointment  : "+latestDate, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -386,7 +389,7 @@ public class AppointmentActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.d(LOG_TAG,"No Appointments to Load : "+databaseError.getMessage());
             }
         });
 

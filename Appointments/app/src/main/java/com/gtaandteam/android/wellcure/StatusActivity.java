@@ -116,7 +116,7 @@ public class StatusActivity extends AppCompatActivity {
             {
                 //finish();
                 //go to page which shows users details
-                Log.v("APP","Done Shit");
+                Log.d(LOG_TAG,"New Appointment Added To Database");
                 Toast.makeText(getApplicationContext(),"Stored Appointment Data",Toast.LENGTH_SHORT).show();
 
             }
