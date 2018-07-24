@@ -73,6 +73,7 @@ public class StatusActivity extends AppCompatActivity {
             TimeOfAppointmentTV.setText(AppointmentDate);
             StatusMessageTV.setText("You have Successfully Made a Booking!");
             StatusHeaderTV.setText("SUCCESS!");
+            addAppointmentToDatabase();
 
         }
         else

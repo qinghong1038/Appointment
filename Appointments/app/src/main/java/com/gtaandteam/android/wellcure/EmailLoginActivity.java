@@ -68,6 +68,15 @@ public class EmailLoginActivity extends AppCompatActivity {
         LoginBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(FbAuth.getCurrentUser()!=null)
+                {
+                    //User already logged in, previous login credentials stored in PhoneNumber
+                    //then skip login and directly go to choosing doctor page
+                    finish();
+                    Intent i =new Intent(EmailLoginActivity.this, DoctorsActivity.class);
+                    i.putExtra("loginMode",1);
+                    startActivity(i);
+                }
                 userLogin();
 
             }
@@ -116,6 +125,7 @@ public class EmailLoginActivity extends AppCompatActivity {
 
     }
     private void userLogin(){
+
         String email= UsernameET.getText().toString().trim();
         String pass= PasswordET.getText().toString().trim();
         if(TextUtils.isEmpty(email)){

@@ -220,7 +220,7 @@ public class RegisterActivity extends AppCompatActivity {
                 else
                 {
 
-                    Toast.makeText(RegisterActivity.this, "Phone number not linked to any account. Please Register. ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Phone number not linked to any account. Will Register. ", Toast.LENGTH_SHORT).show();
                 }
             }
 

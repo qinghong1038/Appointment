@@ -30,8 +30,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -240,10 +243,10 @@ public class AppointmentActivity extends AppCompatActivity {
         //second_name=etSecondName.getText().toString();
         Progress2.setMessage("Loading Confirmation");
         Progress2.show();
-
-        if(rName.equals(""))
-        {
+        rName=FbAuth.getCurrentUser().getDisplayName();
+        if (TextUtils.isEmpty(rName)) {
             updateDisplayName(FirstName);
+
         }
         Date = Day +"/"+(Month +1)+"/"+ Year;
         Data = new HashMap<>();
@@ -354,6 +357,26 @@ public class AppointmentActivity extends AppCompatActivity {
                             Log.d(LOG_TAG, "User profile updated.");
                         }
                     }
+                });
+    }
+   public void getLatestAppointment() {
+        //Not tested yet....(Change to Direction.Acending if required)
+       /*DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("userDB");
+       userRef.orderByChild("Phone").equalTo(PhoneNumber).addListenerForSingleValueEvent(new ValueEventListener() { */
+
+       UserDb2 = FirebaseDatabase.getInstance().getReference("users").child(FbAuth.getCurrentUser().getUid());
+        UserDb2.orderByChild("date").limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+
                 });
     }
 }
