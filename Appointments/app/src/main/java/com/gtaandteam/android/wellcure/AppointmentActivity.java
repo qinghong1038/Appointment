@@ -359,10 +359,48 @@ public class AppointmentActivity extends AppCompatActivity {
                     }
                 });
     }
+    String latestDate;
+    public void getLatestAppointment() {
+        
+        UserDb2 = FirebaseDatabase.getInstance().getReference("appointmentDb").child(FbAuth.getCurrentUser().getUid());
+        UserDb2.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                latestDate=dataSnapshot.getKey();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+    }
+    
+    
+    
+    /*
    public void getLatestAppointment() {
         //Not tested yet....(Change to Direction.Acending if required)
        /*DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("userDB");
-       userRef.orderByChild("Phone").equalTo(PhoneNumber).addListenerForSingleValueEvent(new ValueEventListener() { */
+       userRef.orderByChild("Phone").equalTo(PhoneNumber).addListenerForSingleValueEvent(new ValueEventListener() { 
 
        UserDb2 = FirebaseDatabase.getInstance().getReference("users").child(FbAuth.getCurrentUser().getUid());
         UserDb2.orderByChild("date").limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -378,5 +416,6 @@ public class AppointmentActivity extends AppCompatActivity {
 
 
                 });
-    }
+    }*/
+    
 }
