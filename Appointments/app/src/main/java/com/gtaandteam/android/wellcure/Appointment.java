@@ -70,9 +70,9 @@ public class Appointment {
         return mDoctorImage;
     }
 
-    public boolean getmDoctorImage() {
+    /*public boolean getmDoctorImage() {
         return mDoctorImage != NO_IMAGE_PROVIDED;
-    }
+    }*/
 
 }
 
