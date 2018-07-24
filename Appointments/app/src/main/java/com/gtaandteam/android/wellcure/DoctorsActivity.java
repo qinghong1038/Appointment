@@ -15,9 +15,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+
+import io.fabric.sdk.android.Fabric;
 
 public class DoctorsActivity extends AppCompatActivity {
 
@@ -44,6 +47,7 @@ public class DoctorsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_doctors);
 
         //Linking to views
@@ -72,6 +76,7 @@ public class DoctorsActivity extends AppCompatActivity {
                 intent.putExtra("loginMode",loginMode);
                 intent.putExtra("UserExists", UserExists);
                 startActivity(intent);
+
 
 
             }
@@ -132,6 +137,10 @@ public class DoctorsActivity extends AppCompatActivity {
 
         }
     }
+    public void forceCrash() {
+        throw new RuntimeException("This is a crash");
+    }
+
     public void signOut() {
         FbAuth.signOut();
     }
