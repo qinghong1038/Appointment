@@ -108,9 +108,10 @@ public class StatusActivity extends AppCompatActivity {
         //Data.put("")
 
         newAppointment = new Appointment(PatientName,DoctorName,AppointmentDate,Fees);
-
+        String date=AppointmentDate;
+        date.replaceAll("/", "-");
         UserDb1 = FirebaseDatabase.getInstance().getReference().child("appointmentDB");
-        UserDb1.child(FbAuth.getCurrentUser().getUid()).child(AppointmentDate).setValue(newAppointment).addOnCompleteListener(this, new OnCompleteListener<Void>() {
+        UserDb1.child(FbAuth.getCurrentUser().getUid()).child(date).setValue(newAppointment).addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task)
             {
