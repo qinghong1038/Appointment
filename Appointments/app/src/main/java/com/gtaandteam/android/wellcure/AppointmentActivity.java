@@ -360,40 +360,7 @@ public class AppointmentActivity extends AppCompatActivity {
                     }
                 });
     }
-    String latestDate="";
-    public void getLatestAppointment() {
-        Log.d(LOG_TAG,"Inside getLatestAppointment");
-        UserDb2 = FirebaseDatabase.getInstance().getReference("appointmentDB").child(FbAuth.getCurrentUser().getUid());
-        UserDb2.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                latestDate=dataSnapshot.getKey();
-                latestDate.replaceAll("-", "/");
-                Log.d(LOG_TAG,"Latest Date is "+latestDate);
-                Toast.makeText(AppointmentActivity.this, "Latest Appointment  : "+latestDate, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d(LOG_TAG,"Error : "+databaseError.getMessage());
-            }
-        });
-        
+   
 
 
     }
