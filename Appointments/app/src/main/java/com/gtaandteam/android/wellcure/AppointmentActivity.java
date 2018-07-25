@@ -389,7 +389,7 @@ public class AppointmentActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.d(LOG_TAG,"No Appointments to Load : "+databaseError.getMessage());
+                Log.d(LOG_TAG,"Error : "+databaseError.getMessage());
             }
         });
 
