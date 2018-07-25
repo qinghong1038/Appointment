@@ -30,11 +30,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -337,7 +338,7 @@ public class AppointmentActivity extends AppCompatActivity {
         NameET.setText(rName);
         EmailET.setText(Email);
         PhoneET.setText(PhoneNumber);
-        getLatestAppointment();
+        //getLatestAppointment();
         Progress.dismiss();
 
 
@@ -360,10 +361,33 @@ public class AppointmentActivity extends AppCompatActivity {
                     }
                 });
     }
-   
+    public String getLatestDate(){
+        final String[] latestDate = new String[1];
 
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("appointmentDb");//.child();
+        final Query lastQuery = databaseReference.child(FbAuth.getCurrentUser().getUid()).orderByKey().limitToLast(1);
+        lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                HashMap map=(HashMap) dataSnapshot.getValue();
+                for ( Object key : map.keySet() ) {
+                    latestDate[0]=key.toString();
 
+                }
+                //Do calculations here to find month diffrence
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //Handle possible errors.
+            }
+        });
+        //this may return null
+        return latestDate[0];
     }
+
+}
     
     
     
@@ -389,4 +413,4 @@ public class AppointmentActivity extends AppCompatActivity {
                 });
     }*/
     
-}
+

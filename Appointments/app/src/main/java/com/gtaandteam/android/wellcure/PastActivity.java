@@ -16,6 +16,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -26,7 +31,8 @@ public class PastActivity extends AppCompatActivity {
 
     /**FIrebase*/
     private FirebaseAuth FbAuth;
-
+    DatabaseReference UserDb1;
+    ArrayList<Appointment> appointments = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +49,12 @@ public class PastActivity extends AppCompatActivity {
 
         //TODO: Major FireBase changes/additions to be made in order to access past appointment Data from the particular ACCOUNT only
         //Following ArrayList is a temporary placeholder.
-        ArrayList<Appointment> appointments = new ArrayList<>();
-        appointments.add(new Appointment("Ritu Jain","Jan 26, 2018", R.drawable.doctor));
+
+        /*appointments.add(new Appointment("Ritu Jain","Jan 26, 2018", R.drawable.doctor));
         appointments.add(new Appointment("Ritu Jain","Aug 15, 2018", R.drawable.doctor));
         appointments.add(new Appointment("Ritu Jain","October 2, 2018", R.drawable.doctor));
         appointments.add(new Appointment("Ritu Jain","July 28, 2018",R.drawable.doctor));
-        appointments.add(new Appointment("Test for no Image"," Jan 01, 1970"));
+        appointments.add(new Appointment("Test for no Image"," Jan 01, 1970"));*/
 
 
         AppointmentAdapter adapter =new AppointmentAdapter(PastActivity.this, appointments);
@@ -132,6 +138,27 @@ public class PastActivity extends AppCompatActivity {
 
     public void signOut() {
         FbAuth.signOut();
+    }
+
+    public void getAllAppointment(){
+        UserDb1 = FirebaseDatabase.getInstance().getReference().child("appointmentDB");
+        UserDb1.child(FbAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot shot : snapshot.getChildren()) {
+                    Appointment appointment= shot.getValue(Appointment.class);
+
+                    //add to array list
+                    // Toast.makeText(Main2Activity.this, appointment.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+        });
+
     }
 
 }
