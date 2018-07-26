@@ -107,7 +107,7 @@ public class StatusActivity extends AppCompatActivity {
         //Data=new HashMap<>();
         //Data.put("")
         //TODO:READ THIS
-        newAppointment = new Appointment(PatientName,DoctorName,AppointmentDate,Fees);
+        newAppointment = new Appointment(PatientName,DoctorName,AppointmentDate,BookingDate, Fees);
         String date;
         date=AppointmentDate.replaceAll("/", "-");
         UserDb1 = FirebaseDatabase.getInstance().getReference().child("appointmentDB");

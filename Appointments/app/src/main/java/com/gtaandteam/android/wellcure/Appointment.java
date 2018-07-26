@@ -11,13 +11,15 @@ public class Appointment {
     private Float mFees;
     private int mDoctorImage = NO_IMAGE_PROVIDED;
     final String Dr = "Dr. ";
+    private String mBookedOn;
 
 
     public Appointment(){
 
     }
     //Temporary Constructor:
-    public Appointment(String DoctorName, String Date, int DoctorImage){
+    public Appointment(String DoctorName, String Date, String BookedOn, int DoctorImage){
+        mBookedOn = BookedOn;
         mDoctorName =  Dr + DoctorName;
         mDate = Date;
         mDoctorImage = DoctorImage;
@@ -25,13 +27,16 @@ public class Appointment {
 
 
     //Temporary Constructor:
-    public Appointment(String DoctorName, String Date){
+    public Appointment(String DoctorName, String Date,String BookedOn){
+        mBookedOn = BookedOn;
         mDoctorName =  Dr +DoctorName;
         mDate = Date;
 
     }
 
-    public Appointment(String PatientName,String DoctorName, String Date, Float Fees){
+    public Appointment(String PatientName,String DoctorName, String Date,String BookedOn, Float Fees){
+
+        mBookedOn = BookedOn;
         mPatientName = PatientName;
         mDoctorName =  Dr +DoctorName;
         mDate = Date;
@@ -41,9 +46,10 @@ public class Appointment {
 
     }
 
-    public Appointment(String PatientName,String DoctorName, String Date, Float Fees, int DoctorImage){
+    public Appointment(String PatientName,String DoctorName, String Date,String BookedOn, Float Fees, int DoctorImage){
         mPatientName = PatientName;
         mDoctorName =  Dr +DoctorName;
+        mBookedOn = BookedOn;
         mDate = Date;
         mFees = Fees;
         mDoctorImage = DoctorImage;
@@ -76,4 +82,7 @@ public class Appointment {
         return mDoctorImage != NO_IMAGE_PROVIDED;
     }
 
+    public String getmBookedOn() {
+        return mBookedOn;
+    }
 }
