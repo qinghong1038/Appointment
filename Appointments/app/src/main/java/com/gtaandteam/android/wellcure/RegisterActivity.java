@@ -150,53 +150,55 @@ public class RegisterActivity extends AppCompatActivity {
             return;
 
         }
+
         checkPhoneNumberExists();
-        // if validations are ok we show a progress bar
-        Log.d(LOG_TAG, "All good, Starting Registration");
-        Progress.setMessage("Registering Email ID ... ");
-        Progress.show();
-        FbAuth.createUserWithEmailAndPassword(EmailId, Password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Progress.dismiss();
-                        if (task.isSuccessful()) {
-                            //user successfully registered
-                            Log.d(LOG_TAG, "Email account successfully created.");
-                            Toast.makeText(RegisterActivity.this, "Email registered successfully.", Toast.LENGTH_SHORT).show();
-                            //finish();
-                            //startActivity(new Intent(getApplicationContext(), EmailLoginActivity.class));
 
-                            Log.d(LOG_TAG, "Proceeding to link Mobile Number with Email ID");
-                            Toast.makeText(RegisterActivity.this, "Proceeding to link mobile number with Email ID", Toast.LENGTH_SHORT).show();
-//                            Progress.setMessage("Sending OTP");
-//                            Progress.show();
-                            PhoneNumberExists =false;
-                            if(PhoneNumberExists)
-                            {
-                                Log.d(LOG_TAG, "Phone number already registered with another account");
-                                Toast.makeText(RegisterActivity.this, "Phone number already registered with another account.", Toast.LENGTH_SHORT).show();
-                            }
-                            else
-                            {
-                                Log.d(LOG_TAG, "All good, Calling OTP Function sendCode()");
-                                Intent intent = new Intent(RegisterActivity.this, OTPopUp.class);
-                                intent.putExtra("PhoneNumber", PhoneNumber);
-                                intent.putExtra("Parent", LOG_TAG);
-                                intent.putExtra("EmailId",EmailId);
-                                intent.putExtra("Password",Password);
-                                Log.d(LOG_TAG, "Done. Exiting setUpVerificationCallbacks() ");
-                                startActivity(intent);
-                            }
-
-                        } else {
-                            Toast.makeText(RegisterActivity.this, "Couldn't register. Please try again.", Toast.LENGTH_SHORT).show();
-                            Log.d(LOG_TAG, "Couldn't create Email Account");
-                            //TODO: DISPLAY EXCEPTION MESSAGE AS TO WHY REGISTRATION COULDN'T OCCUR. I KNOW THE CODE. WILL ADD IT SOON.
-                            //TODO: OK.
-                        }
-                    }
-                });
+//        // if validations are ok we show a progress bar
+//        Log.d(LOG_TAG, "All good, Starting Registration");
+//        Progress.setMessage("Registering Email ID ... ");
+//        Progress.show();
+//        FbAuth.createUserWithEmailAndPassword(EmailId, Password)
+//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        Progress.dismiss();
+//                        if (task.isSuccessful()) {
+//                            //user successfully registered
+//                            Log.d(LOG_TAG, "Email account successfully created.");
+//                            Toast.makeText(RegisterActivity.this, "Email registered successfully.", Toast.LENGTH_SHORT).show();
+//                            //finish();
+//                            //startActivity(new Intent(getApplicationContext(), EmailLoginActivity.class));
+//
+//                            Log.d(LOG_TAG, "Proceeding to link Mobile Number with Email ID");
+//                            Toast.makeText(RegisterActivity.this, "Proceeding to link mobile number with Email ID", Toast.LENGTH_SHORT).show();
+////                            Progress.setMessage("Sending OTP");
+////                            Progress.show();
+//                            PhoneNumberExists =false;
+//                            if(PhoneNumberExists)
+//                            {
+//                                Log.d(LOG_TAG, "Phone number already registered with another account");
+//                                Toast.makeText(RegisterActivity.this, "Phone number already registered with another account.", Toast.LENGTH_SHORT).show();
+//                            }
+//                            else
+//                            {
+//                                Log.d(LOG_TAG, "All good, Calling OTP Function sendCode()");
+//                                Intent intent = new Intent(RegisterActivity.this, OTPopUp.class);
+//                                intent.putExtra("PhoneNumber", PhoneNumber);
+//                                intent.putExtra("Parent", LOG_TAG);
+//                                intent.putExtra("EmailId",EmailId);
+//                                intent.putExtra("Password",Password);
+//                                Log.d(LOG_TAG, "Done. Exiting setUpVerificationCallbacks() ");
+//                                startActivity(intent);
+//                            }
+//
+//                        } else {
+//                            Toast.makeText(RegisterActivity.this, "Couldn't register. Please try again.", Toast.LENGTH_SHORT).show();
+//                            Log.d(LOG_TAG, "Couldn't create Email Account");
+//                            //TODO: DISPLAY EXCEPTION MESSAGE AS TO WHY REGISTRATION COULDN'T OCCUR. I KNOW THE CODE. WILL ADD IT SOON.
+//                            //TODO: OK.
+//                        }
+//                    }
+//                });
 
 
     }
@@ -217,7 +219,47 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 else
                 {
+                    FbAuth.createUserWithEmailAndPassword(EmailId, Password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                //user successfully registered
+                                Log.d(LOG_TAG, "Email account successfully created.");
+                                Toast.makeText(RegisterActivity.this, "Email registered successfully.", Toast.LENGTH_SHORT).show();
+                                //finish();
+                                //startActivity(new Intent(getApplicationContext(), EmailLoginActivity.class));
 
+                                Log.d(LOG_TAG, "Proceeding to link Mobile Number with Email ID");
+                                Toast.makeText(RegisterActivity.this, "Proceeding to link mobile number with Email ID", Toast.LENGTH_SHORT).show();
+//                            Progress.setMessage("Sending OTP");
+//                            Progress.show();
+                                PhoneNumberExists =false;
+                                if(PhoneNumberExists)
+                                {
+                                    Log.d(LOG_TAG, "Phone number already registered with another account");
+                                    Toast.makeText(RegisterActivity.this, "Phone number already registered with another account.", Toast.LENGTH_SHORT).show();
+                                }
+                                else
+                                {
+                                    Log.d(LOG_TAG, "All good, Calling OTP Function sendCode()");
+                                    Intent intent = new Intent(RegisterActivity.this, OTPopUp.class);
+                                    intent.putExtra("PhoneNumber", PhoneNumber);
+                                    intent.putExtra("Parent", LOG_TAG);
+                                    intent.putExtra("EmailId",EmailId);
+                                    intent.putExtra("Password",Password);
+                                    Log.d(LOG_TAG, "Done. Exiting setUpVerificationCallbacks() ");
+                                    startActivity(intent);
+                                }
+
+                            } else {
+                                Toast.makeText(RegisterActivity.this, "Couldn't register. Please try again.", Toast.LENGTH_SHORT).show();
+                                Log.d(LOG_TAG, "Couldn't create Email Account");
+                                //TODO: DISPLAY EXCEPTION MESSAGE AS TO WHY REGISTRATION COULDN'T OCCUR. I KNOW THE CODE. WILL ADD IT SOON.
+                                //TODO: OK.
+                            }
+
+                        }
+                    });
                     Toast.makeText(RegisterActivity.this, "Phone number not linked to any account. Will Register. ", Toast.LENGTH_SHORT).show();
                 }
             }
