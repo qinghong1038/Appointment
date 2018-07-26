@@ -1,11 +1,13 @@
 package com.gtaandteam.android.wellcure;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,11 +31,20 @@ public class PastActivity extends AppCompatActivity {
 
     /**Views*/
     Toolbar MyToolbar;
+    ListView AppointmentListView;
+    TextView NoPast;
+    private ProgressDialog Progress;
+
 
     /**FIrebase*/
     private FirebaseAuth FbAuth;
     DatabaseReference UserDb1;
-    ArrayList<Appointment> appointments = new ArrayList<>();
+
+    ArrayList<Appointment> appointments;
+    AppointmentAdapter adapter;
+
+    final String LOG_TAG = this.getClass().getSimpleName();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +53,16 @@ public class PastActivity extends AppCompatActivity {
 
         //Linking to views
         MyToolbar = findViewById(R.id.MyToolbar);
-        ListView AppointmentListView = findViewById(R.id.List);
+        AppointmentListView = findViewById(R.id.List);
+        NoPast = findViewById(R.id.NoPastView);
+        AppointmentListView.setVisibility(View.INVISIBLE);
 
         setSupportActionBar(MyToolbar);
         FbAuth = FirebaseAuth.getInstance();
 
-
+        Progress =new ProgressDialog(this);
+        Progress.setMessage("Fetching Past Appointments.");
+        Progress.show();
         //TODO: Major FireBase changes/additions to be made in order to access past appointment Data from the particular ACCOUNT only
         //Following ArrayList is a temporary placeholder.
 
@@ -55,10 +71,8 @@ public class PastActivity extends AppCompatActivity {
         appointments.add(new Appointment("Ritu Jain","October 2, 2018", R.drawable.doctor));
         appointments.add(new Appointment("Ritu Jain","July 28, 2018",R.drawable.doctor));
         appointments.add(new Appointment("Test for no Image"," Jan 01, 1970"));*/
+        getAllAppointment();
 
-
-        AppointmentAdapter adapter =new AppointmentAdapter(PastActivity.this, appointments);
-        AppointmentListView.setAdapter(adapter);
         AppointmentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
@@ -141,16 +155,36 @@ public class PastActivity extends AppCompatActivity {
     }
 
     public void getAllAppointment(){
+        appointments = new ArrayList<>();
         UserDb1 = FirebaseDatabase.getInstance().getReference().child("appointmentDB");
         UserDb1.child(FbAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+                int i = 0;
+                Log.d(LOG_TAG, "Now entering for-loop" );
+
                 for (DataSnapshot shot : snapshot.getChildren()) {
                     Appointment appointment= shot.getValue(Appointment.class);
+                    appointments.add(appointment);
+                    Log.d(LOG_TAG, "iteration: " + i++ );
+                    //Log.d(LOG_TAG, "" + appointment.getmDoctorName().length() );
 
                     //add to array list
                     // Toast.makeText(Main2Activity.this, appointment.toString(), Toast.LENGTH_SHORT).show();
+
                 }
+                Log.d(LOG_TAG, "Now exiting for-loop" );
+                adapter =new AppointmentAdapter(PastActivity.this, appointments);
+                AppointmentListView.setAdapter(adapter);
+
+                Log.d(LOG_TAG,  "Size of ArrayList: " + appointments.size());
+                Progress.dismiss();
+                if(appointments.size() > 0 )
+                {
+                    AppointmentListView.setVisibility(View.VISIBLE);
+                    NoPast.setVisibility(View.GONE);
+                }
+
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -158,8 +192,9 @@ public class PastActivity extends AppCompatActivity {
             }
 
         });
-
     }
+
+
 
 }
 

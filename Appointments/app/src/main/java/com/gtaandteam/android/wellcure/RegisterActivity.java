@@ -150,8 +150,7 @@ public class RegisterActivity extends AppCompatActivity {
             return;
 
         }
-
-
+        checkPhoneNumberExists();
         // if validations are ok we show a progress bar
         Log.d(LOG_TAG, "All good, Starting Registration");
         Progress.setMessage("Registering Email ID ... ");
@@ -173,7 +172,6 @@ public class RegisterActivity extends AppCompatActivity {
 //                            Progress.setMessage("Sending OTP");
 //                            Progress.show();
                             PhoneNumberExists =false;
-                            checkPhoneNumberExists();
                             if(PhoneNumberExists)
                             {
                                 Log.d(LOG_TAG, "Phone number already registered with another account");

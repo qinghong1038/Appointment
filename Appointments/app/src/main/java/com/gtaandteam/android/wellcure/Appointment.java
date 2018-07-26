@@ -13,7 +13,9 @@ public class Appointment {
     final String Dr = "Dr. ";
 
 
+    public Appointment(){
 
+    }
     //Temporary Constructor:
     public Appointment(String DoctorName, String Date, int DoctorImage){
         mDoctorName =  Dr + DoctorName;
