@@ -85,6 +85,7 @@ public class PastActivity extends AppCompatActivity {
                 intent.putExtra("DateTV", currentAppointment.getmDate());
                 intent.putExtra("Fees", currentAppointment.getmFees());
                 intent.putExtra("BookedOn",currentAppointment.getmBookedOn());
+                intent.putExtra("PatientName",currentAppointment.getmPatientName());
 
                 if(currentAppointment.hasImage()) {
                     intent.putExtra("DoctorImage", currentAppointment.getmDoctorImage());

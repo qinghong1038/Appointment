@@ -26,21 +26,23 @@ public class DetailsPopUp extends Activity {
         DoctorIV = findViewById(R.id.DoctorIV);
         BookedOnTV = findViewById(R.id.BookedOnET);
 
-        //String CurrentName = getIntent().getStringExtra("NameET");
+        String CurrentName = getIntent().getStringExtra("PatientName");
         String CurrentDoctor = getIntent().getStringExtra("Doctor");
         String CurrentDate = getIntent().getStringExtra("DateTV");
         int CurrentDoctorImage = getIntent().getIntExtra("DoctorImage", -1);
         float CurrentFees = getIntent().getFloatExtra("Fees", 0);
         String CurrentBookedOn = getIntent().getStringExtra("BookedOn");
+        int IntCurrentFees=(int)CurrentFees;
+
 
 
         DoctorTV.setText(CurrentDoctor);
         DateTV.setText(CurrentDate);
         DoctorIV.setImageResource(CurrentDoctorImage);
         BookedOnTV.setText(CurrentBookedOn);
-        ;
+        FeesTV.setText("₹"+IntCurrentFees);
 
-        //NameET.setText(CurrentName);
-        FeesTV.setText("" +CurrentFees);
+        NameTV.setText(CurrentName);
+        //FeesTV.setText("" +CurrentFees);
     }
 }
