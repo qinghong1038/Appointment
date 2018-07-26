@@ -28,7 +28,7 @@ public class StatusActivity extends AppCompatActivity {
 
     /**Views*/
     Button GoBackBTN;
-    TextView StatusHeaderTV, StatusMessageTV, BookingIDTV, TimeOfBookingTV, TimeOfAppointmentTV;
+    TextView StatusHeaderTV, StatusMessageTV, BookingIDTV, TimeOfBookingTV, TimeOfAppointmentTV,BookingLabel,BookingDateTV,AppointmentDateTV;
     ImageView StatusIV;
     Appointment newAppointment;
 
@@ -52,6 +52,9 @@ public class StatusActivity extends AppCompatActivity {
         StatusIV = findViewById(R.id.StatusIV);
         TimeOfBookingTV = findViewById(R.id.BookingDateET);
         TimeOfAppointmentTV = findViewById(R.id.AppointmentDateET);
+        BookingLabel = findViewById(R.id.BookingIDTV);
+        BookingDateTV = findViewById(R.id.BookingDateTV);
+        AppointmentDateTV = findViewById(R.id.AppointmentDateTV);
 
         //Side note : prefer to use "hh:mm,  dd-mm-yyyy" for displaying time of completion.
         Intent getStatus = getIntent();
@@ -83,6 +86,13 @@ public class StatusActivity extends AppCompatActivity {
             StatusMessageTV.setText("Payment Failed! Please Try Again!");
             BookingIDTV.setVisibility(View.INVISIBLE);
             TimeOfBookingTV.setVisibility(View.INVISIBLE);
+            TimeOfAppointmentTV.setVisibility(View.INVISIBLE);
+            BookingLabel.setVisibility(View.INVISIBLE);
+            BookingDateTV.setVisibility(View.INVISIBLE);
+            AppointmentDateTV.setVisibility(View.INVISIBLE);
+
+
+
         }
 
         //TextView StatusHeader, StatusMessage, BookingID, TimeOfBooking;

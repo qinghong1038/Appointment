@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-condensed"
         android:gravity="center"
-        android:text="Doctor's Qualifications"
+        android:text="Homoeopathic Doctor"
         app:layout_constraintEnd_toEndOf="@+id/DoctorsNameTV"
         app:layout_constraintStart_toStartOf="@+id/DoctorsNameTV"
         app:layout_constraintTop_toBottomOf="@+id/DoctorsNameTV" />
