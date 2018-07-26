@@ -106,7 +106,7 @@ public class StatusActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "Amount is "+Fees);
         //Data=new HashMap<>();
         //Data.put("")
-
+        //TODO:READ THIS
         newAppointment = new Appointment(PatientName,DoctorName,AppointmentDate,Fees);
         String date=AppointmentDate;
         date.replaceAll("/", "-");
