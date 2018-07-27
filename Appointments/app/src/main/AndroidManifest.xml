@@ -59,21 +59,21 @@
         <activity
             android:name=".DetailsPopUp"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar.MinWidth">
-
-        </activity>
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar.MinWidth"></activity>
 
         <meta-data
             android:name="instamojo.orderauth.url"
             android:value="https://wellcure.000webhostapp.com/access_token_test.php" />
 
-        <activity android:name=".OTPopUp"
-            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar.MinWidth">
+        <activity
+            android:name=".OTPopUp"
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar.MinWidth"></activity>
 
-        </activity>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="80547909762a12903a49cd9f0b3e3467762a2231" />
+
+        <activity android:name=".AboutActivity"></activity>
     </application>
 
 </manifest>

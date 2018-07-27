@@ -223,7 +223,12 @@ public class AppointmentActivity extends AppCompatActivity {
             case R.id.action_past:
                 Intent intent = new Intent(AppointmentActivity.this, PastActivity.class);
                 intent.putExtra("Parent", LOG_TAG);
-                startActivity(intent);                return true;
+                startActivity(intent);
+                return true;
+            case R.id.action_About:
+                startActivity(new Intent(AppointmentActivity.this, AboutActivity.class));
+                return true;
+
 
             default:
                 // If we got here, the user's action was not recognized.

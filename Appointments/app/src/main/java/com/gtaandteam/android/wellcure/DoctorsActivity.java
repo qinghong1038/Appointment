@@ -59,6 +59,14 @@ public class DoctorsActivity extends AppCompatActivity {
         FbUser = FbAuth.getCurrentUser();
         setSupportActionBar(MyToolbar);
 
+        if(FbUser.getPhoneNumber() == null){
+            signOut();
+            startActivity(new Intent(DoctorsActivity.this, EmailLoginActivity.class));
+            finish();
+
+
+        }
+
 
         //Toast.makeText(this, user.getEmail(), Toast.LENGTH_SHORT).show();
         Log.d(LOG_TAG, "" + FbUser.getPhoneNumber());
@@ -127,6 +135,9 @@ public class DoctorsActivity extends AppCompatActivity {
                 Intent intent = new Intent(DoctorsActivity.this, PastActivity.class);
                 intent.putExtra("Parent", LOG_TAG);
                 startActivity(intent);
+                return true;
+            case R.id.action_About:
+                startActivity(new Intent(DoctorsActivity.this, AboutActivity.class));
                 return true;
 
             default:

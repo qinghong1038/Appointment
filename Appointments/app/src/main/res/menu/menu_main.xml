@@ -15,5 +15,11 @@
         android:title="Sign Out"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/action_About"
+        android:icon="@drawable/common_full_open_on_phone"
+        android:title="About"
+        app:showAsAction="never"/>
+
 
 </menu>
