@@ -84,6 +84,8 @@ public class ConfirmActivity extends AppCompatActivity {
 
                 Intent onFailure = new Intent(ConfirmActivity.this, StatusActivity.class);
                 onFailure.putExtra("Status",false);
+                onFailure.putExtra("Reason",reason);
+                onFailure.putExtra("Code",code);
                 startActivity(onFailure);
                 finish();
             }
