@@ -167,7 +167,7 @@ public class StatusActivity extends AppCompatActivity {
         else
         {
             Data.put("OrderID", "ERROR");
-            Data.put("PaymentID", "Fail : "+Code);
+            Data.put("PaymentID", "Fail Code : "+Code);
             Data.put("PaymentToken", "Reason : "+Reason);
             Data.put("Amount", Amount);
         }
@@ -179,7 +179,7 @@ public class StatusActivity extends AppCompatActivity {
             {
                 //finish();
                 //go to page which shows users details
-                Log.d(LOG_TAG,"Stored to Database");
+                Log.d(LOG_TAG,"Stored TXN Details to Database");
                 Toast.makeText(getApplicationContext(),"Stored Data",Toast.LENGTH_SHORT).show();
 
             }

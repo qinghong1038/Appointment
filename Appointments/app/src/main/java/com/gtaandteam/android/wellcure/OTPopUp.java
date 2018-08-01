@@ -69,7 +69,7 @@ public class OTPopUp extends Activity {
         ResendBTN = findViewById(R.id.ResendOTPBTN);
         LoginBTN = findViewById(R.id.LoginBTN);
         Progress =new ProgressDialog(this);
-
+        RegisterActivity.Progress.dismiss();
 
         OTPET.addTextChangedListener(new TextWatcher() {
             @Override

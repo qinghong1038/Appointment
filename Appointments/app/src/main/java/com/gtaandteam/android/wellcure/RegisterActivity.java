@@ -34,7 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
     /**Views*/
     Button LoginBTN, RegisterBTN;
     EditText UsernameET, PhoneNumberET, PasswordET, ConfirmPasswordET;
-    private ProgressDialog Progress;
+    static ProgressDialog Progress;
 
     /**Firebase*/
     private FirebaseAuth FbAuth;
@@ -150,7 +150,8 @@ public class RegisterActivity extends AppCompatActivity {
             return;
 
         }
-
+        Progress.setMessage("Registering Email ID ... ");
+        Progress.show();
         checkPhoneNumberExists();
 
 //        // if validations are ok we show a progress bar

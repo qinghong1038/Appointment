@@ -47,7 +47,7 @@ public class AppointmentActivity extends AppCompatActivity {
     /**Data Structures*/
     int Year, Month, Day;
     String FirstName, Email, PhoneNumber, Date;
-    String rName, rEmail, rPhone, rDate; //retrieved files from database
+    String rName, Amount; //retrieved files from database
     HashMap<String, String> Data;
     static String SelectedDate, TodaysDate;
     Boolean UserExists;
@@ -125,7 +125,12 @@ public class AppointmentActivity extends AppCompatActivity {
                 long diffday = duration/(24 * 60 * 60 * 1000) +1;
                 int days =(int)diffday-1;
                 if(days<0) {
-                    BookingTypeTV.setText("Appointment Date has already passed\nChoose A New Date");
+                    BookingTypeTV.setText("Appointment Date has already passed\n\nChoose A New Date");
+                    BookAndPayBTN.setVisibility(View.INVISIBLE);
+                }
+                else if(days==0)
+                {
+                    BookingTypeTV.setText("Appointment Date Should Be \nAtleast 2 Days Apart\n\nChoose A New Date");
                     BookAndPayBTN.setVisibility(View.INVISIBLE);
                 }
                 else {
@@ -174,6 +179,18 @@ public class AppointmentActivity extends AppCompatActivity {
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
         retrieve();
+        String LatestDate=getLatestDate();
+        Log.d(LOG_TAG,"Latest Date : "+LatestDate);
+        if(LatestDate==null)
+        {
+            Amount="300";
+        }
+        else
+        {
+            Amount ="100";
+        }
+        Log.d(LOG_TAG,"Amount : "+Amount);
+
 
     }
 
@@ -275,6 +292,7 @@ public class AppointmentActivity extends AppCompatActivity {
                 toConfirm.putExtra("Email", Email);
                 toConfirm.putExtra("Phone", PhoneNumber);
                 toConfirm.putExtra("Date", SelectedDate);
+                toConfirm.putExtra("Amount",Amount);
                 startActivity (toConfirm);
             }
         });
@@ -338,8 +356,8 @@ public class AppointmentActivity extends AppCompatActivity {
         });
         */
         rName=FbAuth.getCurrentUser().getDisplayName();
-        PhoneNumber = FbAuth.getCurrentUser().getPhoneNumber().substring(3);
-        Email=FbAuth.getCurrentUser().getEmail();
+            PhoneNumber = FbAuth.getCurrentUser().getPhoneNumber().substring(3);
+            Email=FbAuth.getCurrentUser().getEmail();
         NameET.setText(rName);
         EmailET.setText(Email);
         PhoneET.setText(PhoneNumber);
@@ -369,7 +387,7 @@ public class AppointmentActivity extends AppCompatActivity {
     public String getLatestDate(){
         final String[] latestDate = new String[1];
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("appointmentDb");//.child();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("appointmentDB");//.child();
         final Query lastQuery = databaseReference.child(FbAuth.getCurrentUser().getUid()).orderByKey().limitToLast(1);
         lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

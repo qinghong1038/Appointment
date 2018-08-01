@@ -111,13 +111,14 @@ public class ConfirmActivity extends AppCompatActivity {
         Date =getDetails.getStringExtra("Date");
         Phone =getDetails.getStringExtra("Phone");
         Email =getDetails.getStringExtra("Email");
-
+        Amount = getDetails.getStringExtra("Amount");
         PatientNameTV.setText(Name);
         EmailTV.setText(Email);
         DateTV.setText(Date);
+        AmountTV.setText("₹"+Amount);
 
         Purpose = "Wellcure Clinic Appointment Fee";
-        Amount ="10";
+
 
         ConfirmBTN.setOnClickListener(new View.OnClickListener() {
             @Override

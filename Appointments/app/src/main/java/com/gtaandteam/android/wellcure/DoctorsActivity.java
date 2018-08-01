@@ -3,9 +3,11 @@ package com.gtaandteam.android.wellcure;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
@@ -16,9 +18,17 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -90,7 +100,7 @@ public class DoctorsActivity extends AppCompatActivity {
             }
         });
 
-
+        storeData();
     }
 
     @Override
@@ -156,55 +166,43 @@ public class DoctorsActivity extends AppCompatActivity {
         FbAuth.signOut();
     }
 
-    /*private void checkUserExists() {
-        Log.d(LOG_TAG, "Inside checkUser");
-        try
-        {
-            UserDb1 = FirebaseDatabase.getInstance().getReference("users").child(FbAuth.getCurrentUser().getUid());
-            UserDb1.addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+    public void storeData(){
+        /**Stores user data in the database*/
 
-                    String ss = dataSnapshot.getKey();
-                    String name;
-                    switch (ss) {
-                        case "Name":
-                            name = dataSnapshot.getValue().toString();
-                            UserExists=true;
-                            Toast.makeText(DoctorsActivity.this, "Value of UserExists inside OnChild: "+UserExists, Toast.LENGTH_SHORT).show();
-                            Log.d(LOG_TAG, "UserExists. Show Progress Bar after this");
-                            break;
+        Log.d(LOG_TAG,"Entered storeData() Function");
+        //FirstName = NameET.getText().toString().trim();
+        //second_name=etSecondName.getText().toString();
+        String rName=FbAuth.getCurrentUser().getDisplayName();
+        if (TextUtils.isEmpty(rName)) {
+            rName="";
 
-                    }
-                }
-
-                @Override
-                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                }
-
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-
-
-            });
         }
-        catch (Exception e)
-        {
-            UserExists = false;
-            Log.d(LOG_TAG, "User doesnt Exist. Dont Show Progress Bar after this");
-        }
-    }*/
+        Date startDate = Calendar.getInstance().getTime();
+        //String rName=FbAuth.getCurrentUser().getDisplayName();
+        HashMap<String,String> Data= new HashMap<>();
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        String Date = format.format(startDate);
+        Log.d(LOG_TAG,""+Date);
+        String PhoneNumber = FbAuth.getCurrentUser().getPhoneNumber().substring(3);
+        String Email=FbAuth.getCurrentUser().getEmail();
+        //Date = Day +"/"+(Month +1)+"/"+ Year;
+        //Data = new HashMap<>();
+        Data.put("Name", rName);
+        Data.put("Email", Email);
+        Data.put("Phone", PhoneNumber);
+        Data.put("LoginDate", Date);
+        Log.d(LOG_TAG,"Hashmap Done");
+        UserDb1 = FirebaseDatabase.getInstance().getReference().child("users");
+        UserDb1.child(FbAuth.getCurrentUser().getUid()).setValue(Data).addOnCompleteListener(this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task)
+            {
+                //finish();
+                //go to page which shows users details
+                Log.d(LOG_TAG,"Stored to Database");
+
+            }
+        });
+    }
+
 }
