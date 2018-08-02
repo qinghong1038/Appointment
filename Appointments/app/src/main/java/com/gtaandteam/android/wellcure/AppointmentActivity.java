@@ -179,17 +179,6 @@ public class AppointmentActivity extends AppCompatActivity {
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
         retrieve();
-        String LatestDate=getLatestDate();
-        Log.d(LOG_TAG,"Latest Date : "+LatestDate);
-        if(LatestDate==null)
-        {
-            Amount="300";
-        }
-        else
-        {
-            Amount ="100";
-        }
-        Log.d(LOG_TAG,"Amount : "+Amount);
 
 
     }
@@ -362,6 +351,22 @@ public class AppointmentActivity extends AppCompatActivity {
         EmailET.setText(Email);
         PhoneET.setText(PhoneNumber);
         //getLatestAppointment();
+        String LatestDate="";
+        if(!rName.equals(""))
+          LatestDate = getLatestDate();
+        Log.d(LOG_TAG,"rName : "+rName);
+        Log.d(LOG_TAG,"Latest Date : "+LatestDate);
+        try{
+            if(LatestDate.equals("")||LatestDate==null);
+            Amount ="100";
+        }
+        catch (Exception e)
+        {
+            Amount="300";
+        }
+
+        Log.d(LOG_TAG,"Amount : "+Amount);
+
         Progress.dismiss();
 
 
