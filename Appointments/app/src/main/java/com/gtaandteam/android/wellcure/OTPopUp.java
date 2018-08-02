@@ -327,6 +327,7 @@ public class OTPopUp extends Activity {
                     Toast.makeText(getApplicationContext(),"Stored User Data to UserDatabase",Toast.LENGTH_SHORT).show();
                     FbAuth.signOut();
                     startActivity(new Intent(OTPopUp.this, EmailLoginActivity.class));
+                    finish();
                 }
 
             }

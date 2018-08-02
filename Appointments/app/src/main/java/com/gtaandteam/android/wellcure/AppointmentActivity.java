@@ -130,7 +130,7 @@ public class AppointmentActivity extends AppCompatActivity {
                 }
                 else if(days==0)
                 {
-                    BookingTypeTV.setText("Appointment Date Should Be \nAtleast 2 Days Apart\n\nChoose A New Date");
+                    BookingTypeTV.setText("Appointment Date Should Be \nMinimum 2 Days Later\n\nChoose A New Date");
                     BookAndPayBTN.setVisibility(View.INVISIBLE);
                 }
                 else {
@@ -352,20 +352,36 @@ public class AppointmentActivity extends AppCompatActivity {
         PhoneET.setText(PhoneNumber);
         //getLatestAppointment();
         String LatestDate="";
-        if(!rName.equals(""))
-          LatestDate = getLatestDate();
-        Log.d(LOG_TAG,"rName : "+rName);
-        Log.d(LOG_TAG,"Latest Date : "+LatestDate);
-        try{
-            if(LatestDate.equals("")||LatestDate==null);
-            Amount ="100";
+        try
+        {
+            if(!(rName.equals("")))
+            {
+                LatestDate = getLatestDate();
+                Log.d(LOG_TAG,"rName equal blank");
+            }
         }
         catch (Exception e)
         {
-            Amount="300";
+            rName="";
+            Log.d(LOG_TAG,"Inside rName exception : "+e.getMessage());
+        }
+        Log.d(LOG_TAG,"rName : "+rName);
+        Log.d(LOG_TAG,"Latest Date : "+LatestDate);
+        try{
+            if(LatestDate.equals("")||LatestDate==null)
+            {
+                Amount ="300";
+                Log.d(LOG_TAG,"Amount in try: "+Amount);
+            }
+        }
+        catch (Exception e)
+        {
+            Amount="350";
+            Log.d(LOG_TAG,"Amount in catch: "+Amount);
+            Log.d(LOG_TAG,"Error : "+e.getMessage());
         }
 
-        Log.d(LOG_TAG,"Amount : "+Amount);
+        Log.d(LOG_TAG,"Amount outside all: "+Amount);
 
         Progress.dismiss();
 
