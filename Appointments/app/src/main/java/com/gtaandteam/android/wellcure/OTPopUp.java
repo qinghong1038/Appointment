@@ -293,6 +293,7 @@ public class OTPopUp extends Activity {
                         else
                         {
                             Toast.makeText(OTPopUp.this,"Couldn't Login with new Account ...",Toast.LENGTH_SHORT).show();
+                            Log.d(LOG_TAG,"Couldnt Login before linking. Error : "+task.getException().getMessage());
                         }
                     }
                 });
