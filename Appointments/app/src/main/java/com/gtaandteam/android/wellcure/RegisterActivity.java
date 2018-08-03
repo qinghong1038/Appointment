@@ -34,7 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
     /**Views*/
     Button LoginBTN, RegisterBTN;
     EditText UsernameET, PhoneNumberET, PasswordET, ConfirmPasswordET;
-    private ProgressDialog Progress;
+    static ProgressDialog Progress;
 
     /**Firebase*/
     private FirebaseAuth FbAuth;
@@ -120,6 +120,12 @@ public class RegisterActivity extends AppCompatActivity {
 
             return;
         }
+        if(Password.length()<6)
+        {
+            Toast.makeText(this,"Minimum password length is 6",Toast.LENGTH_SHORT).show();
+            Log.d(LOG_TAG, "Minimum password length is 6, Exiting regitserUser()");
+            return;
+        }
 
         if(PhoneNumber.length()==13)
         {
@@ -150,7 +156,8 @@ public class RegisterActivity extends AppCompatActivity {
             return;
 
         }
-
+        Progress.setMessage("Registering Email ID ... ");
+        Progress.show();
         checkPhoneNumberExists();
 
 //        // if validations are ok we show a progress bar
@@ -216,6 +223,9 @@ public class RegisterActivity extends AppCompatActivity {
                     //it means user already registered
                     PhoneNumberExists =true;
                     Toast.makeText(RegisterActivity.this, "Phone Number exists", Toast.LENGTH_SHORT).show();
+                    Log.d(LOG_TAG,"Phone Number Exists");
+                    Progress.dismiss();
+                    return;
                 }
                 else
                 {
@@ -252,8 +262,10 @@ public class RegisterActivity extends AppCompatActivity {
                                 }
 
                             } else {
-                                Toast.makeText(RegisterActivity.this, "Couldn't register. Please try again.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterActivity.this, "Couldn't Register.\n"+task.getException().getMessage()+" Please Try Again.", Toast.LENGTH_SHORT).show();
                                 Log.d(LOG_TAG, "Couldn't create Email Account");
+                                Log.d(LOG_TAG, ""+task.getException().getMessage());
+                                Progress.dismiss();
                                 //TODO: DISPLAY EXCEPTION MESSAGE AS TO WHY REGISTRATION COULDN'T OCCUR. I KNOW THE CODE. WILL ADD IT SOON.
                                 //TODO: OK.
                             }

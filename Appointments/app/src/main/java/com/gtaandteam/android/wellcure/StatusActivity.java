@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +23,10 @@ import java.util.HashMap;
 public class StatusActivity extends AppCompatActivity {
 
     /**Data Structures*/
-    String BookingDate, OrderID, TokenID, PaymentID, AppointmentDate, Name, Amount;
+    String BookingDate, OrderID, TokenID, PaymentID, AppointmentDate, Name, Amount,Reason;
+    String Email;
+
+    int Code;
     Boolean Success;
     HashMap<String, String> Data;
 
@@ -43,6 +47,7 @@ public class StatusActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status);
         FbAuth = FirebaseAuth.getInstance();
+        Email=FbAuth.getCurrentUser().getEmail();
         //Linking to views
         GoBackBTN = findViewById(R.id.BackBTN);
         StatusIV = findViewById(R.id.StatusIV);
@@ -61,6 +66,12 @@ public class StatusActivity extends AppCompatActivity {
         Success = getStatus.getBooleanExtra("Status",false);
         Name = getStatus.getStringExtra("Name");
         Amount=getStatus.getStringExtra("Amount");
+        OrderID=getStatus.getStringExtra("OrderID");
+        PaymentID=getStatus.getStringExtra("PaymentID");
+        TokenID=getStatus.getStringExtra("PaymentToken");
+        Reason=getStatus.getStringExtra("Reason");
+        Code=getStatus.getIntExtra("Code",0);
+
 
         BookingDate =AppointmentActivity.TodaysDate;
         AppointmentDate =AppointmentActivity.SelectedDate;
@@ -94,6 +105,7 @@ public class StatusActivity extends AppCompatActivity {
 
 
         }
+        storeData();
 
         //TextView StatusHeader, StatusMessage, BookingID, TimeOfBooking;
         GoBackBTN.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +118,7 @@ public class StatusActivity extends AppCompatActivity {
     }
     private void addAppointmentToDatabase()
     {
-        String AppointmentDate,PatientName,DoctorName;
+        String PatientName,DoctorName;
         Float Fees;
         Toast.makeText(this, "Appointment Details Stored To AppointmentDatabase", Toast.LENGTH_SHORT).show();
         AppointmentDate = AppointmentActivity.SelectedDate;
@@ -114,9 +126,6 @@ public class StatusActivity extends AppCompatActivity {
         DoctorName = DoctorsActivity.DoctorName;
         Fees = Float.parseFloat(Amount);
         Log.d(LOG_TAG, "Amount is "+Fees);
-        //Data=new HashMap<>();
-        //Data.put("")
-        //TODO:READ THIS
         newAppointment = new Appointment(PatientName,DoctorName,AppointmentDate,BookingDate, Fees);
         String date;
         date=AppointmentDate.replaceAll("/", "-");
@@ -129,6 +138,49 @@ public class StatusActivity extends AppCompatActivity {
                 //go to page which shows users details
                 Log.d(LOG_TAG,"New Appointment Added To Database");
                 Toast.makeText(getApplicationContext(),"Stored Appointment Data",Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
+    public void storeData(){
+        /**Stores user data in the database*/
+
+        Log.d(LOG_TAG,"Entered storeData() Function");
+
+        /*onSuccess.putExtra("Status",true);
+        getStatus.getStringExtra("OrderID",orderID[1]);
+        getStatus.getStringExtra("PaymentID",paymentID[1]);
+        getStatus.getStringExtra("PaymentToken",paymentToken[1]);
+        getStatus.getStringExtra("Amount",Amount);
+        getStatus.getStringExtra("Name",Name);*/
+        Data = new HashMap<>();
+        Data.put("Name",Name);
+        Data.put("Email",Email);
+        if(Success)
+        {
+            Data.put("OrderID", OrderID);
+            Data.put("PaymentID", PaymentID);
+            Data.put("PaymentToken", TokenID);
+            Data.put("Amount", Amount);
+        }
+        else
+        {
+            Data.put("OrderID", "ERROR");
+            Data.put("PaymentID", "Fail Code : "+Code);
+            Data.put("PaymentToken", "Reason : "+Reason);
+            Data.put("Amount", Amount);
+        }
+        Log.d(LOG_TAG,"Hashmap Done");
+        UserDb1 = FirebaseDatabase.getInstance().getReference().child("txnDetails");
+        UserDb1.child(FbAuth.getCurrentUser().getUid()).setValue(Data).addOnCompleteListener(this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task)
+            {
+                //finish();
+                //go to page which shows users details
+                Log.d(LOG_TAG,"Stored TXN Details to Database");
+                Toast.makeText(getApplicationContext(),"Stored Data",Toast.LENGTH_SHORT).show();
 
             }
         });

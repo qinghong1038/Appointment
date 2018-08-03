@@ -69,7 +69,7 @@ public class OTPopUp extends Activity {
         ResendBTN = findViewById(R.id.ResendOTPBTN);
         LoginBTN = findViewById(R.id.LoginBTN);
         Progress =new ProgressDialog(this);
-
+        RegisterActivity.Progress.dismiss();
 
         OTPET.addTextChangedListener(new TextWatcher() {
             @Override
@@ -327,6 +327,7 @@ public class OTPopUp extends Activity {
                     Toast.makeText(getApplicationContext(),"Stored User Data to UserDatabase",Toast.LENGTH_SHORT).show();
                     FbAuth.signOut();
                     startActivity(new Intent(OTPopUp.this, EmailLoginActivity.class));
+                    finish();
                 }
 
             }

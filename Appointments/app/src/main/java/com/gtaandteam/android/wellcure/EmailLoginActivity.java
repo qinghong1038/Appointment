@@ -138,7 +138,7 @@ public class EmailLoginActivity extends AppCompatActivity {
         String pass= PasswordET.getText().toString().trim();
         if(TextUtils.isEmpty(email)){
             // is empty
-            Toast.makeText(this,"Please Enter EmailET Id",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Please Enter Email Id",Toast.LENGTH_SHORT).show();
             return;
         }
         if(TextUtils.isEmpty(pass)){
