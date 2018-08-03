@@ -8,50 +8,136 @@
     tools:layout_editor_absoluteY="25dp">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/textView2"
+        style="@style/TVStyle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="About Wellcure"
-        app:layout_constraintBottom_toTopOf="@+id/SocialLayout"
+        android:fontFamily="sans-serif-smallcaps"
+        android:padding="8dp"
+        android:text="About Dr. Ritu Jain "
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/SocialLayout"
-        android:layout_width="0dp"
+        android:id="@+id/youtube"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/about">
+
         <ImageView
+            android:id="@+id/imageView2"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:src="@drawable/youtube"
-            android:layout_marginLeft="16dp" />
-        <ImageView
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:src="@drawable/instagram"
-            android:layout_marginLeft="16dp" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="4"
+            android:layout_margin="16dp"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textColor="@color/red"
+            android:text="Subscribe to our Youtube" />
+    </LinearLayout>1
+
+    <LinearLayout
+        android:id="@+id/facebook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/youtube">
 
         <ImageView
+            android:id="@+id/imageView3"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"
-            android:layout_marginLeft="16dp"
-            android:src="@drawable/blogger"/>
+            android:src="@drawable/facebook"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="4"
+            android:textSize="18sp"
+            android:textColor="@color/blue"
+            android:layout_margin="16dp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:text="Follow us on Facebook" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/wellcure"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/facebook">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+
+            android:src="@drawable/app_logo"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_weight="4"
+            android:text="Visit our Official Website" />
+
+    </LinearLayout>
+    
+    <TextView
+        android:id="@+id/about"
+        style="@style/ETStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-condensed"
+        android:padding="16dp"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
 
 </android.support.constraint.ConstraintLayout>
