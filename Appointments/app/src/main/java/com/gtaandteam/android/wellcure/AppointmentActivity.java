@@ -296,57 +296,6 @@ public class AppointmentActivity extends AppCompatActivity {
         /**Function to Auto-fill information about a previously registered user.*/
 
         rName="";
-        /*UserDb2 = FirebaseDatabase.getInstance().getReference("users").child(FbAuth.getCurrentUser().getUid());
-        UserDb2.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                String ss = dataSnapshot.getKey();
-                switch (ss)
-                {
-                    case "Name":
-                        rName= dataSnapshot.getValue().toString();
-                        break;
-                    case "Email":
-                        rName= dataSnapshot.getValue().toString();
-                        break;
-                    case "Phone":
-                        rPhone= dataSnapshot.getValue().toString();
-                        break;
-                    case "Date":
-                        rDate= dataSnapshot.getValue().toString();
-                        break;
-
-                }
-                //NameET.setText(rName);
-               // Progress.dismiss();
-                //Toast.makeText(AppointmentActivity.this, "Value of UserExists : "+UserExists, Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-
-
-        });
-        */
         rName=FbAuth.getCurrentUser().getDisplayName();
             PhoneNumber = FbAuth.getCurrentUser().getPhoneNumber().substring(3);
             Email=FbAuth.getCurrentUser().getEmail();
@@ -376,6 +325,7 @@ public class AppointmentActivity extends AppCompatActivity {
                 Amount ="300";
                 Log.d(LOG_TAG,"Amount in try: "+Amount);
             }
+
         }
         catch (Exception e)
         {
@@ -417,9 +367,16 @@ public class AppointmentActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 HashMap map=(HashMap) dataSnapshot.getValue();
-                for ( Object key : map.keySet() ) {
-                    latestDate[0]=key.toString();
+                try
+                {
+                    for ( Object key : map.keySet() ) {
+                        latestDate[0]=key.toString();
 
+                    }
+                }
+                catch(Exception e)
+                {
+                    Log.d(LOG_TAG,"Error : "+e.getMessage());
                 }
                 //Do calculations here to find month diffrence
 
@@ -428,6 +385,7 @@ public class AppointmentActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 //Handle possible errors.
+                Log.d(LOG_TAG,databaseError.getMessage());
             }
         });
         //this may return null
@@ -467,7 +425,7 @@ public class AppointmentActivity extends AppCompatActivity {
         }
         else
         {
-            Log.d(LOG_TAG,"Other Acitivites Exist");
+            Log.d(LOG_TAG,"Other Activities Exist");
         }
         return super.onKeyDown(keyCode, event);
     }

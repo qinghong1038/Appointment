@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -185,4 +186,27 @@ public class StatusActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            Log.d(LOG_TAG, "back button pressed");
+        }
+        if(isTaskRoot())
+        {
+            Log.d(LOG_TAG,"No other Activities Exist");
+        }
+        else
+        {
+            Log.d(LOG_TAG,"Other Activities Exist");
+        }
+        Intent intent = new Intent(StatusActivity.this, AppointmentActivity.class);
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+        return super.onKeyDown(keyCode, event);
+    }
+
 }

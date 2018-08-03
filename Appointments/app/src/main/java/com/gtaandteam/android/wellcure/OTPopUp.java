@@ -15,6 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.LoginEvent;
+import com.crashlytics.android.answers.SignUpEvent;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -245,6 +248,9 @@ public class OTPopUp extends Activity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
 
+                            Answers.getInstance().logLogin(new LoginEvent()
+                                    .putMethod("Digits")
+                                    .putSuccess(true));
                             FirebaseUser user = task.getResult().getUser();
                             String phone = user.getPhoneNumber();
                             UserId = user.getUid();
@@ -325,6 +331,9 @@ public class OTPopUp extends Activity {
 
     private void registerToDatabase()
     {
+        Answers.getInstance().logSignUp(new SignUpEvent()
+                .putMethod("Email and Mobile")
+                .putSuccess(true));
         Data = new HashMap<>();
         Data.put("Email", EmailId);
         Data.put("Phone", PhoneNumber);

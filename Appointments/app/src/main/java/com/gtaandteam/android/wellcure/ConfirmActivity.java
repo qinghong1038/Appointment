@@ -11,8 +11,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.StartCheckoutEvent;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.math.BigDecimal;
+import java.util.Currency;
 
 import instamojo.library.InstamojoPay;
 import instamojo.library.InstapayListener;
@@ -124,6 +130,10 @@ public class ConfirmActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                Answers.getInstance().logStartCheckout(new StartCheckoutEvent()
+                        .putTotalPrice(BigDecimal.valueOf(Double.parseDouble(Amount)))
+                        .putCurrency(Currency.getInstance("INR"))
+                        .putItemCount(1));
                 callInstamojoPay(Email, Phone, Amount, Purpose, Name);
             }
         });
