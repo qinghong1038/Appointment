@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -203,6 +204,44 @@ public class DoctorsActivity extends AppCompatActivity {
 
             }
         });
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            Log.d(LOG_TAG, "back button pressed");
+        }
+        if(isTaskRoot())
+        {
+            Log.d(LOG_TAG,"No other Activities Exist");
+            AlertDialog.Builder builder = new AlertDialog.Builder(
+                    new ContextThemeWrapper(DoctorsActivity.this, R.style.AlertDialogCustom));
+            builder.setCancelable(true);
+            builder.setTitle("Exit App");
+            builder.setMessage("Are you sure you want to Exit?");
+            builder.setPositiveButton("YES",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d(LOG_TAG,"Exiting App");
+                            finishAffinity();
+
+                        }
+                    });
+            builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+        else
+        {
+            Log.d(LOG_TAG,"Other Acitivites Exist");
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }

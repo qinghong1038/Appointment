@@ -62,6 +62,7 @@ public class PastActivity extends AppCompatActivity {
 
         Progress =new ProgressDialog(this);
         Progress.setMessage("Fetching Past Appointments.");
+        Progress.setCancelable(false);
         Progress.show();
         //TODO: Major FireBase changes/additions to be made in order to access past appointment Data from the particular ACCOUNT only
         //Following ArrayList is a temporary placeholder.
@@ -143,6 +144,10 @@ public class PastActivity extends AppCompatActivity {
 
                 return true;
             case R.id.action_past:
+                Toast.makeText(this, "Already in Past Appointments Page", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_About:
+                startActivity(new Intent(PastActivity.this, AboutActivity.class));
                 return true;
 
             default:

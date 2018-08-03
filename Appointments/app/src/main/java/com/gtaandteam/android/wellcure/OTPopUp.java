@@ -5,9 +5,11 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.IntentCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -69,7 +71,12 @@ public class OTPopUp extends Activity {
         ResendBTN = findViewById(R.id.ResendOTPBTN);
         LoginBTN = findViewById(R.id.LoginBTN);
         Progress =new ProgressDialog(this);
-        RegisterActivity.Progress.dismiss();
+        Parent = getIntent().getStringExtra("Parent");
+        Log.d(LOG_TAG,  "Parent ativity: " + Parent);
+        if(!Parent.equals("OTPLoginActivity"))
+        {
+            RegisterActivity.Progress.dismiss();
+        }
 
         OTPET.addTextChangedListener(new TextWatcher() {
             @Override
@@ -91,6 +98,7 @@ public class OTPopUp extends Activity {
                 {
                     Code=OTP;
                     Progress.setMessage("Verifying OTP");
+                    Progress.setCancelable(false);
                     Progress.show();
                     OTPET.setText("");
                     verifyCode();
@@ -101,8 +109,6 @@ public class OTPopUp extends Activity {
 
         FbAuth = FirebaseAuth.getInstance();
         PhoneNumber = getIntent().getStringExtra("PhoneNumber");
-        Parent = getIntent().getStringExtra("Parent");
-        Log.d(LOG_TAG,  "Parent ativity: " + Parent);
 
         ResendBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +116,7 @@ public class OTPopUp extends Activity {
                 if(view.getVisibility() == View.VISIBLE)
                 {
                     Progress.setMessage("Resending OTP");
+                    Progress.setCancelable(false);
                     Progress.show();
                     resendCode();
                     Toast.makeText(OTPopUp.this, "Resending OTP", Toast.LENGTH_LONG).show();
@@ -119,6 +126,7 @@ public class OTPopUp extends Activity {
         });
 //
         Progress.setMessage("Sending OTP");
+        Progress.setCancelable(false);
         Progress.show();
         sendCode();
     }
@@ -180,7 +188,7 @@ public class OTPopUp extends Activity {
                     @Override
                     public void onVerificationCompleted(
                             PhoneAuthCredential credential) {
-                        Log.d(LOG_TAG, "Verification Completed Successfully");
+                        Log.d(LOG_TAG, "Auto Verification Completed Successfully");
                         if(Parent.equals("OTPLoginActivity"))
                             signInWithPhoneAuthCredential(credential);
                         else
@@ -219,6 +227,7 @@ public class OTPopUp extends Activity {
                         Log.d(LOG_TAG, "All good. Code sent. Exiting onCodeSent() ");
                         Toast.makeText(OTPopUp.this, "OTP Sent", Toast.LENGTH_SHORT).show();
                         Progress.dismiss();
+                        Log.d(LOG_TAG, "Will Try Auto Retrieiving OTP");
 
 
                     }
@@ -243,6 +252,9 @@ public class OTPopUp extends Activity {
                             Toast.makeText(OTPopUp.this,"Login Successful by : "+phone,Toast.LENGTH_SHORT).show();
                             finish();
                             Intent i=new Intent(getApplicationContext(),DoctorsActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             i.putExtra("loginMode",2);
                             startActivity(i);
 
@@ -298,10 +310,10 @@ public class OTPopUp extends Activity {
                             //FirebaseUser user = task.getResult().getUser();
                             //updateUI(user);
                         } else {
-                            Log.w("App", "linkWithCredential:failure", task.getException());
+                            Log.w(LOG_TAG, "linkWithCredential:failure", task.getException());
                             Progress.dismiss();
-                            Toast.makeText(OTPopUp.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OTPopUp.this, "Authentication Failed.\n"+task.getException().getMessage(),
+                                    Toast.LENGTH_LONG).show();
                             OTPET.setText("");
                         }
 
@@ -326,11 +338,55 @@ public class OTPopUp extends Activity {
                     Log.v("App","Adding to User Database");
                     Toast.makeText(getApplicationContext(),"Stored User Data to UserDatabase",Toast.LENGTH_SHORT).show();
                     FbAuth.signOut();
-                    startActivity(new Intent(OTPopUp.this, EmailLoginActivity.class));
+                    Intent intent = new Intent(OTPopUp.this, EmailLoginActivity.class);
+
+                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
                     finish();
                 }
 
             }
         });
     }
+    protected void onStop() {
+
+        super.onStop();
+        Toast.makeText(this, "Closing App", Toast.LENGTH_SHORT).show();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(!Parent.equals("OTPLoginActivity"))
+        {
+            if(user!=null)
+            {
+                user.delete()
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d(LOG_TAG, "User account deleted.");
+                                }
+                            }
+                        });
+            }
+        }
+
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            Log.d(LOG_TAG, "back button pressed");
+        }
+        if(isTaskRoot())
+        {
+            Log.d(LOG_TAG,"No other Acitivites Exist");
+        }
+        else
+        {
+            Log.d(LOG_TAG,"Other Activites Exist");
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 }

@@ -64,11 +64,12 @@ public class RegisterActivity extends AppCompatActivity {
         if(FbAuth.getCurrentUser()!=null)
         {
             //user already logged in. go directly to doctor activity
-            Toast.makeText(this, "Already signed in with Email : "+FbAuth.getCurrentUser().getEmail(), Toast.LENGTH_SHORT).show();
+            /*Toast.makeText(this, "Already signed in with Email : "+FbAuth.getCurrentUser().getEmail(), Toast.LENGTH_SHORT).show();
             finish();
             Intent i =new Intent(getApplicationContext(),DoctorsActivity.class);
             i.putExtra("loginMode",0);
-            startActivity(i);
+            startActivity(i);*/
+            FbAuth.signOut();
         }
 
         LoginBTN.setOnClickListener(new View.OnClickListener() {
@@ -157,6 +158,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         }
         Progress.setMessage("Registering Email ID ... ");
+        Progress.setCancelable(false);
         Progress.show();
         checkPhoneNumberExists();
 

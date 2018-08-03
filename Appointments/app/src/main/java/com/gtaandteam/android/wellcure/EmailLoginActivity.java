@@ -1,12 +1,16 @@
 package com.gtaandteam.android.wellcure;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,7 +38,7 @@ public class EmailLoginActivity extends AppCompatActivity {
 
     /**Firebase*/
     private FirebaseAuth FbAuth;
-
+    final String LOG_TAG = this.getClass().getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,10 +72,12 @@ public class EmailLoginActivity extends AppCompatActivity {
         {
             //User already logged in, previous login credentials stored in PhoneNumber
             //then skip login and directly go to choosing doctor page
-            finish();
+            /*finish();
+            Log.d(LOG_TAG,FbAuth.getCurrentUser().getEmail());
             Intent i =new Intent(EmailLoginActivity.this, DoctorsActivity.class);
             i.putExtra("loginMode",1);
-            startActivity(i);
+            startActivity(i);*/
+            FbAuth.signOut();
         }
         LoginBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,10 +86,11 @@ public class EmailLoginActivity extends AppCompatActivity {
                 {
                     //User already logged in, previous login credentials stored in PhoneNumber
                     //then skip login and directly go to choosing doctor page
-                    finish();
-                    Intent i =new Intent(EmailLoginActivity.this, DoctorsActivity.class);
-                    i.putExtra("loginMode",1);
-                    startActivity(i);
+                    //finish();
+                    //Intent i =new Intent(EmailLoginActivity.this, DoctorsActivity.class);
+                    //i.putExtra("loginMode",1);
+                    //startActivity(i);
+                    FbAuth.signOut();
                 }
                 userLogin();
 
@@ -148,6 +155,7 @@ public class EmailLoginActivity extends AppCompatActivity {
 
         }
         Progress.setMessage("Logging In");
+        Progress.setCancelable(false);
         Progress.show();
         FbAuth.signInWithEmailAndPassword(email,pass)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -166,10 +174,49 @@ public class EmailLoginActivity extends AppCompatActivity {
                         }
                         else
                         {
-                            Toast.makeText(EmailLoginActivity.this,"Couldn't Login. Please Try Again..",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EmailLoginActivity.this,"Couldn't Login. Please Try Again.." +
+                                    "\n"+task.getException().getMessage(),Toast.LENGTH_LONG).show();
                         }
                     }
                 });
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            Log.d(LOG_TAG, "back button pressed");
+        }
+        if(isTaskRoot())
+        {
+            Log.d(LOG_TAG,"No other Acitivites Exist");
+            AlertDialog.Builder builder = new AlertDialog.Builder(
+                    new ContextThemeWrapper(EmailLoginActivity.this, R.style.AlertDialogCustom));
+            builder.setCancelable(true);
+            builder.setTitle("Exit App");
+            builder.setMessage("Are you sure you want to Exit?");
+            builder.setPositiveButton("YES",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d(LOG_TAG,"Exiting App");
+                            finishAffinity();
+
+                        }
+                    });
+            builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+        else
+        {
+            Log.d(LOG_TAG,"Other Acitivites Exist");
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }
