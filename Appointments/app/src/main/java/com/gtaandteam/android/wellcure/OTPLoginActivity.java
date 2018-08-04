@@ -1,13 +1,16 @@
 package com.gtaandteam.android.wellcure;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Selection;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -18,6 +21,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.io.IOException;
 
 public class OTPLoginActivity extends AppCompatActivity {
 
@@ -64,15 +69,32 @@ public class OTPLoginActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 PhoneNumber = PhoneOTPTV.getText().toString().trim().replaceAll(" ", "" );
-
+                hideKeyboard(OTPLoginActivity.this);
                 if(PhoneNumber.length()==13)
                 {
                     if(PhoneNumber.startsWith("+91"))
                     {
+                        try
+                        {
+                            if(!isConnected()) {
+                                Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
+                                sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
+                                sb.show();
+                                Log.d(LOG_TAG,"No Internet");
+                                return;
+                            }
+                            else
+                            {
+                                Log.d(LOG_TAG,"Internet is connected");
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Log.d(LOG_TAG,"Exception : "+e.getMessage());
+                        }
                         Progress.setMessage("Validating Mobile Number");
                         Progress.show();
-                        //TODO: Need to check if not in Database
-                        //Commented for Testing
+
                         checkPhoneNumberExists();
 
 
@@ -157,6 +179,22 @@ public class OTPLoginActivity extends AppCompatActivity {
             }
         });
         Log.d(LOG_TAG, "Returning from checkPhoneNumberExists");
+    }
+    public boolean isConnected() throws InterruptedException, IOException
+    {
+        String command = "ping -c 1 google.com";
+        return (Runtime.getRuntime().exec (command).waitFor() == 0);
+    }
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        Log.d("OTPLoginActivity","Keyboard Closed");
     }
 
 }

@@ -1,10 +1,12 @@
 package com.gtaandteam.android.wellcure;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -12,6 +14,7 @@ import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,6 +25,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.io.IOException;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -82,6 +87,7 @@ public class EmailLoginActivity extends AppCompatActivity {
         LoginBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideKeyboard(EmailLoginActivity.this);
                 if(FbAuth.getCurrentUser()!=null)
                 {
                     //User already logged in, previous login credentials stored in PhoneNumber
@@ -92,7 +98,7 @@ public class EmailLoginActivity extends AppCompatActivity {
                     //startActivity(i);
                     FbAuth.signOut();
                 }
-                userLogin();
+                userLogin(view);
 
             }
         });
@@ -139,7 +145,7 @@ public class EmailLoginActivity extends AppCompatActivity {
         });
 
     }
-    private void userLogin(){
+    private void userLogin(View view){
 
         String email= UsernameET.getText().toString().trim();
         String pass= PasswordET.getText().toString().trim();
@@ -154,6 +160,26 @@ public class EmailLoginActivity extends AppCompatActivity {
             return;
 
         }
+        try
+        {
+            if(!isConnected()) {
+                Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
+                sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
+                sb.show();
+                Log.d(LOG_TAG,"No Internet");
+                return;
+            }
+            else
+            {
+                Log.d(LOG_TAG,"Internet is connected");
+            }
+        }
+        catch (Exception e)
+        {
+            Log.d(LOG_TAG,"Exception : "+e.getMessage());
+        }
+
+
         Progress.setMessage("Logging In");
         Progress.setCancelable(false);
         Progress.show();
@@ -217,6 +243,22 @@ public class EmailLoginActivity extends AppCompatActivity {
             Log.d(LOG_TAG,"Other Acitivites Exist");
         }
         return super.onKeyDown(keyCode, event);
+    }
+    public boolean isConnected() throws InterruptedException, IOException
+    {
+        String command = "ping -c 1 google.com";
+        return (Runtime.getRuntime().exec (command).waitFor() == 0);
+    }
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        Log.d("EmailLoginActivity","Keyboard Closed");
     }
 
 }
