@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -38,6 +39,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -169,6 +171,24 @@ public class AppointmentActivity extends AppCompatActivity {
                     Log.d(LOG_TAG, "Name Field Is Blank");
 
                 } else {
+                    try
+                    {
+                        if(!isConnected()) {
+                            Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
+                            sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
+                            sb.show();
+                            Log.d(LOG_TAG,"No Internet");
+                            return;
+                        }
+                        else
+                        {
+                            Log.d(LOG_TAG,"Internet is connected");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Log.d(LOG_TAG,"Exception : "+e.getMessage());
+                    }
                     storeData();
                 }
             }
@@ -429,6 +449,12 @@ public class AppointmentActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+    public boolean isConnected() throws InterruptedException, IOException
+    {
+        String command = "ping -c 1 google.com";
+        return (Runtime.getRuntime().exec (command).waitFor() == 0);
+    }
+
 
 }
     

@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.IOException;
+
 public class AboutActivity extends AppCompatActivity {
 
     TextView About;
@@ -63,5 +65,10 @@ public class AboutActivity extends AppCompatActivity {
             }
         });
 
+    }
+    public boolean isConnected() throws InterruptedException, IOException
+    {
+        String command = "ping -c 1 google.com";
+        return (Runtime.getRuntime().exec (command).waitFor() == 0);
     }
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.crashlytics.android.answers.StartCheckoutEvent;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Currency;
 
@@ -130,6 +132,24 @@ public class ConfirmActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                try
+                {
+                    if(!isConnected()) {
+                        Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
+                        sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
+                        sb.show();
+                        Log.d(LOG_TAG,"No Internet");
+                        return;
+                    }
+                    else
+                    {
+                        Log.d(LOG_TAG,"Internet is connected");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.d(LOG_TAG,"Exception : "+e.getMessage());
+                }
                 Answers.getInstance().logStartCheckout(new StartCheckoutEvent()
                         .putTotalPrice(BigDecimal.valueOf(Double.parseDouble(Amount)))
                         .putCurrency(Currency.getInstance("INR"))
@@ -138,4 +158,10 @@ public class ConfirmActivity extends AppCompatActivity {
             }
         });
     }
+    public boolean isConnected() throws InterruptedException, IOException
+    {
+        String command = "ping -c 1 google.com";
+        return (Runtime.getRuntime().exec (command).waitFor() == 0);
+    }
+
 }

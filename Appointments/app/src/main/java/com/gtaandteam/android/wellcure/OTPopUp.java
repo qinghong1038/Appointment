@@ -1,16 +1,18 @@
 package com.gtaandteam.android.wellcure;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v4.content.IntentCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -31,6 +33,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -81,6 +84,7 @@ public class OTPopUp extends Activity {
             RegisterActivity.Progress.dismiss();
         }
 
+
         OTPET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -103,7 +107,9 @@ public class OTPopUp extends Activity {
                     Progress.setMessage("Verifying OTP");
                     Progress.setCancelable(false);
                     Progress.show();
+                    timerDelayRemoveDialog(10000,Progress);
                     OTPET.setText("");
+                    hideKeyboard(OTPopUp.this);
                     verifyCode();
                 }
 
@@ -121,6 +127,7 @@ public class OTPopUp extends Activity {
                     Progress.setMessage("Resending OTP");
                     Progress.setCancelable(false);
                     Progress.show();
+                    timerDelayRemoveDialog(10000,Progress);
                     resendCode();
                     Toast.makeText(OTPopUp.this, "Resending OTP", Toast.LENGTH_LONG).show();
                 }
@@ -131,7 +138,18 @@ public class OTPopUp extends Activity {
         Progress.setMessage("Sending OTP");
         Progress.setCancelable(false);
         Progress.show();
+        timerDelayRemoveDialog(10000,Progress);
         sendCode();
+    }
+    public void timerDelayRemoveDialog(long time, final Dialog d){
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                if(d.isShowing()) {
+                    d.dismiss();
+                    Toast.makeText(OTPopUp.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, time);
     }
 
     public void sendCode() {
@@ -397,6 +415,22 @@ public class OTPopUp extends Activity {
             Log.d(LOG_TAG,"Other Activites Exist");
         }
         return super.onKeyDown(keyCode, event);
+    }
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        Log.d("OTPopUp","Keyboard Closed");
+    }
+    public boolean isConnected() throws InterruptedException, IOException
+    {
+        String command = "ping -c 1 google.com";
+        return (Runtime.getRuntime().exec (command).waitFor() == 0);
     }
 
 }

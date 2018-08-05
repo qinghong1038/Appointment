@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,6 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -91,6 +93,24 @@ public class DoctorsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //checkUserExists();
+                try
+                {
+                    if(!isConnected()) {
+                        Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
+                        sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
+                        sb.show();
+                        Log.d(LOG_TAG,"No Internet");
+                        return;
+                    }
+                    else
+                    {
+                        Log.d(LOG_TAG,"Internet is connected");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.d(LOG_TAG,"Exception : "+e.getMessage());
+                }
                 Intent intent = new Intent(DoctorsActivity.this, AppointmentActivity.class);
                 intent.putExtra("loginMode",loginMode);
                 intent.putExtra("UserExists", UserExists);
@@ -242,6 +262,11 @@ public class DoctorsActivity extends AppCompatActivity {
             Log.d(LOG_TAG,"Other Acitivites Exist");
         }
         return super.onKeyDown(keyCode, event);
+    }
+    public boolean isConnected() throws InterruptedException, IOException
+    {
+        String command = "ping -c 1 google.com";
+        return (Runtime.getRuntime().exec (command).waitFor() == 0);
     }
 
 }
