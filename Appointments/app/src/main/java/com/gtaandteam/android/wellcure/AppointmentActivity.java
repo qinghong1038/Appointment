@@ -42,6 +42,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -72,8 +74,10 @@ public class AppointmentActivity extends AppCompatActivity {
     DatabaseReference UserDb1, UserDb2, AppointmentDb;
 
     final String LOG_TAG = this.getClass().getSimpleName();
-
-
+    String latestDate="";
+    String LatestDate="";
+    Date lastAppointment,todays,requestedApt;
+    SimpleDateFormat format;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,7 +130,9 @@ public class AppointmentActivity extends AppCompatActivity {
                 DateET.setText(date);
                 SelectedDate =dayOfMonth+"/"+(month+1)+"/"+year;
                 Date endDate = new Date(year+"/"+(month+1)+"/"+dayOfMonth); //Deprecation Warning [Date].
+                requestedApt=endDate;
                 Date startDate = Calendar.getInstance().getTime();
+                todays=startDate;
                 long duration  = endDate.getTime() - startDate.getTime();
                 long diffday = duration/(24 * 60 * 60 * 1000) +1;
                 int days =(int)diffday-1;
@@ -143,6 +149,7 @@ public class AppointmentActivity extends AppCompatActivity {
                     BookingTypeTV.setText("Number of Days till Appointment: "+days);
                     BookAndPayBTN.setVisibility(View.VISIBLE);
                 }
+
 
             }
         };
@@ -190,6 +197,39 @@ public class AppointmentActivity extends AppCompatActivity {
                     catch (Exception e)
                     {
                         Log.d(LOG_TAG,"Exception : "+e.getMessage());
+                    }
+
+                    format = new SimpleDateFormat("dd/MM/yyyy");
+                    try {
+                        lastAppointment = format.parse(LatestDate);
+                        Log.d(LOG_TAG,"Converted Date : "+lastAppointment.toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    long duration  = requestedApt.getTime() - lastAppointment.getTime();
+                    long diffday = duration/(24 * 60 * 60 * 1000) +1;
+                    int days =(int)diffday-1;
+                    Log.d(LOG_TAG,"No of days between appointments : "+days);
+                    if(days>31)
+                    {
+                        Log.d(LOG_TAG,"Booking New Appointment");
+                        Amount="300";
+                    }
+                    else if(days<0)
+                    {
+                        Log.d(LOG_TAG,"An appointment is already there ahead");
+                        Amount="300";
+                    }
+                    else if(days==0)
+                    {
+                        Log.d(LOG_TAG,"An appointment is already scheduled for same day");
+                        Toast.makeText(AppointmentActivity.this, "You already have an appointment for that day", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    else
+                    {
+                        Log.d(LOG_TAG,"Booking Follow Up Appointment");
+                        Amount="150";
                     }
                     storeData();
                 }
@@ -325,36 +365,22 @@ public class AppointmentActivity extends AppCompatActivity {
         EmailET.setText(Email);
         PhoneET.setText(PhoneNumber);
         //getLatestAppointment();
-        String LatestDate="";
+
         try
         {
             if(!(rName.equals("")))
             {
-                LatestDate = getLatestDate();
-                Log.d(LOG_TAG,"rName equal blank");
+                getLatestDate();
+                Log.d(LOG_TAG,"rName not equal blank");
             }
         }
         catch (Exception e)
         {
             rName="";
             Log.d(LOG_TAG,"Inside rName exception : "+e.getMessage());
+            Amount="300";
         }
-        Log.d(LOG_TAG,"rName : "+rName);
-        Log.d(LOG_TAG,"Latest Date : "+LatestDate);
-        try{
-            if(LatestDate.equals("")||LatestDate==null)
-            {
-                Amount ="300";
-                Log.d(LOG_TAG,"Amount in try: "+Amount);
-            }
 
-        }
-        catch (Exception e)
-        {
-            Amount="350";
-            Log.d(LOG_TAG,"Amount in catch: "+Amount);
-            Log.d(LOG_TAG,"Error : "+e.getMessage());
-        }
 
         Log.d(LOG_TAG,"Amount outside all: "+Amount);
 
@@ -380,8 +406,8 @@ public class AppointmentActivity extends AppCompatActivity {
                     }
                 });
     }
-    public String getLatestDate(){
-        final String[] latestDate = new String[1];
+    public void getLatestDate(){
+
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("appointmentDB");//.child();
         final Query lastQuery = databaseReference.child(FbAuth.getCurrentUser().getUid()).orderByKey().limitToLast(1);
@@ -391,16 +417,48 @@ public class AppointmentActivity extends AppCompatActivity {
                 HashMap map=(HashMap) dataSnapshot.getValue();
                 try
                 {
-                    for ( Object key : map.keySet() ) {
-                        latestDate[0]=key.toString();
+                    /*for ( Object key : map.keySet() ) {
+                        latestDate=key.toString();
+
+                    }*/
+                    Object key = map.keySet();
+                    LatestDate=key.toString();
+                    Log.d(LOG_TAG,"rName : "+rName);
+                    Log.d(LOG_TAG,"Latest Date : "+LatestDate);
+                    try{
+                        if(LatestDate.equals("")||LatestDate==null)
+                        {
+                            Amount ="300";
+                            Log.d(LOG_TAG,"Amount in try: "+Amount);
+                        }
 
                     }
+                    catch (Exception e)
+                    {
+                        Amount="350";
+                        Log.d(LOG_TAG,"Amount in catch: "+Amount);
+                        Log.d(LOG_TAG,"Error : "+e.getMessage());
+                    }
+
                 }
                 catch(Exception e)
                 {
-                    Log.d(LOG_TAG,"Error : "+e.getMessage());
+                    Log.d(LOG_TAG,"Error inside getLatestAppt: "+e.getMessage());
                 }
                 //Do calculations here to find month diffrence
+                try{
+                    StringBuilder builder = new StringBuilder(LatestDate);
+                    builder.deleteCharAt(0);
+                    builder.deleteCharAt(LatestDate.length() - 2);
+                    latestDate=builder.toString();
+                    LatestDate=latestDate.replaceAll("-", "/");
+                    Log.d(LOG_TAG,"Done fetching Latest Date : "+latestDate);
+                }
+                catch (Exception e)
+                {
+                    Log.d(LOG_TAG,"Error : "+e.getMessage());
+                }
+
 
             }
 
@@ -411,7 +469,7 @@ public class AppointmentActivity extends AppCompatActivity {
             }
         });
         //this may return null
-        return latestDate[0];
+
     }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
