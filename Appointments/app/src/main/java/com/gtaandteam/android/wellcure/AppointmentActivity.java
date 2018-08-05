@@ -1,12 +1,14 @@
 package com.gtaandteam.android.wellcure;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -453,6 +455,16 @@ public class AppointmentActivity extends AppCompatActivity {
     {
         String command = "ping -c 1 google.com";
         return (Runtime.getRuntime().exec (command).waitFor() == 0);
+    }
+    public void timerDelayRemoveDialog(long time, final Dialog d){
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                if(d.isShowing()) {
+                    d.dismiss();
+                    Toast.makeText(AppointmentActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, time);
     }
 
 

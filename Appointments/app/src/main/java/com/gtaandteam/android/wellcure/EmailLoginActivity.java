@@ -261,4 +261,5 @@ public class EmailLoginActivity extends AppCompatActivity {
         Log.d("EmailLoginActivity","Keyboard Closed");
     }
 
+
 }
