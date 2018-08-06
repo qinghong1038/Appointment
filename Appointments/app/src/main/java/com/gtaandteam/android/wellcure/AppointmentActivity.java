@@ -57,7 +57,7 @@ public class AppointmentActivity extends AppCompatActivity {
     String rName, Amount; //retrieved files from database
     HashMap<String, String> Data;
     static String SelectedDate, TodaysDate;
-    Boolean UserExists, newApt;
+    Boolean UserExists, newApt=true;
 
     /**Views*/
     EditText DateET, NameET, PhoneET, EmailET;
