@@ -57,7 +57,7 @@ public class AppointmentActivity extends AppCompatActivity {
     String rName, Amount; //retrieved files from database
     HashMap<String, String> Data;
     static String SelectedDate, TodaysDate;
-    Boolean UserExists;
+    Boolean UserExists, newApt;
 
     /**Views*/
     EditText DateET, NameET, PhoneET, EmailET;
@@ -206,7 +206,8 @@ public class AppointmentActivity extends AppCompatActivity {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    long duration  = requestedApt.getTime() - lastAppointment.getTime();
+                    if(!newApt)
+                    {long duration  = requestedApt.getTime() - lastAppointment.getTime();
                     long diffday = duration/(24 * 60 * 60 * 1000) +1;
                     int days =(int)diffday-1;
                     Log.d(LOG_TAG,"No of days between appointments : "+days);
@@ -230,7 +231,10 @@ public class AppointmentActivity extends AppCompatActivity {
                     {
                         Log.d(LOG_TAG,"Booking Follow Up Appointment");
                         Amount="150";
-                    }
+                    }}
+                    else
+                        Amount="300";
+
                     storeData();
                 }
             }
@@ -453,6 +457,7 @@ public class AppointmentActivity extends AppCompatActivity {
                     latestDate=builder.toString();
                     LatestDate=latestDate.replaceAll("-", "/");
                     Log.d(LOG_TAG,"Done fetching Latest Date : "+latestDate);
+                    newApt=true;
                 }
                 catch (Exception e)
                 {
