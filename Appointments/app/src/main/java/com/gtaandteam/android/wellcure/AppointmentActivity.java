@@ -128,7 +128,13 @@ public class AppointmentActivity extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 String date = dayOfMonth+"/"+(month+1)+"/"+year;
                 DateET.setText(date);
-                SelectedDate =dayOfMonth+"/"+(month+1)+"/"+year;
+                String day=String.valueOf(dayOfMonth);
+                String month_= String.valueOf(month+1);
+                if(day.length()==1)
+                    day="0"+day;
+                if(month_.length()==1)
+                    month_="0"+month_;
+                SelectedDate=day+"/"+(month_)+"/"+year;
                 Date endDate = new Date(year+"/"+(month+1)+"/"+dayOfMonth); //Deprecation Warning [Date].
                 requestedApt=endDate;
                 Date startDate = Calendar.getInstance().getTime();
