@@ -13,7 +13,6 @@ import java.io.IOException;
 public class AboutActivity extends AppCompatActivity {
 
     TextView About;
-
     LinearLayout Youtube, Facebook, Wellcure;
     String youtubeURL = "https://www.youtube.com/channel/UChzQns81GkjawXR9zxiHJKA";
     String facebookURL = "https://www.facebook.com/RitusClinic/";

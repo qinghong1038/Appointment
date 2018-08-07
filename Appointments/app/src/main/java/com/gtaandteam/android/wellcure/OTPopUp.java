@@ -141,6 +141,7 @@ public class OTPopUp extends Activity {
         timerDelayRemoveDialog(10000,Progress);
         sendCode();
     }
+
     public void timerDelayRemoveDialog(long time, final Dialog d){
         new Handler().postDelayed(new Runnable() {
             public void run() {
