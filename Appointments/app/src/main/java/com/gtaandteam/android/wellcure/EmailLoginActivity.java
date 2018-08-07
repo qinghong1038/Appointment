@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -160,24 +159,24 @@ public class EmailLoginActivity extends AppCompatActivity {
             return;
 
         }
-        try
-        {
-            if(!isConnected()) {
-                Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
-                sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
-                sb.show();
-                Log.d(LOG_TAG,"No Internet");
-                return;
-            }
-            else
-            {
-                Log.d(LOG_TAG,"Internet is connected");
-            }
-        }
-        catch (Exception e)
-        {
-            Log.d(LOG_TAG,"Exception : "+e.getMessage());
-        }
+//        try
+//        {
+//            if(!isConnected()) {
+//                Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
+//                sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
+//                sb.show();
+//                Log.d(LOG_TAG,"No Internet");
+//                return;
+//            }
+//            else
+//            {
+//                Log.d(LOG_TAG,"Internet is connected");
+//            }
+//        }
+//        catch (Exception e)
+//        {
+//            Log.d(LOG_TAG,"Exception : "+e.getMessage());
+//        }
 
 
         Progress.setMessage("Logging In");

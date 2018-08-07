@@ -79,7 +79,11 @@
             android:value="80547909762a12903a49cd9f0b3e3467762a2231" />
 
         <activity android:name=".AboutActivity" />
-        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".ProfileActivity"
+            android:label="Personal Details"
+            android:screenOrientation="portrait">
+
+        </activity>
     </application>
 
 </manifest>
