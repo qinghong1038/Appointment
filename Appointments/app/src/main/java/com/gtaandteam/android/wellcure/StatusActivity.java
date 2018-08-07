@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -173,8 +172,10 @@ public class StatusActivity extends AppCompatActivity {
             Data.put("Amount", Amount);
         }
         Log.d(LOG_TAG,"Hashmap Done");
+        String date;
+        date=AppointmentActivity.TodaysDate.replaceAll("/", "-");
         UserDb1 = FirebaseDatabase.getInstance().getReference().child("txnDetails");
-        UserDb1.child(FbAuth.getCurrentUser().getUid()).setValue(Data).addOnCompleteListener(this, new OnCompleteListener<Void>() {
+        UserDb1.child(FbAuth.getCurrentUser().getUid()).child(date).setValue(Data).addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task)
             {

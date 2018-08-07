@@ -107,7 +107,7 @@ public class OTPopUp extends Activity {
                     Progress.setMessage("Verifying OTP");
                     Progress.setCancelable(false);
                     Progress.show();
-                    timerDelayRemoveDialog(10000,Progress);
+                   // timerDelayRemoveDialog(10000,Progress);
                     OTPET.setText("");
                     hideKeyboard(OTPopUp.this);
                     verifyCode();
@@ -127,7 +127,7 @@ public class OTPopUp extends Activity {
                     Progress.setMessage("Resending OTP");
                     Progress.setCancelable(false);
                     Progress.show();
-                    timerDelayRemoveDialog(10000,Progress);
+                   // timerDelayRemoveDialog(10000,Progress);
                     resendCode();
                     Toast.makeText(OTPopUp.this, "Resending OTP", Toast.LENGTH_LONG).show();
                 }
@@ -138,7 +138,7 @@ public class OTPopUp extends Activity {
         Progress.setMessage("Sending OTP");
         Progress.setCancelable(false);
         Progress.show();
-        timerDelayRemoveDialog(10000,Progress);
+        //timerDelayRemoveDialog(10000,Progress);
         sendCode();
     }
 
