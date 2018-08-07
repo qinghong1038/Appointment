@@ -257,6 +257,10 @@ public class AppointmentActivity extends AppCompatActivity {
                 startActivity(new Intent(AppointmentActivity.this, AboutActivity.class));
                 return true;
 
+            case R.id.action_profile:
+                startActivity(new Intent(AppointmentActivity.this, ProfileActivity.class));
+                return true;
+
 
             default:
                 // If we got here, the user's action was not recognized.

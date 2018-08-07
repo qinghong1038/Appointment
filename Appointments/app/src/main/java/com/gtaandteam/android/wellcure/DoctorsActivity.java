@@ -171,6 +171,11 @@ public class DoctorsActivity extends AppCompatActivity {
                 startActivity(new Intent(DoctorsActivity.this, AboutActivity.class));
                 return true;
 
+
+            case R.id.action_profile:
+                startActivity(new Intent(DoctorsActivity.this, ProfileActivity.class));
+                return true;
+
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
