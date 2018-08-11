@@ -3,11 +3,18 @@ package com.gtaandteam.android.wellcure;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
+
+import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -34,8 +41,12 @@ public class ProfileActivity extends AppCompatActivity {
             OLDPassword,
             NEWPassword;
 
+    //Firebase
+    FirebaseAuth FbAuth;
+    FirebaseUser user;
+    List<UserInfo> profileData;
 
-
+    final String LOG_TAG = this.getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +54,14 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         //TODO: Add code to pull user name, email and phone from Firebase
+
+        FbAuth=FirebaseAuth.getInstance();
+        user=FbAuth.getCurrentUser();
+        Name=user.getDisplayName();
+        Email=user.getEmail();
+        Phone=user.getPhoneNumber();
+        Log.d(LOG_TAG,"Email ID : "+Email);
+        Log.d(LOG_TAG,"Phone : "+Phone);
 
         SaveChangesBTN = findViewById(R.id.SaveChanges);
         VerifyNowBTN = findViewById(R.id.VerifyNow);
@@ -77,6 +96,45 @@ public class ProfileActivity extends AppCompatActivity {
         VerifyMessage.setVisibility(View.VISIBLE);
         VerifyNowBTN.setVisibility(View.VISIBLE);
 
+
+
+        /*try{
+            if(Name.equals("")||Name==null)
+            {
+                Name="";
+                Log.d(LOG_TAG,"Name was null. No exception");
+            }
+            else
+            {
+                NameTV.setText(Name);
+            }
+
+        }
+        catch (Exception e)
+        {
+            Name="";
+            Log.d(LOG_TAG,"Inside Exception. Error : "+e.getMessage());
+        }
+        try{
+            if(Name.equals("")||Name==null)
+            {
+                Name="";
+                Log.d(LOG_TAG,"Name was null. No exception");
+            }
+            else
+            {
+                NameTV.setText(Name);
+            }
+
+        }
+        catch (Exception e)
+        {
+            Name="";
+            Log.d(LOG_TAG,"Inside Exception. Error : "+e.getMessage());
+        }
+        */
+
+        //PhoneTV.setText(Phone);
 
         EditBTN.setOnClickListener(new View.OnClickListener() {
             @Override

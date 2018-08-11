@@ -317,7 +317,6 @@ public class AppointmentActivity extends AppCompatActivity {
             case R.id.action_About:
                 startActivity(new Intent(AppointmentActivity.this, AboutActivity.class));
                 return true;
-
             case R.id.action_profile:
                 startActivity(new Intent(AppointmentActivity.this, ProfileActivity.class));
                 return true;
@@ -382,8 +381,8 @@ public class AppointmentActivity extends AppCompatActivity {
 
         rName="";
         rName=FbAuth.getCurrentUser().getDisplayName();
-            PhoneNumber = FbAuth.getCurrentUser().getPhoneNumber().substring(3);
-            Email=FbAuth.getCurrentUser().getEmail();
+        PhoneNumber = FbAuth.getCurrentUser().getPhoneNumber().substring(3);
+        Email=FbAuth.getCurrentUser().getEmail();
         NameET.setText(rName);
         EmailET.setText(Email);
         PhoneET.setText(PhoneNumber);

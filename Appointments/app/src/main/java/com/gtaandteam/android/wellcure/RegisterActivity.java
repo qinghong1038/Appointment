@@ -163,6 +163,7 @@ public class RegisterActivity extends AppCompatActivity {
             return;
 
         }
+
         Progress.setMessage("Registering Email ID ... ");
         Progress.setCancelable(false);
         Progress.show();

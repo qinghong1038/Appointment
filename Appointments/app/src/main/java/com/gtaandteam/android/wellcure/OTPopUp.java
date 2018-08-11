@@ -3,13 +3,16 @@ package com.gtaandteam.android.wellcure;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -49,7 +52,7 @@ public class OTPopUp extends Activity {
     String EmailId;
     private String Password;
     HashMap<String, String> Data;
-
+    int RetryCount=0;
 
 
 
@@ -57,6 +60,7 @@ public class OTPopUp extends Activity {
     EditText OTPET; // OTP EditText
     Button ResendBTN, LoginBTN;
     private ProgressDialog Progress;
+    AlertDialog.Builder Pbuilder;
 
 
     /**Firebase*/
@@ -115,7 +119,70 @@ public class OTPopUp extends Activity {
 
             }
         });
+        Pbuilder = new AlertDialog.Builder(
+                new ContextThemeWrapper(OTPopUp.this, R.style.AlertDialogCustom));
+        Pbuilder.setCancelable(false);
+        Pbuilder.setTitle("Continue Anyway");
+        Pbuilder.setMessage("Would you like to continue anyway without linking mobile number?\n" +
+                "Note : If you proceed without linking mobile number, you wont be able to Login using Mobile Number");
+        Pbuilder.setPositiveButton("YES",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d(LOG_TAG,"Proceed Without Linking");
+                        FbAuth.signOut();
+                        Intent intent = new Intent(OTPopUp.this, EmailLoginActivity.class);
 
+                        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        finish();
+
+                    }
+                });
+        Pbuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(OTPopUp.this, "Retrying Phone Verification", Toast.LENGTH_SHORT).show();
+                Log.d(LOG_TAG,"Retrying Phone Verification");
+                RetryCount=0;
+
+                //  dialog.dismiss();
+            }
+        });
+        Pbuilder = new AlertDialog.Builder(
+                new ContextThemeWrapper(OTPopUp.this, R.style.AlertDialogCustom));
+        Pbuilder.setCancelable(false);
+        Pbuilder.setTitle("Continue Anyway");
+        Pbuilder.setMessage("Would you like to continue anyway without linking mobile number?\n" +
+                "Note : If you proceed without linking mobile number, you wont be able to Login using Mobile Number");
+        Pbuilder.setPositiveButton("YES",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d(LOG_TAG,"Proceed Without Linking");
+                        FbAuth.signOut();
+                        Intent intent = new Intent(OTPopUp.this, EmailLoginActivity.class);
+
+                        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        finish();
+
+                    }
+                });
+        Pbuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(OTPopUp.this, "Retrying Phone Verification", Toast.LENGTH_SHORT).show();
+                Log.d(LOG_TAG,"Retrying Phone Verification");
+                RetryCount=0;
+
+                //  dialog.dismiss();
+            }
+        });
         FbAuth = FirebaseAuth.getInstance();
         PhoneNumber = getIntent().getStringExtra("PhoneNumber");
 
@@ -249,8 +316,20 @@ public class OTPopUp extends Activity {
                         Log.d(LOG_TAG, "All good. Code sent. Exiting onCodeSent() ");
                         Toast.makeText(OTPopUp.this, "OTP Sent", Toast.LENGTH_SHORT).show();
                         Progress.dismiss();
-                        Log.d(LOG_TAG, "Will Try Auto Retrieiving OTP");
+                        Log.d(LOG_TAG, "Will Try Auto Retrieving OTP");
 
+
+                        new Handler().postDelayed(new Runnable() {
+                            public void run() {
+
+                                AlertDialog dialog = Pbuilder.create();
+                                dialog.show();
+
+                            }
+
+                        }, 30000);
+                        Log.d(LOG_TAG,"This log was nnot delayed");
+                        Toast.makeText(OTPopUp.this, "This toast was not delayed", Toast.LENGTH_SHORT).show();
 
                     }
                 };
@@ -341,6 +420,44 @@ public class OTPopUp extends Activity {
                             Toast.makeText(OTPopUp.this, "Authentication Failed.\n"+task.getException().getMessage(),
                                     Toast.LENGTH_LONG).show();
                             OTPET.setText("");
+                            RetryCount++;
+                            if(RetryCount==3)
+                            {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(
+                                        new ContextThemeWrapper(OTPopUp.this, R.style.AlertDialogCustom));
+                                builder.setCancelable(true);
+                                builder.setTitle("Continue Anyway");
+                                builder.setMessage("Would you like to continue anyway without linking mobile number?\n" +
+                                        "Note : If you proceed without linking mobile number, you wont be able to Login using Mobile Number");
+                                builder.setPositiveButton("YES",
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Log.d(LOG_TAG,"Proceed Without Linking");
+                                                FbAuth.signOut();
+                                                Intent intent = new Intent(OTPopUp.this, EmailLoginActivity.class);
+
+                                                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                startActivity(intent);
+                                                finish();
+
+                                            }
+                                        });
+                                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Toast.makeText(OTPopUp.this, "Retrying Phone Verification", Toast.LENGTH_SHORT).show();
+                                        Log.d(LOG_TAG,"Retrying Phone Verification");
+                                        RetryCount=0;
+                                        dialog.dismiss();
+                                    }
+                                });
+
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            }
                         }
 
                         // ...
@@ -432,6 +549,9 @@ public class OTPopUp extends Activity {
     {
         String command = "ping -c 1 google.com";
         return (Runtime.getRuntime().exec (command).waitFor() == 0);
+    }
+    public void timerDelayShowDialog(long time){
+
     }
 
 }

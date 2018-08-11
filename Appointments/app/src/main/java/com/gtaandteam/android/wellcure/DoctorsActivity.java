@@ -172,8 +172,6 @@ public class DoctorsActivity extends AppCompatActivity {
             case R.id.action_About:
                 startActivity(new Intent(DoctorsActivity.this, AboutActivity.class));
                 return true;
-
-
             case R.id.action_profile:
                 startActivity(new Intent(DoctorsActivity.this, ProfileActivity.class));
                 return true;
