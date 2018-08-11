@@ -26,6 +26,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +65,8 @@ public class AppointmentActivity extends AppCompatActivity {
     EditText DateET, NameET, PhoneET, EmailET;
     TextView BookingTypeTV;
     Button BookAndPayBTN;
+    RadioGroup RGroup;
+    RadioButton newRB, FollowUpRB;
     Toolbar MyToolbar;
 
     /**Firebase*/
@@ -90,11 +94,16 @@ public class AppointmentActivity extends AppCompatActivity {
         PhoneET = findViewById(R.id.PhoneET);
         EmailET = findViewById(R.id.EmailET);
         DateET = findViewById(R.id.DateET);
-        BookingTypeTV = findViewById(R.id.BookingType);
+        BookingTypeTV = findViewById(R.id.BookingMessage);
         BookAndPayBTN = findViewById(R.id.bookAndPay_Button);
         MyToolbar = findViewById(R.id.MyToolbar);
         EmailET.setFocusable(false);
         PhoneET.setFocusable(false);
+
+        /**NEW BUTTONS*/
+        newRB = findViewById(R.id.new_appt);
+        FollowUpRB = findViewById(R.id.follow_up_appt);
+        RGroup = findViewById(R.id.Radio_group);
 
         Intent intent = getIntent();
         UserExists = intent.getBooleanExtra("UserExists",false);
