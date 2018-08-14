@@ -63,6 +63,15 @@ public class EmailLoginActivity extends AppCompatActivity {
         FbAuth = FirebaseAuth.getInstance();
         Progress =new ProgressDialog(this);
 
+        Intent intent=getIntent();
+        String Parent=intent.getStringExtra("Parent");
+        if(Parent==null)
+            Parent="";
+        if(Parent.equals("OTPopUp"))
+            if(OTPopUp.Progress.isShowing()){
+            Log.d(LOG_TAG,"OTP Progress was showing");
+            OTPopUp.Progress.dismiss();
+            }
 
         OTPLogin.setOnClickListener(new View.OnClickListener() {
             @Override

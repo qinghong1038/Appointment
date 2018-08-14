@@ -2,5 +2,7 @@
 <resources>
     <dimen name="height">88dp</dimen>
     <dimen name = "width">60dp</dimen>
+    <dimen name="dialog_min_width_major">17104899</dimen>
+    <dimen name="dialog_min_width_minor">17104899</dimen>
 
 </resources>

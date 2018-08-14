@@ -2,13 +2,17 @@ package com.gtaandteam.android.wellcure;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Selection;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -167,7 +171,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                 else
                 {
                     Log.d(LOG_TAG, "Phone Number Doesn't exist.");
-                    Toast.makeText(OTPLoginActivity.this, "Phone number not linked to any account. Please Register. ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OTPLoginActivity.this, "Phone number not linked to any account.\nPlease Register or Login Using Email. ", Toast.LENGTH_SHORT).show();
                     Progress.dismiss();
                 }
 
@@ -195,6 +199,44 @@ public class OTPLoginActivity extends AppCompatActivity {
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         Log.d("OTPLoginActivity","Keyboard Closed");
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            Log.d(LOG_TAG, "back button pressed");
+        }
+        if(isTaskRoot())
+        {
+            Log.d(LOG_TAG,"No other Acitivites Exist");
+            AlertDialog.Builder builder = new AlertDialog.Builder(
+                    new ContextThemeWrapper(OTPLoginActivity.this, R.style.AlertDialogCustom));
+            builder.setCancelable(true);
+            builder.setTitle("Exit App");
+            builder.setMessage("Are you sure you want to Exit?");
+            builder.setPositiveButton("YES",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d(LOG_TAG,"Exiting App");
+                            finishAffinity();
+
+                        }
+                    });
+            builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+        else
+        {
+            Log.d(LOG_TAG,"Other Acitivites Exist");
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }

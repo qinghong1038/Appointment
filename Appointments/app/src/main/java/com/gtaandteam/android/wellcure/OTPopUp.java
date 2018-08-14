@@ -12,7 +12,6 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -48,7 +47,7 @@ public class OTPopUp extends Activity {
     String PhoneNumber;
     String Parent;
     String OTP,Code;
-    Boolean PhoneCredentialCreated, LinkingStatus;
+    Boolean PhoneCredentialCreated, LinkingStatus,VerificationCompleted,AutoEnteredOTP;
     String EmailId;
     private String Password;
     HashMap<String, String> Data;
@@ -59,8 +58,9 @@ public class OTPopUp extends Activity {
     /**Views*/
     EditText OTPET; // OTP EditText
     Button ResendBTN, LoginBTN;
-    private ProgressDialog Progress;
+    static ProgressDialog Progress;
     AlertDialog.Builder Pbuilder;
+    static ProgressDialog VerifyProgress;
 
 
     /**Firebase*/
@@ -74,6 +74,7 @@ public class OTPopUp extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.Theme_AppCompat_Light_Dialog_MinWidth);
         setContentView(R.layout.activity_otpup);
 
         //Linking to views
@@ -81,14 +82,18 @@ public class OTPopUp extends Activity {
         ResendBTN = findViewById(R.id.ResendOTPBTN);
         LoginBTN = findViewById(R.id.LoginBTN);
         Progress =new ProgressDialog(this);
+        VerifyProgress = new ProgressDialog(this);
         Parent = getIntent().getStringExtra("Parent");
-        Log.d(LOG_TAG,  "Parent ativity: " + Parent);
+        Log.d(LOG_TAG,  "Parent Activity: " + Parent);
         if(!Parent.equals("OTPLoginActivity"))
         {
             RegisterActivity.Progress.dismiss();
         }
-
-
+        //Log.d(LOG_TAG),"Width Major : "
+        if(ProfileActivity.Progress2.isShowing())
+            ProfileActivity.Progress2.dismiss();
+        VerificationCompleted = false;
+        AutoEnteredOTP=false;
         OTPET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -112,32 +117,58 @@ public class OTPopUp extends Activity {
                     Progress.setCancelable(false);
                     Progress.show();
                    // timerDelayRemoveDialog(10000,Progress);
-                    OTPET.setText("");
+                    if(!AutoEnteredOTP)
+                        OTPET.setText("");
                     hideKeyboard(OTPopUp.this);
                     verifyCode();
                 }
 
             }
         });
-        Pbuilder = new AlertDialog.Builder(
-                new ContextThemeWrapper(OTPopUp.this, R.style.AlertDialogCustom));
+        Pbuilder = new AlertDialog.Builder(this);
         Pbuilder.setCancelable(false);
-        Pbuilder.setTitle("Continue Anyway");
-        Pbuilder.setMessage("Would you like to continue anyway without linking mobile number?\n" +
-                "Note : If you proceed without linking mobile number, you wont be able to Login using Mobile Number");
+
+        if(Parent.equals("RegisterActivity"))
+        {    Pbuilder.setTitle("Register with Email Only?");
+            Pbuilder.setMessage("Would you like to continue anyway without linking mobile number?\n\n" +
+                    "Note : If you proceed without linking mobile number, you wont be able to Login using Mobile Number");
+        }
+        else if(Parent.equals("OTPLoginActivity"))
+        {
+            Pbuilder.setTitle("Waiting for OTP");
+            Pbuilder.setMessage("Would you like to Login with Email Instead?\n\n" +
+                    "If not, You can continue to wait for the OTP");
+        }
+        else
+        {   Pbuilder.setTitle("Skip Verifying Mobile Number?");
+            Pbuilder.setMessage("Would you like to continue anyway without linking mobile number?\n\n" +
+                    "Note : If you proceed without linking mobile number, you won't be able to Login using Mobile Number");
+        }
+
         Pbuilder.setPositiveButton("YES",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Log.d(LOG_TAG,"Proceed Without Linking");
-                        FbAuth.signOut();
-                        Intent intent = new Intent(OTPopUp.this, EmailLoginActivity.class);
-
-                        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                        finish();
+                        Log.d(LOG_TAG,"Proceed Without Verifying OTP");
+                        if(!Parent.equals("ProfileActivity"))
+                        {
+                            FbAuth.signOut();
+                            Intent intent = new Intent(OTPopUp.this, EmailLoginActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            finish();
+                        }
+                        else
+                        {
+                            Intent intent = new Intent(OTPopUp.this, ProfileActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            finish();
+                        }
 
                     }
                 });
@@ -147,40 +178,16 @@ public class OTPopUp extends Activity {
                 Toast.makeText(OTPopUp.this, "Retrying Phone Verification", Toast.LENGTH_SHORT).show();
                 Log.d(LOG_TAG,"Retrying Phone Verification");
                 RetryCount=0;
+                dialog.dismiss();
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
 
-                //  dialog.dismiss();
-            }
-        });
-        Pbuilder = new AlertDialog.Builder(
-                new ContextThemeWrapper(OTPopUp.this, R.style.AlertDialogCustom));
-        Pbuilder.setCancelable(false);
-        Pbuilder.setTitle("Continue Anyway");
-        Pbuilder.setMessage("Would you like to continue anyway without linking mobile number?\n" +
-                "Note : If you proceed without linking mobile number, you wont be able to Login using Mobile Number");
-        Pbuilder.setPositiveButton("YES",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Log.d(LOG_TAG,"Proceed Without Linking");
-                        FbAuth.signOut();
-                        Intent intent = new Intent(OTPopUp.this, EmailLoginActivity.class);
-
-                        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                        finish();
+                        AlertDialog rdialog = Pbuilder.create();
+                        rdialog.show();
 
                     }
-                });
-        Pbuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(OTPopUp.this, "Retrying Phone Verification", Toast.LENGTH_SHORT).show();
-                Log.d(LOG_TAG,"Retrying Phone Verification");
-                RetryCount=0;
 
-                //  dialog.dismiss();
+                }, 20000);
             }
         });
         FbAuth = FirebaseAuth.getInstance();
@@ -209,16 +216,7 @@ public class OTPopUp extends Activity {
         sendCode();
     }
 
-    public void timerDelayRemoveDialog(long time, final Dialog d){
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                if(d.isShowing()) {
-                    d.dismiss();
-                    Toast.makeText(OTPopUp.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, time);
-    }
+
 
     public void sendCode() {
         Log.d(LOG_TAG, "Entered sendCode()");
@@ -236,7 +234,8 @@ public class OTPopUp extends Activity {
     }
 
     public void verifyCode() {
-
+        Log.d(LOG_TAG,"Inside VerifyCode()");
+        VerificationCompleted=true;
         Log.d(LOG_TAG, "Displaying OTP Value :"+Code);
         PhoneAuthCredential credential =
                 PhoneAuthProvider.getCredential(phoneVerificationId, Code);
@@ -277,14 +276,18 @@ public class OTPopUp extends Activity {
                     @Override
                     public void onVerificationCompleted(
                             PhoneAuthCredential credential) {
+                        Log.d(LOG_TAG,"Inside onVerification Completed");
+                        Progress.setMessage("Auto Detecting OTP");
+                        Progress.show();
+                        VerificationCompleted=true;
+                        AutoEnteredOTP=true;
+                        final PhoneAuthCredential pcredential = credential;
+                        Progress.dismiss();
+                        OTPET.setText(pcredential.getSmsCode());
+                        Log.d(LOG_TAG,pcredential.getSmsCode());
+
                         Log.d(LOG_TAG, "Auto Verification Completed Successfully");
-                        if(Parent.equals("OTPLoginActivity"))
-                            signInWithPhoneAuthCredential(credential);
-                        else
-                        {
-                            PhoneCredentialCreated = true;
-                            linkMobWithEmail(credential);
-                        }
+
 
                     }
 
@@ -319,11 +322,16 @@ public class OTPopUp extends Activity {
                         Log.d(LOG_TAG, "Will Try Auto Retrieving OTP");
 
 
+
                         new Handler().postDelayed(new Runnable() {
                             public void run() {
 
-                                AlertDialog dialog = Pbuilder.create();
-                                dialog.show();
+                                if(!VerificationCompleted)
+                                {
+                                    AlertDialog dialog = Pbuilder.create();
+                                    dialog.show();
+                                }
+
 
                             }
 
@@ -379,34 +387,37 @@ public class OTPopUp extends Activity {
     private void linkMobWithEmail(PhoneAuthCredential credential)
     {
         LinkingStatus = false;
-        EmailId = getIntent().getStringExtra("EmailId");
-        Password = getIntent().getStringExtra("Password");
 
-        FbAuth.signInWithEmailAndPassword(EmailId, Password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+        if(Parent.equals("RegisterActivity")){
+            EmailId = getIntent().getStringExtra("EmailId");
+            Password = getIntent().getStringExtra("Password");
+            FbAuth.signInWithEmailAndPassword(EmailId, Password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
 
-                        if(task.isSuccessful())
-                        {
-                            //user successfully logged in
-                            //we start doctor activity here
-                            Toast.makeText(OTPopUp.this,"Login with New Account Successful",Toast.LENGTH_SHORT).show();
+                            if(task.isSuccessful())
+                            {
+                                //user successfully logged in
+                                //we start doctor activity here
+                                Toast.makeText(OTPopUp.this,"Login with New Account Successful",Toast.LENGTH_SHORT).show();
 
+                            }
+                            else
+                            {
+                                Toast.makeText(OTPopUp.this,"Couldn't Login with new Account ...",Toast.LENGTH_SHORT).show();
+                                Log.d(LOG_TAG,"Couldnt Login before linking. Error : "+task.getException().getMessage());
+                                return;
+                            }
                         }
-                        else
-                        {
-                            Toast.makeText(OTPopUp.this,"Couldn't Login with new Account ...",Toast.LENGTH_SHORT).show();
-                            Log.d(LOG_TAG,"Couldnt Login before linking. Error : "+task.getException().getMessage());
-                        }
-                    }
-                });
+                    });
+        }
         FbAuth.getCurrentUser().linkWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Progress.dismiss();
+                            //Progress.dismiss();
                             Log.d(LOG_TAG, "linkWithCredential:success");
                             Toast.makeText(OTPopUp.this, "Mobile Number has been successfully linked with Email ID", Toast.LENGTH_SHORT).show();
 
@@ -423,44 +434,12 @@ public class OTPopUp extends Activity {
                             RetryCount++;
                             if(RetryCount==3)
                             {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(
-                                        new ContextThemeWrapper(OTPopUp.this, R.style.AlertDialogCustom));
-                                builder.setCancelable(true);
-                                builder.setTitle("Continue Anyway");
-                                builder.setMessage("Would you like to continue anyway without linking mobile number?\n" +
-                                        "Note : If you proceed without linking mobile number, you wont be able to Login using Mobile Number");
-                                builder.setPositiveButton("YES",
-                                        new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                Log.d(LOG_TAG,"Proceed Without Linking");
-                                                FbAuth.signOut();
-                                                Intent intent = new Intent(OTPopUp.this, EmailLoginActivity.class);
-
-                                                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                startActivity(intent);
-                                                finish();
-
-                                            }
-                                        });
-                                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Toast.makeText(OTPopUp.this, "Retrying Phone Verification", Toast.LENGTH_SHORT).show();
-                                        Log.d(LOG_TAG,"Retrying Phone Verification");
-                                        RetryCount=0;
-                                        dialog.dismiss();
-                                    }
-                                });
-
-                                AlertDialog dialog = builder.create();
+                                AlertDialog dialog = Pbuilder.create();
                                 dialog.show();
                             }
                         }
 
-                        // ...
+
                     }
                 });
     }
@@ -483,20 +462,36 @@ public class OTPopUp extends Activity {
                 {
                     Log.v("App","Adding to User Database");
                     Toast.makeText(getApplicationContext(),"Stored User Data to UserDatabase",Toast.LENGTH_SHORT).show();
-                    FbAuth.signOut();
-                    Intent intent = new Intent(OTPopUp.this, EmailLoginActivity.class);
+                    if(!Parent.equals("ProfileActivity"))
+                    {
+                        FbAuth.signOut();
+                        Intent intent = new Intent(OTPopUp.this, EmailLoginActivity.class);
+                        intent.putExtra("Parent", LOG_TAG);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        finish();
+                    }
+                    else
+                    {
+                        Intent intent = new Intent(OTPopUp.this, ProfileActivity.class);
+                        intent.putExtra("LinkingStatus",true);
+                        intent.putExtra("Parent", LOG_TAG);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        finish();
+                    }
 
-                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    finish();
+
                 }
 
             }
         });
     }
-    protected void onStop() {
+    /*protected void onStop() {
 
         super.onStop();
         Toast.makeText(this, "Closing App", Toast.LENGTH_SHORT).show();
@@ -518,7 +513,7 @@ public class OTPopUp extends Activity {
             }
         }
 
-    }
+    }*/
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
@@ -552,6 +547,16 @@ public class OTPopUp extends Activity {
     }
     public void timerDelayShowDialog(long time){
 
+    }
+    public void timerDelayRemoveDialog(long time, final Dialog d){
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                if(d.isShowing()) {
+                    d.dismiss();
+                    Toast.makeText(OTPopUp.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, time);
     }
 
 }

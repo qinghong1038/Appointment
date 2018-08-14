@@ -74,13 +74,13 @@ public class DoctorsActivity extends AppCompatActivity {
         FbUser = FbAuth.getCurrentUser();
         setSupportActionBar(MyToolbar);
 
-        if(FbUser.getPhoneNumber() == null){
+        /*if(FbUser.getPhoneNumber() == null){
             signOut();
             startActivity(new Intent(DoctorsActivity.this, EmailLoginActivity.class));
             finish();
 
 
-        }
+        }*/
 
 
         //Toast.makeText(this, user.getEmail(), Toast.LENGTH_SHORT).show();
@@ -201,7 +201,6 @@ public class DoctorsActivity extends AppCompatActivity {
         String rName=FbAuth.getCurrentUser().getDisplayName();
         if (TextUtils.isEmpty(rName)) {
             rName="";
-
         }
         Date startDate = Calendar.getInstance().getTime();
         //String rName=FbAuth.getCurrentUser().getDisplayName();
@@ -209,7 +208,15 @@ public class DoctorsActivity extends AppCompatActivity {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         String Date = format.format(startDate);
         Log.d(LOG_TAG,""+Date);
-        String PhoneNumber = FbAuth.getCurrentUser().getPhoneNumber().substring(3);
+        String PhoneNumber;
+        try {
+            PhoneNumber = FbAuth.getCurrentUser().getPhoneNumber().substring(3);
+        }
+        catch (Exception e)
+        {
+            PhoneNumber="Not Verified";
+            Log.d(LOG_TAG,"Error : "+e.getMessage());
+        }
         String Email=FbAuth.getCurrentUser().getEmail();
         //Date = Day +"/"+(Month +1)+"/"+ Year;
         //Data = new HashMap<>();
