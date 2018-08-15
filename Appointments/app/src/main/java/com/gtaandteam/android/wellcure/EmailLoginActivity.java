@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -34,7 +33,7 @@ import io.fabric.sdk.android.Fabric;
 //import io.fabric.sdk.android.Fabric;
 
 public class EmailLoginActivity extends AppCompatActivity {
-
+    //TODO: What else?
     /**Views*/
     EditText UsernameET, PasswordET;
     Button RegisterBTN, LoginBTN;
@@ -169,7 +168,7 @@ public class EmailLoginActivity extends AppCompatActivity {
             return;
 
         }
-        try
+        /*try
         {
             if(!isConnected()) {
                 Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
@@ -186,7 +185,7 @@ public class EmailLoginActivity extends AppCompatActivity {
         catch (Exception e)
         {
             Log.d(LOG_TAG,"Exception : "+e.getMessage());
-        }
+        }*/
 
 
         Progress.setMessage("Logging In");
@@ -209,8 +208,17 @@ public class EmailLoginActivity extends AppCompatActivity {
                         }
                         else
                         {
-                            Toast.makeText(EmailLoginActivity.this,"Couldn't Login. Please Try Again.." +
-                                    "\n"+task.getException().getMessage(),Toast.LENGTH_LONG).show();
+                            if(task.getException().toString().contains("com.google.firebase.FirebaseNetworkException"))
+                            {
+                                Toast.makeText(EmailLoginActivity.this, "Internet Connectivity Issues", Toast.LENGTH_SHORT).show();
+                            }
+                            else
+                            {
+                                Toast.makeText(EmailLoginActivity.this,"Couldn't Login. Please Try Again.." +
+                                        "\n"+task.getException().getMessage(),Toast.LENGTH_LONG).show();
+                            }
+                            Log.d(LOG_TAG,"Error : "+task.getException());
+
                         }
                     }
                 });

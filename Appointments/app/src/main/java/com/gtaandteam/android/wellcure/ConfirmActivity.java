@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -81,6 +80,9 @@ public class ConfirmActivity extends AppCompatActivity {
                 onSuccess.putExtra("PaymentToken",paymentToken[1]);
                 onSuccess.putExtra("Amount",Amount);
                 onSuccess.putExtra("Name",Name);
+                onSuccess.putExtra("Date",Date);
+                onSuccess.putExtra("Phone",Phone);
+                onSuccess.putExtra("Email",Email);
 
                 startActivity(onSuccess);
                 finish();
@@ -94,6 +96,11 @@ public class ConfirmActivity extends AppCompatActivity {
                 onFailure.putExtra("Status",false);
                 onFailure.putExtra("Reason",reason);
                 onFailure.putExtra("Code",code);
+                onFailure.putExtra("Amount",Amount);
+                onFailure.putExtra("Name",Name);
+                onFailure.putExtra("Date",Date);
+                onFailure.putExtra("Phone",Phone);
+                onFailure.putExtra("Email",Email);
                 startActivity(onFailure);
                 finish();
             }
@@ -132,7 +139,7 @@ public class ConfirmActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                try
+                /*try
                 {
                     if(!isConnected()) {
                         Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
@@ -149,7 +156,7 @@ public class ConfirmActivity extends AppCompatActivity {
                 catch (Exception e)
                 {
                     Log.d(LOG_TAG,"Exception : "+e.getMessage());
-                }
+                }*/
                 Answers.getInstance().logStartCheckout(new StartCheckoutEvent()
                         .putTotalPrice(BigDecimal.valueOf(Double.parseDouble(Amount)))
                         .putCurrency(Currency.getInstance("INR"))

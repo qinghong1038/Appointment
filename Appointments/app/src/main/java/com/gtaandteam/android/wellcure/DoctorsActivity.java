@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -95,7 +94,7 @@ public class DoctorsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //checkUserExists();
-                try
+                /*try
                 {
                     if(!isConnected()) {
                         Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
@@ -112,7 +111,7 @@ public class DoctorsActivity extends AppCompatActivity {
                 catch (Exception e)
                 {
                     Log.d(LOG_TAG,"Exception : "+e.getMessage());
-                }
+                }*/
                 Intent intent = new Intent(DoctorsActivity.this, AppointmentActivity.class);
                 intent.putExtra("loginMode",loginMode);
                 intent.putExtra("UserExists", UserExists);

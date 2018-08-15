@@ -90,8 +90,14 @@ public class OTPopUp extends Activity {
             RegisterActivity.Progress.dismiss();
         }
         //Log.d(LOG_TAG),"Width Major : "
-        if(ProfileActivity.Progress2.isShowing())
-            ProfileActivity.Progress2.dismiss();
+        try {
+            if(ProfileActivity.Progress2.isShowing())
+                ProfileActivity.Progress2.dismiss();
+        }
+        catch (Exception e)
+        {
+            Log.d(LOG_TAG,"No Such Progress : "+e.getMessage());
+        }
         VerificationCompleted = false;
         AutoEnteredOTP=false;
         OTPET.addTextChangedListener(new TextWatcher() {
@@ -452,7 +458,7 @@ public class OTPopUp extends Activity {
         Data = new HashMap<>();
         Data.put("Email", EmailId);
         Data.put("Phone", PhoneNumber);
-        UserDb1 = FirebaseDatabase.getInstance().getReference().child("userDB");
+        UserDb1 = FirebaseDatabase.getInstance().getReference().child("mobileDB");
         UserDb1.child(FbAuth.getCurrentUser().getUid()).setValue(Data).addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

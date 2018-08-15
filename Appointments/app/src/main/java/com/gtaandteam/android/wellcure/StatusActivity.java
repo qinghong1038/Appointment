@@ -24,7 +24,7 @@ public class StatusActivity extends AppCompatActivity {
 
     /**Data Structures*/
     String BookingDate, OrderID, TokenID, PaymentID, AppointmentDate, Name, Amount,Reason;
-    String Email;
+    String Email,Phone;
 
     int Code;
     Boolean Success;
@@ -47,7 +47,8 @@ public class StatusActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_status);
         FbAuth = FirebaseAuth.getInstance();
-        Email=FbAuth.getCurrentUser().getEmail();
+
+
         //Linking to views
         GoBackBTN = findViewById(R.id.BackBTN);
         StatusIV = findViewById(R.id.StatusIV);
@@ -63,6 +64,8 @@ public class StatusActivity extends AppCompatActivity {
 
         //Side note : prefer to use "hh:mm,  dd-mm-yyyy" for displaying time of completion.
         Intent getStatus = getIntent();
+        Email=getStatus.getStringExtra("Email");
+        Phone=getStatus.getStringExtra("Phone");
         Success = getStatus.getBooleanExtra("Status",false);
         Name = getStatus.getStringExtra("Name");
         Amount=getStatus.getStringExtra("Amount");
@@ -157,19 +160,23 @@ public class StatusActivity extends AppCompatActivity {
         Data = new HashMap<>();
         Data.put("Name",Name);
         Data.put("Email",Email);
+        Data.put("Phone",Phone);
+        Data.put("AppointmentDate",AppointmentActivity.SelectedDate);
+        Data.put("BookingDate",AppointmentActivity.TodaysDate);
+        Data.put("Amount", Amount);
         if(Success)
         {
             Data.put("OrderID", OrderID);
             Data.put("PaymentID", PaymentID);
             Data.put("PaymentToken", TokenID);
-            Data.put("Amount", Amount);
+
         }
         else
         {
             Data.put("OrderID", "ERROR");
             Data.put("PaymentID", "Fail Code : "+Code);
             Data.put("PaymentToken", "Reason : "+Reason);
-            Data.put("Amount", Amount);
+
         }
         Log.d(LOG_TAG,"Hashmap Done");
         String date;

@@ -1,6 +1,5 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -28,7 +27,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:hint="Enter Patient Name"
         android:inputType="textCapWords|textPersonName"
+        android:tooltipText="Enter The Name of Patient for Whom You are Booking The Appointment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/NameTV" />
@@ -38,7 +39,9 @@
         style="@style/ETStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:hint="Enter 10 Digit Mobile Number"
         android:inputType="phone"
+        android:tooltipText="Enter 10 Digit Mobile Number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/PhoneTV" />
@@ -68,7 +71,9 @@
         style="@style/ETStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:hint="Enter Email Address (To Receive Receipt)"
         android:inputType="textEmailAddress"
+        android:tooltipText="Enter A Valid Email Address to Receive Receipt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/EmailTV" />
@@ -89,6 +94,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:focusable="false"
+        android:hint="Required Date of Appointment"
+        android:tooltipText="Enter The Date You Would Like To Book The Appointment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/DateTV" />
@@ -144,19 +151,21 @@
 
         <RadioButton
             android:id="@+id/new_appt"
-            android:layout_width="0dp"
-            android:layout_weight="1"
             style="@style/ETStyle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="New" />
+            android:layout_weight="1"
+            android:text="New"
+            android:tooltipText="For Making A New Appointment Booking" />
 
         <RadioButton
             android:id="@+id/follow_up_appt"
-            android:layout_width="0dp"
             style="@style/ETStyle"
-            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Follow-up" />
+            android:layout_weight="1"
+            android:text="Follow-up"
+            android:tooltipText="For Making A Follow Up Appointment Booking" />
     </RadioGroup>
 
 

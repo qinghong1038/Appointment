@@ -223,7 +223,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void checkPhoneNumberExists()
     {
         PhoneNumberExists=false;
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("userDB");
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("mobileDB");
         userRef.orderByChild("Phone").equalTo(PhoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
@@ -281,13 +281,13 @@ public class RegisterActivity extends AppCompatActivity {
 
                         }
                     });
-                    Toast.makeText(RegisterActivity.this, "Phone number not linked to any account. Will Register. ", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(RegisterActivity.this, "Phone number not linked to any account. Will Register. ", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.d(LOG_TAG,"Error : "+databaseError.getMessage());
             }
         });
     }

@@ -10,7 +10,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -97,8 +96,8 @@ public class AppointmentActivity extends AppCompatActivity {
         BookingTypeTV = findViewById(R.id.BookingMessage);
         BookAndPayBTN = findViewById(R.id.bookAndPay_Button);
         MyToolbar = findViewById(R.id.MyToolbar);
-        EmailET.setFocusable(false);
-        PhoneET.setFocusable(false);
+        //EmailET.setFocusable(false);
+        //PhoneET.setFocusable(false);
 
         /**NEW BUTTONS*/
         newRB = findViewById(R.id.new_appt);
@@ -169,7 +168,7 @@ public class AppointmentActivity extends AppCompatActivity {
             }
         };
 
-        EmailET.setOnClickListener(new View.OnClickListener() {
+        /*EmailET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(AppointmentActivity.this, "Not Allowed To Change Email", Toast.LENGTH_SHORT).show();
@@ -181,7 +180,7 @@ public class AppointmentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Toast.makeText(AppointmentActivity.this, "Not Allowed To Change Phone Number", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
 
         BookAndPayBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,13 +188,29 @@ public class AppointmentActivity extends AppCompatActivity {
                 //TODO: Calculate Amount To Be Paid based on Past Appointments.
                 Log.v("APP","Clicked Submit");
                 FirstName = NameET.getText().toString().trim();
+                PhoneNumber=PhoneET.getText().toString().trim();
                 if (TextUtils.isEmpty(FirstName)) {
                     // is empty
                     Toast.makeText(AppointmentActivity.this, "Name Field Cannot Be Blank", Toast.LENGTH_SHORT).show();
                     Log.d(LOG_TAG, "Name Field Is Blank");
+                    return;
 
-                } else {
-                    try
+                }
+                if (TextUtils.isEmpty(PhoneNumber)) {
+                    // is empty
+                    Toast.makeText(AppointmentActivity.this, "Phone Field Cannot Be Blank", Toast.LENGTH_SHORT).show();
+                    Log.d(LOG_TAG, "Phone Field Is Blank");
+                    return;
+
+                }
+                if(PhoneNumber.length()!=10)
+                {
+                    Toast.makeText(AppointmentActivity.this, "Invalid Phone Number", Toast.LENGTH_SHORT).show();
+                    Log.d(LOG_TAG, "Phone Field Is Not 10 Digit Long");
+                    return;
+
+                }
+                /*try
                     {
                         if(!isConnected()) {
                             Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
@@ -212,17 +227,30 @@ public class AppointmentActivity extends AppCompatActivity {
                     catch (Exception e)
                     {
                         Log.d(LOG_TAG,"Exception : "+e.getMessage());
-                    }
+                    }*/
 
-                    format = new SimpleDateFormat("dd/MM/yyyy");
-                    try {
-                        lastAppointment = format.parse(LatestDate);
-                        Log.d(LOG_TAG,"Converted Date : "+lastAppointment.toString());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                format = new SimpleDateFormat("dd/MM/yyyy");
+                try {
+                    lastAppointment = format.parse(LatestDate);
+                    Log.d(LOG_TAG,"Converted Date : "+lastAppointment.toString());
+                } catch (ParseException e) {
+                    Log.d(LOG_TAG,"LatestDateError : "+e.getMessage());
+
+                    if(FollowUpRB.isChecked())
+                    {
+                        Toast.makeText(AppointmentActivity.this, "Follow Up Appointment Cannot Be Booked", Toast.LENGTH_SHORT).show();
+                        newRB.setChecked(true);
+                        return;
                     }
-                    if(!newApt)
-                    {long duration  = requestedApt.getTime() - lastAppointment.getTime();
+                }
+                if(newRB.isChecked())
+                {
+                    Amount="300";
+                }
+                if(FollowUpRB.isChecked())
+                {
+
+                    long duration  = requestedApt.getTime() - lastAppointment.getTime();
                     long diffday = duration/(24 * 60 * 60 * 1000) +1;
                     int days =(int)diffday-1;
                     Log.d(LOG_TAG,"No of days between appointments : "+days);
@@ -246,12 +274,11 @@ public class AppointmentActivity extends AppCompatActivity {
                     {
                         Log.d(LOG_TAG,"Booking Follow Up Appointment");
                         Amount="150";
-                    }}
-                    else
-                        Amount="300";
-
-                    storeData();
+                    }
                 }
+
+                storeData();
+
             }
         });
 
@@ -381,11 +408,22 @@ public class AppointmentActivity extends AppCompatActivity {
 
         rName="";
         rName=FbAuth.getCurrentUser().getDisplayName();
-        PhoneNumber = FbAuth.getCurrentUser().getPhoneNumber().substring(3);
+        if(FbAuth.getCurrentUser().getPhoneNumber()!=null) {
+            PhoneNumber = FbAuth.getCurrentUser().getPhoneNumber().substring(3);
+            PhoneET.setText(PhoneNumber);
+        }
+        else
+            PhoneET.setText("");
+        if(rName!=null)
+        {
+            NameET.setText(rName);
+        }
+        else
+            NameET.setText("");
         Email=FbAuth.getCurrentUser().getEmail();
-        NameET.setText(rName);
+
         EmailET.setText(Email);
-        PhoneET.setText(PhoneNumber);
+
         //getLatestAppointment();
 
         try
@@ -481,10 +519,7 @@ public class AppointmentActivity extends AppCompatActivity {
                 {
                     Log.d(LOG_TAG,"Error : "+e.getMessage());
                 }
-
-
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 //Handle possible errors.
@@ -492,7 +527,6 @@ public class AppointmentActivity extends AppCompatActivity {
             }
         });
         //this may return null
-
     }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -547,32 +581,5 @@ public class AppointmentActivity extends AppCompatActivity {
             }
         }, time);
     }
-
-
 }
-    
-    
-    
-    /*
-   public void getLatestAppointment() {
-        //Not tested yet....(Change to Direction.Acending if required)
-       /*DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("userDB");
-       userRef.orderByChild("Phone").equalTo(PhoneNumber).addListenerForSingleValueEvent(new ValueEventListener() { 
-
-       UserDb2 = FirebaseDatabase.getInstance().getReference("users").child(FbAuth.getCurrentUser().getUid());
-        UserDb2.orderByChild("date").limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-
-
-                });
-    }*/
-    
 

@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Selection;
@@ -78,7 +77,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                 {
                     if(PhoneNumber.startsWith("+91"))
                     {
-                        try
+                        /*try
                         {
                             if(!isConnected()) {
                                 Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
@@ -95,7 +94,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                         catch (Exception e)
                         {
                             Log.d(LOG_TAG,"Exception : "+e.getMessage());
-                        }
+                        }*/
                         Progress.setMessage("Validating Mobile Number");
                         Progress.show();
 
@@ -144,7 +143,7 @@ public class OTPLoginActivity extends AppCompatActivity {
     private void checkPhoneNumberExists()
     {
         Log.d(LOG_TAG, "Entered  checkPhoneNumberExists");
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("userDB");
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("mobileDB");
         userRef.orderByChild("Phone").equalTo(PhoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override

@@ -359,11 +359,14 @@ public class ProfileActivity extends AppCompatActivity {
                 OLDPasswordET.setEnabled(false);
                 NEWPasswordET.setEnabled(false);
 
-                //TODO: Add code to check if old password matches. If matches, add code to change to new.
+
                 //TODO: Add code to update the data in the Database
-                //TODO: Add code to verify if Phone Number is verified. If not, display the message and the verify Button
-                VerifyMessage.setVisibility(View.VISIBLE);
-                VerifyNowBTN.setVisibility(View.VISIBLE);
+                if(user.getPhoneNumber()==null)
+                {
+                    VerifyMessage.setVisibility(View.VISIBLE);
+                    VerifyNowBTN.setVisibility(View.VISIBLE);
+                }
+
 
             }
         });
@@ -429,7 +432,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         final String PhoneNumber=Phone;
         PhoneNumberExists=false;
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("userDB");
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("mobileDB");
         userRef.orderByChild("Phone").equalTo(PhoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
