@@ -1,7 +1,9 @@
 package com.gtaandteam.android.wellcure;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -215,6 +217,23 @@ public class StatusActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
         return super.onKeyDown(keyCode, event);
+    }
+    public void timerDelayRemoveDialog(long time, final Dialog d){
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                try
+                {
+                    if(d.isShowing()) {
+                        d.dismiss();
+                        Toast.makeText(StatusActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.d(LOG_TAG,""+e.getMessage());
+                }
+            }
+        }, time);
     }
 
 }

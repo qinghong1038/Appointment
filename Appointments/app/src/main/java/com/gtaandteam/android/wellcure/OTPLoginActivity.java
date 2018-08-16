@@ -1,11 +1,14 @@
 package com.gtaandteam.android.wellcure;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Selection;
@@ -24,8 +27,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.io.IOException;
 
 public class OTPLoginActivity extends AppCompatActivity {
 
@@ -77,24 +78,17 @@ public class OTPLoginActivity extends AppCompatActivity {
                 {
                     if(PhoneNumber.startsWith("+91"))
                     {
-                        /*try
-                        {
-                            if(!isConnected()) {
-                                Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
-                                sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
-                                sb.show();
-                                Log.d(LOG_TAG,"No Internet");
-                                return;
-                            }
-                            else
-                            {
-                                Log.d(LOG_TAG,"Internet is connected");
-                            }
+                        if(!isConnected()) {
+                            Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
+                            sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
+                            sb.show();
+                            Log.d(LOG_TAG,"No Internet");
+                            return;
                         }
-                        catch (Exception e)
+                        else
                         {
-                            Log.d(LOG_TAG,"Exception : "+e.getMessage());
-                        }*/
+                            Log.d(LOG_TAG,"Internet is connected");
+                        }
                         Progress.setMessage("Validating Mobile Number");
                         Progress.show();
 
@@ -183,10 +177,19 @@ public class OTPLoginActivity extends AppCompatActivity {
         });
         Log.d(LOG_TAG, "Returning from checkPhoneNumberExists");
     }
-    public boolean isConnected() throws InterruptedException, IOException
+    public boolean isConnected()
     {
         String command = "ping -c 1 google.com";
-        return (Runtime.getRuntime().exec (command).waitFor() == 0);
+        Boolean isConnectedVar=false;
+        try{
+
+            isConnectedVar = (Runtime.getRuntime().exec (command).waitFor() == 0);
+        }
+        catch (Exception e)
+        {
+            Log.d(LOG_TAG,"Exception : "+e.getMessage());
+        }
+        return isConnectedVar;
     }
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -236,6 +239,23 @@ public class OTPLoginActivity extends AppCompatActivity {
             Log.d(LOG_TAG,"Other Acitivites Exist");
         }
         return super.onKeyDown(keyCode, event);
+    }
+    public void timerDelayRemoveDialog(long time, final Dialog d){
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                try
+                {
+                    if(d.isShowing()) {
+                        d.dismiss();
+                        Toast.makeText(OTPLoginActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.d(LOG_TAG,""+e.getMessage());
+                }
+            }
+        }, time);
     }
 
 }

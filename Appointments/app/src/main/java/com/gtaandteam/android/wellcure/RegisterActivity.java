@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Selection;
 import android.text.TextUtils;
@@ -26,8 +27,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.io.IOException;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -69,12 +68,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         if(FbAuth.getCurrentUser()!=null)
         {
-            //user already logged in. go directly to doctor activity
-            /*Toast.makeText(this, "Already signed in with Email : "+FbAuth.getCurrentUser().getEmail(), Toast.LENGTH_SHORT).show();
-            finish();
-            Intent i =new Intent(getApplicationContext(),DoctorsActivity.class);
-            i.putExtra("loginMode",0);
-            startActivity(i);*/
             FbAuth.signOut();
         }
 
@@ -90,6 +83,18 @@ public class RegisterActivity extends AppCompatActivity {
         RegisterBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideKeyboard(RegisterActivity.this);
+                if(!isConnected()) {
+                    Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
+                    sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
+                    sb.show();
+                    Log.d(LOG_TAG,"No Internet");
+                    return;
+                }
+                else
+                {
+                    Log.d(LOG_TAG,"Internet is connected");
+                }
                 registerUser();
             }
         });
@@ -167,56 +172,8 @@ public class RegisterActivity extends AppCompatActivity {
         Progress.setMessage("Registering Email ID ... ");
         Progress.setCancelable(false);
         Progress.show();
+        timerDelayRemoveDialog(30000,Progress);
         checkPhoneNumberExists();
-
-//        // if validations are ok we show a progress bar
-//        Log.d(LOG_TAG, "All good, Starting Registration");
-//        Progress.setMessage("Registering Email ID ... ");
-//        Progress.show();
-//        FbAuth.createUserWithEmailAndPassword(EmailId, Password)
-//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        Progress.dismiss();
-//                        if (task.isSuccessful()) {
-//                            //user successfully registered
-//                            Log.d(LOG_TAG, "Email account successfully created.");
-//                            Toast.makeText(RegisterActivity.this, "Email registered successfully.", Toast.LENGTH_SHORT).show();
-//                            //finish();
-//                            //startActivity(new Intent(getApplicationContext(), EmailLoginActivity.class));
-//
-//                            Log.d(LOG_TAG, "Proceeding to link Mobile Number with Email ID");
-//                            Toast.makeText(RegisterActivity.this, "Proceeding to link mobile number with Email ID", Toast.LENGTH_SHORT).show();
-////                            Progress.setMessage("Sending OTP");
-////                            Progress.show();
-//                            PhoneNumberExists =false;
-//                            if(PhoneNumberExists)
-//                            {
-//                                Log.d(LOG_TAG, "Phone number already registered with another account");
-//                                Toast.makeText(RegisterActivity.this, "Phone number already registered with another account.", Toast.LENGTH_SHORT).show();
-//                            }
-//                            else
-//                            {
-//                                Log.d(LOG_TAG, "All good, Calling OTP Function sendCode()");
-//                                Intent intent = new Intent(RegisterActivity.this, OTPopUp.class);
-//                                intent.putExtra("PhoneNumber", PhoneNumber);
-//                                intent.putExtra("Parent", LOG_TAG);
-//                                intent.putExtra("EmailId",EmailId);
-//                                intent.putExtra("Password",Password);
-//                                Log.d(LOG_TAG, "Done. Exiting setUpVerificationCallbacks() ");
-//                                startActivity(intent);
-//                            }
-//
-//                        } else {
-//                            Toast.makeText(RegisterActivity.this, "Couldn't register. Please try again.", Toast.LENGTH_SHORT).show();
-//                            Log.d(LOG_TAG, "Couldn't create Email Account");
-//                            //TODO: DISPLAY EXCEPTION MESSAGE AS TO WHY REGISTRATION COULDN'T OCCUR. I KNOW THE CODE. WILL ADD IT SOON.
-//                            //TODO: OK.
-//                        }
-//                    }
-//                });
-
-
     }
 
 
@@ -302,17 +259,33 @@ public class RegisterActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         Log.d("OTPLoginActivity","Keyboard Closed");
     }
-    public boolean isConnected() throws InterruptedException, IOException
+    public boolean isConnected()
     {
         String command = "ping -c 1 google.com";
-        return (Runtime.getRuntime().exec (command).waitFor() == 0);
+        Boolean isConnectedVar=false;
+        try{
+
+            isConnectedVar = (Runtime.getRuntime().exec (command).waitFor() == 0);
+        }
+        catch (Exception e)
+        {
+            Log.d(LOG_TAG,"Exception : "+e.getMessage());
+        }
+        return isConnectedVar;
     }
     public void timerDelayRemoveDialog(long time, final Dialog d){
         new Handler().postDelayed(new Runnable() {
             public void run() {
-                if(d.isShowing()) {
-                    d.dismiss();
-                    Toast.makeText(RegisterActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                try
+                {
+                    if(d.isShowing()) {
+                        d.dismiss();
+                        Toast.makeText(RegisterActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.d(LOG_TAG,""+e.getMessage());
                 }
             }
         }, time);

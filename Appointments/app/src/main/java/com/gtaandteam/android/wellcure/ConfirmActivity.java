@@ -1,15 +1,19 @@
 package com.gtaandteam.android.wellcure;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.StartCheckoutEvent;
@@ -17,7 +21,6 @@ import com.crashlytics.android.answers.StartCheckoutEvent;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Currency;
 
@@ -139,24 +142,17 @@ public class ConfirmActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                /*try
-                {
-                    if(!isConnected()) {
-                        Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
-                        sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
-                        sb.show();
-                        Log.d(LOG_TAG,"No Internet");
-                        return;
-                    }
-                    else
-                    {
-                        Log.d(LOG_TAG,"Internet is connected");
-                    }
+                if(!isConnected()) {
+                    Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
+                    sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
+                    sb.show();
+                    Log.d(LOG_TAG,"No Internet");
+                    return;
                 }
-                catch (Exception e)
+                else
                 {
-                    Log.d(LOG_TAG,"Exception : "+e.getMessage());
-                }*/
+                    Log.d(LOG_TAG,"Internet is connected");
+                }
                 Answers.getInstance().logStartCheckout(new StartCheckoutEvent()
                         .putTotalPrice(BigDecimal.valueOf(Double.parseDouble(Amount)))
                         .putCurrency(Currency.getInstance("INR"))
@@ -165,10 +161,36 @@ public class ConfirmActivity extends AppCompatActivity {
             }
         });
     }
-    public boolean isConnected() throws InterruptedException, IOException
+    public boolean isConnected()
     {
         String command = "ping -c 1 google.com";
-        return (Runtime.getRuntime().exec (command).waitFor() == 0);
+        Boolean isConnectedVar=false;
+        try{
+
+            isConnectedVar = (Runtime.getRuntime().exec (command).waitFor() == 0);
+        }
+        catch (Exception e)
+        {
+            Log.d(LOG_TAG,"Exception : "+e.getMessage());
+        }
+        return isConnectedVar;
+    }
+    public void timerDelayRemoveDialog(long time, final Dialog d){
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                try
+                {
+                    if(d.isShowing()) {
+                        d.dismiss();
+                        Toast.makeText(ConfirmActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.d(LOG_TAG,""+e.getMessage());
+                }
+            }
+        }, time);
     }
 
 }

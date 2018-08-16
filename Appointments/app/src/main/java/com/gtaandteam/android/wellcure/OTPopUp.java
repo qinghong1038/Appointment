@@ -122,7 +122,7 @@ public class OTPopUp extends Activity {
                     Progress.setMessage("Verifying OTP");
                     Progress.setCancelable(false);
                     Progress.show();
-                   // timerDelayRemoveDialog(10000,Progress);
+                    timerDelayRemoveDialog(30000,Progress);
                     if(!AutoEnteredOTP)
                         OTPET.setText("");
                     hideKeyboard(OTPopUp.this);
@@ -218,8 +218,28 @@ public class OTPopUp extends Activity {
         Progress.setMessage("Sending OTP");
         Progress.setCancelable(false);
         Progress.show();
-        //timerDelayRemoveDialog(10000,Progress);
+        timerDelayRemoveDialog(30000,Progress);
         sendCode();
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+
+                if(!VerificationCompleted)
+                {
+                    try {
+                        AlertDialog dialog = Pbuilder.create();
+                        dialog.show();
+                    }
+                    catch (Exception e)
+                    {
+                        Log.d(LOG_TAG,""+e.getMessage());
+                    }
+
+                }
+
+
+            }
+
+        }, 30000);
     }
 
 
@@ -329,21 +349,9 @@ public class OTPopUp extends Activity {
 
 
 
-                        new Handler().postDelayed(new Runnable() {
-                            public void run() {
 
-                                if(!VerificationCompleted)
-                                {
-                                    AlertDialog dialog = Pbuilder.create();
-                                    dialog.show();
-                                }
-
-
-                            }
-
-                        }, 30000);
-                        Log.d(LOG_TAG,"This log was nnot delayed");
-                        Toast.makeText(OTPopUp.this, "This toast was not delayed", Toast.LENGTH_SHORT).show();
+                        Log.d(LOG_TAG,"This log was not delayed");
+                        //Toast.makeText(OTPopUp.this, "This toast was not delayed", Toast.LENGTH_SHORT).show();
 
                     }
                 };
@@ -551,15 +559,19 @@ public class OTPopUp extends Activity {
         String command = "ping -c 1 google.com";
         return (Runtime.getRuntime().exec (command).waitFor() == 0);
     }
-    public void timerDelayShowDialog(long time){
-
-    }
     public void timerDelayRemoveDialog(long time, final Dialog d){
         new Handler().postDelayed(new Runnable() {
             public void run() {
-                if(d.isShowing()) {
-                    d.dismiss();
-                    Toast.makeText(OTPopUp.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                try
+                {
+                    if(d.isShowing()) {
+                        d.dismiss();
+                        Toast.makeText(OTPopUp.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.d(LOG_TAG,""+e.getMessage());
                 }
             }
         }, time);

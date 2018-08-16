@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,7 +29,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -93,25 +93,17 @@ public class DoctorsActivity extends AppCompatActivity {
         AppointmentBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //checkUserExists();
-                /*try
-                {
-                    if(!isConnected()) {
-                        Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
-                        sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
-                        sb.show();
-                        Log.d(LOG_TAG,"No Internet");
-                        return;
-                    }
-                    else
-                    {
-                        Log.d(LOG_TAG,"Internet is connected");
-                    }
+                if(!isConnected()) {
+                    Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
+                    sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
+                    sb.show();
+                    Log.d(LOG_TAG,"No Internet");
+                    return;
                 }
-                catch (Exception e)
+                else
                 {
-                    Log.d(LOG_TAG,"Exception : "+e.getMessage());
-                }*/
+                    Log.d(LOG_TAG,"Internet is connected");
+                }
                 Intent intent = new Intent(DoctorsActivity.this, AppointmentActivity.class);
                 intent.putExtra("loginMode",loginMode);
                 intent.putExtra("UserExists", UserExists);
@@ -274,17 +266,33 @@ public class DoctorsActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
-    public boolean isConnected() throws InterruptedException, IOException
+    public boolean isConnected()
     {
         String command = "ping -c 1 google.com";
-        return (Runtime.getRuntime().exec (command).waitFor() == 0);
+        Boolean isConnectedVar=false;
+        try{
+
+            isConnectedVar = (Runtime.getRuntime().exec (command).waitFor() == 0);
+        }
+        catch (Exception e)
+        {
+            Log.d(LOG_TAG,"Exception : "+e.getMessage());
+        }
+        return isConnectedVar;
     }
     public void timerDelayRemoveDialog(long time, final Dialog d){
         new Handler().postDelayed(new Runnable() {
             public void run() {
-                if(d.isShowing()) {
-                    d.dismiss();
-                    Toast.makeText(DoctorsActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                try
+                {
+                    if(d.isShowing()) {
+                        d.dismiss();
+                        Toast.makeText(DoctorsActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.d(LOG_TAG,""+e.getMessage());
                 }
             }
         }, time);

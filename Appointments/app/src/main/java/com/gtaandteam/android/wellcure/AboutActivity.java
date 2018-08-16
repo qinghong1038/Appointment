@@ -4,11 +4,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.io.IOException;
 
 public class AboutActivity extends AppCompatActivity {
 
@@ -65,9 +64,18 @@ public class AboutActivity extends AppCompatActivity {
         });
 
     }
-    public boolean isConnected() throws InterruptedException, IOException
+    public boolean isConnected()
     {
         String command = "ping -c 1 google.com";
-        return (Runtime.getRuntime().exec (command).waitFor() == 0);
+        Boolean isConnectedVar=false;
+        try{
+
+            isConnectedVar = (Runtime.getRuntime().exec (command).waitFor() == 0);
+        }
+        catch (Exception e)
+        {
+            Log.d("AboutActivity","Exception : "+e.getMessage());
+        }
+        return isConnectedVar;
     }
 }

@@ -1,11 +1,14 @@
 package com.gtaandteam.android.wellcure;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -24,8 +27,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.io.IOException;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -106,6 +107,17 @@ public class EmailLoginActivity extends AppCompatActivity {
                     //startActivity(i);
                     FbAuth.signOut();
                 }
+                if(!isConnected()) {
+                    Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
+                    sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
+                    sb.show();
+                    Log.d(LOG_TAG,"No Internet");
+                    return;
+                }
+                else
+                {
+                    Log.d(LOG_TAG,"Internet is connected");
+                }
                 userLogin(view);
 
             }
@@ -133,7 +145,7 @@ public class EmailLoginActivity extends AppCompatActivity {
                 String emailAddress = UsernameET.getText().toString().trim();
                 if(emailAddress.equals(""))
                 {
-                    Toast.makeText(EmailLoginActivity.this, "Please Enter The EmailET ID and Try Again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EmailLoginActivity.this, "Please Enter The Email ID and Try Again", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
@@ -142,8 +154,8 @@ public class EmailLoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        Log.d("App", "EmailET sent.");
-                                        Toast.makeText(EmailLoginActivity.this, "EmailET with Reset Link Sent", Toast.LENGTH_SHORT).show();
+                                        Log.d(LOG_TAG, "Email sent.");
+                                        Toast.makeText(EmailLoginActivity.this, "Email with Reset Link Sent", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -168,29 +180,13 @@ public class EmailLoginActivity extends AppCompatActivity {
             return;
 
         }
-        /*try
-        {
-            if(!isConnected()) {
-                Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
-                sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
-                sb.show();
-                Log.d(LOG_TAG,"No Internet");
-                return;
-            }
-            else
-            {
-                Log.d(LOG_TAG,"Internet is connected");
-            }
-        }
-        catch (Exception e)
-        {
-            Log.d(LOG_TAG,"Exception : "+e.getMessage());
-        }*/
+
 
 
         Progress.setMessage("Logging In");
         Progress.setCancelable(false);
         Progress.show();
+        timerDelayRemoveDialog(20000,Progress);
         FbAuth.signInWithEmailAndPassword(email,pass)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -261,10 +257,19 @@ public class EmailLoginActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
-    public boolean isConnected() throws InterruptedException, IOException
+    public boolean isConnected()
     {
         String command = "ping -c 1 google.com";
-        return (Runtime.getRuntime().exec (command).waitFor() == 0);
+        Boolean isConnectedVar=false;
+        try{
+
+            isConnectedVar = (Runtime.getRuntime().exec (command).waitFor() == 0);
+        }
+        catch (Exception e)
+        {
+            Log.d(LOG_TAG,"Exception : "+e.getMessage());
+        }
+        return isConnectedVar;
     }
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -276,6 +281,23 @@ public class EmailLoginActivity extends AppCompatActivity {
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         Log.d("EmailLoginActivity","Keyboard Closed");
+    }
+    public void timerDelayRemoveDialog(long time, final Dialog d){
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                try
+                {
+                    if(d.isShowing()) {
+                        d.dismiss();
+                        Toast.makeText(EmailLoginActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.d(LOG_TAG,""+e.getMessage());
+                }
+            }
+        }, time);
     }
 
 

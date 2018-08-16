@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -42,7 +43,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -112,6 +112,7 @@ public class AppointmentActivity extends AppCompatActivity {
         Progress.setMessage("Loading Details of User");
         Progress.setCancelable(false);
         Progress.show();
+        timerDelayRemoveDialog(30000,Progress);
 
         BookAndPayBTN.setVisibility(View.GONE); //In order to avoid invalid inputs
         DateET.setOnClickListener(new View.OnClickListener() {
@@ -168,20 +169,6 @@ public class AppointmentActivity extends AppCompatActivity {
             }
         };
 
-        /*EmailET.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(AppointmentActivity.this, "Not Allowed To Change Email", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        PhoneET.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(AppointmentActivity.this, "Not Allowed To Change Phone Number", Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
         BookAndPayBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -210,24 +197,17 @@ public class AppointmentActivity extends AppCompatActivity {
                     return;
 
                 }
-                /*try
-                    {
-                        if(!isConnected()) {
-                            Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
-                            sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
-                            sb.show();
-                            Log.d(LOG_TAG,"No Internet");
-                            return;
-                        }
-                        else
-                        {
-                            Log.d(LOG_TAG,"Internet is connected");
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Log.d(LOG_TAG,"Exception : "+e.getMessage());
-                    }*/
+                if(!isConnected()) {
+                    Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
+                    sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
+                    sb.show();
+                    Log.d(LOG_TAG,"No Internet");
+                    return;
+                }
+                else
+                {
+                    Log.d(LOG_TAG,"Internet is connected");
+                }
 
                 format = new SimpleDateFormat("dd/MM/yyyy");
                 try {
@@ -367,8 +347,9 @@ public class AppointmentActivity extends AppCompatActivity {
         //FirstName = NameET.getText().toString().trim();
         //second_name=etSecondName.getText().toString();
         Progress2.setMessage("Loading Confirmation");
-        Progress.setCancelable(false);
+        Progress2.setCancelable(false);
         Progress2.show();
+        timerDelayRemoveDialog(30000,Progress2);
         rName=FbAuth.getCurrentUser().getDisplayName();
         if (TextUtils.isEmpty(rName)) {
             updateDisplayName(FirstName);
@@ -566,17 +547,33 @@ public class AppointmentActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
-    public boolean isConnected() throws InterruptedException, IOException
+    public boolean isConnected()
     {
         String command = "ping -c 1 google.com";
-        return (Runtime.getRuntime().exec (command).waitFor() == 0);
+        Boolean isConnectedVar=false;
+        try{
+
+            isConnectedVar = (Runtime.getRuntime().exec (command).waitFor() == 0);
+        }
+        catch (Exception e)
+        {
+            Log.d(LOG_TAG,"Exception : "+e.getMessage());
+        }
+        return isConnectedVar;
     }
     public void timerDelayRemoveDialog(long time, final Dialog d){
         new Handler().postDelayed(new Runnable() {
             public void run() {
-                if(d.isShowing()) {
-                    d.dismiss();
-                    Toast.makeText(AppointmentActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                try
+                {
+                    if(d.isShowing()) {
+                        d.dismiss();
+                        Toast.makeText(AppointmentActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.d(LOG_TAG,""+e.getMessage());
                 }
             }
         }, time);

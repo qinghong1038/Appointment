@@ -1,9 +1,13 @@
 package com.gtaandteam.android.wellcure;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Selection;
@@ -11,6 +15,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -187,6 +192,17 @@ public class ProfileActivity extends AppCompatActivity {
         EditBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!isConnected()) {
+                    Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
+                    sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
+                    sb.show();
+                    Log.d(LOG_TAG,"No Internet");
+                    return;
+                }
+                else
+                {
+                    Log.d(LOG_TAG,"Internet is connected");
+                }
                 Log.d(LOG_TAG,"Entered EditButton");
                 Log.d(LOG_TAG,"Email ID : "+Email);
                 Log.d(LOG_TAG,"Phone : "+Phone);
@@ -275,6 +291,18 @@ public class ProfileActivity extends AppCompatActivity {
         SaveChangesBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideKeyboard(ProfileActivity.this);
+                if(!isConnected()) {
+                    Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
+                    sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
+                    sb.show();
+                    Log.d(LOG_TAG,"No Internet");
+                    return;
+                }
+                else
+                {
+                    Log.d(LOG_TAG,"Internet is connected");
+                }
                 EditMode=true;
                 SaveChangesBTN.setVisibility(View.INVISIBLE);
                 EditButtonImg.setVisibility(View.VISIBLE);
@@ -375,6 +403,18 @@ public class ProfileActivity extends AppCompatActivity {
         VerifyNowBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideKeyboard(ProfileActivity.this);
+                if(!isConnected()) {
+                    Snackbar sb = Snackbar.make(view, "No Internet Connectivity", Snackbar.LENGTH_LONG);
+                    sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
+                    sb.show();
+                    Log.d(LOG_TAG,"No Internet");
+                    return;
+                }
+                else
+                {
+                    Log.d(LOG_TAG,"Internet is connected");
+                }
                 if(user.getPhoneNumber()!=null)
                     return;
                 String PhoneNumber=PhoneET.getText().toString().trim().replaceAll(" ", "" );
@@ -486,5 +526,47 @@ public class ProfileActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+    public void timerDelayRemoveDialog(long time, final Dialog d){
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                try
+                {
+                    if(d.isShowing()) {
+                        d.dismiss();
+                        Toast.makeText(ProfileActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.d(LOG_TAG,""+e.getMessage());
+                }
+            }
+        }, time);
+    }
+    public boolean isConnected()
+    {
+        String command = "ping -c 1 google.com";
+        Boolean isConnectedVar=false;
+        try{
+
+            isConnectedVar = (Runtime.getRuntime().exec (command).waitFor() == 0);
+        }
+        catch (Exception e)
+        {
+            Log.d(LOG_TAG,"Exception : "+e.getMessage());
+        }
+        return isConnectedVar;
+    }
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        Log.d("OTPLoginActivity","Keyboard Closed");
     }
 }
