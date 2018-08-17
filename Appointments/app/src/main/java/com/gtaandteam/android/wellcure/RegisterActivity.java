@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Selection;
 import android.text.TextUtils;
@@ -40,7 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
     Button LoginBTN, RegisterBTN;
     EditText UsernameET, PhoneNumberET, PasswordET, ConfirmPasswordET;
     static ProgressDialog Progress;
-
+    android.support.v7.widget.Toolbar MyToolbar;
     /**Firebase*/
     private FirebaseAuth FbAuth;
 
@@ -65,6 +66,12 @@ public class RegisterActivity extends AppCompatActivity {
         PhoneNumberET.setText("+91 ");
         Progress =new ProgressDialog(this);
 
+
+        MyToolbar = findViewById(R.id.MyToolbar);
+        setSupportActionBar(MyToolbar);
+        ActionBar ab = getSupportActionBar();
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
 
         if(FbAuth.getCurrentUser()!=null)
         {

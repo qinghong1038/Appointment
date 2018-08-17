@@ -5,6 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".OTPLoginActivity">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/MyToolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/PhoneOTPLayout"
@@ -12,11 +23,13 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
         android:layout_marginStart="40dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.4">
+        app:layout_constraintTop_toBottomOf="@+id/MyToolbar"
+        app:layout_constraintVertical_bias="0.331">
 
 
         <EditText

@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".EmailLoginActivity"
+            android:name=".WelcomeActivity"
             android:label="Wellcure Clinic"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -29,11 +29,16 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity><activity
+            android:name=".EmailLoginActivity"
+        android:parentActivityName=".WelcomeActivity"
+
+        android:label="Login using EMail "
+
+        android:screenOrientation="portrait" />
         <activity
             android:name=".AppointmentActivity"
             android:label="New Appointment"
-            android:parentActivityName=".DoctorsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".DoctorsActivity"
@@ -42,10 +47,13 @@
         <activity
             android:name=".RegisterActivity"
             android:label="Register"
+            android:parentActivityName=".WelcomeActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".OTPLoginActivity"
             android:label="Login using OTP"
+            android:parentActivityName=".WelcomeActivity"
+
             android:screenOrientation="portrait" />
         <activity
             android:name=".StatusActivity"
@@ -79,11 +87,10 @@
             android:value="80547909762a12903a49cd9f0b3e3467762a2231" />
 
         <activity android:name=".AboutActivity" />
-        <activity android:name=".ProfileActivity"
+        <activity
+            android:name=".ProfileActivity"
             android:label="Personal Details"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

@@ -9,8 +9,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Selection;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -43,6 +45,9 @@ public class OTPLoginActivity extends AppCompatActivity {
     Button RegisterBTN;
     /**Firebase*/
 
+    Toolbar MyToolbar;
+
+
     final String LOG_TAG = this.getClass().getSimpleName();
 
 
@@ -64,6 +69,13 @@ public class OTPLoginActivity extends AppCompatActivity {
             }
         });
         Progress =new ProgressDialog(this);
+
+
+        MyToolbar = findViewById(R.id.MyToolbar);
+        setSupportActionBar(MyToolbar);
+        ActionBar ab = getSupportActionBar();
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
 
         PhoneOTPTV.setText("+91 ");
         Selection.setSelection(PhoneOTPTV.getText(), PhoneOTPTV.getText().length());

@@ -5,6 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.gtaandteam.android.wellcure.EmailLoginActivity">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/MyToolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <LinearLayout
         android:id="@+id/LoginLayout"
@@ -17,8 +28,10 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/MyToolbar"
+        app:layout_constraintVertical_bias="0.369">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/username_layout"
@@ -43,10 +56,10 @@
 
             <EditText
                 android:id="@+id/PasswordET"
+                style="@style/ETStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Password"
-                style="@style/ETStyle"
                 android:inputType="textPassword"
                 android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
