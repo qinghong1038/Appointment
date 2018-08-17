@@ -14,12 +14,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.PurchaseEvent;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.math.BigDecimal;
+import java.util.Currency;
 import java.util.HashMap;
 
 public class StatusActivity extends AppCompatActivity {
@@ -93,6 +97,11 @@ public class StatusActivity extends AppCompatActivity {
             StatusMessageTV.setText("You have Successfully Made a Booking!");
             StatusHeaderTV.setText("SUCCESS!");
             addAppointmentToDatabase();
+            Answers.getInstance().logPurchase(new PurchaseEvent()
+                    .putItemPrice(BigDecimal.valueOf(Double.parseDouble(Amount)))
+                    .putCurrency(Currency.getInstance("INR"))
+                    .putItemName(AppointmentActivity.aptType)
+                    .putSuccess(true));
 
         }
         else
@@ -106,7 +115,11 @@ public class StatusActivity extends AppCompatActivity {
             BookingLabel.setVisibility(View.INVISIBLE);
             BookingDateTV.setVisibility(View.INVISIBLE);
             AppointmentDateTV.setVisibility(View.INVISIBLE);
-
+            Answers.getInstance().logPurchase(new PurchaseEvent()
+                    .putItemPrice(BigDecimal.valueOf(Double.parseDouble(Amount)))
+                    .putCurrency(Currency.getInstance("INR"))
+                    .putItemName(AppointmentActivity.aptType)
+                    .putSuccess(false));
 
 
         }
