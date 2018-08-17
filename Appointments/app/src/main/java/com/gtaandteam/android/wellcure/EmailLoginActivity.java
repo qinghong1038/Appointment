@@ -232,38 +232,38 @@ public class EmailLoginActivity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             Log.d(LOG_TAG, "back button pressed");
-        }
-        if(isTaskRoot())
-        {
-            Log.d(LOG_TAG,"No other Acitivites Exist");
-            AlertDialog.Builder builder = new AlertDialog.Builder(
-                    new ContextThemeWrapper(EmailLoginActivity.this, R.style.AlertDialogCustom));
-            builder.setCancelable(true);
-            builder.setTitle("Exit App");
-            builder.setMessage("Are you sure you want to Exit?");
-            builder.setPositiveButton("YES",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Log.d(LOG_TAG,"Exiting App");
-                            finishAffinity();
 
-                        }
-                    });
-            builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
+            if (isTaskRoot()) {
+                Log.d(LOG_TAG, "No other Acitivites Exist");
+                AlertDialog.Builder builder = new AlertDialog.Builder(
+                        new ContextThemeWrapper(EmailLoginActivity.this, R.style.AlertDialogCustom));
+                builder.setCancelable(true);
+                builder.setTitle("Exit App");
+                builder.setMessage("Are you sure you want to Exit?");
+                builder.setPositiveButton("YES",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.d(LOG_TAG, "Exiting App");
+                                finishAffinity();
 
-            AlertDialog dialog = builder.create();
-            dialog.show();
+                            }
+                        });
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            } else {
+                Log.d(LOG_TAG, "Other Activites Exist");
+            }
         }
-        else
-        {
-            Log.d(LOG_TAG,"Other Acitivites Exist");
-        }
+        if ((keyCode == KeyEvent.KEYCODE_DEL))
+            Log.d(LOG_TAG,"Backspace Pressed");
         return super.onKeyDown(keyCode, event);
     }
     public boolean isConnected()

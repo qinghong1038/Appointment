@@ -31,6 +31,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.answers.AddToCartEvent;
+import com.crashlytics.android.answers.Answers;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,9 +45,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -56,6 +60,7 @@ public class AppointmentActivity extends AppCompatActivity {
     int Year, Month, Day;
     String FirstName, Email, PhoneNumber, Date;
     String rName, Amount; //retrieved files from database
+    static String aptType="";
     HashMap<String, String> Data;
     static String SelectedDate, TodaysDate;
     Boolean UserExists, newApt=true;
@@ -226,6 +231,7 @@ public class AppointmentActivity extends AppCompatActivity {
                 if(newRB.isChecked())
                 {
                     Amount="300";
+                    aptType="New Appointment";
                 }
                 if(FollowUpRB.isChecked())
                 {
@@ -254,9 +260,13 @@ public class AppointmentActivity extends AppCompatActivity {
                     {
                         Log.d(LOG_TAG,"Booking Follow Up Appointment");
                         Amount="150";
+                        aptType="Follow Up Appointment";
                     }
                 }
-
+                Answers.getInstance().logAddToCart(new AddToCartEvent()
+                        .putItemPrice(BigDecimal.valueOf(Double.parseDouble(Amount)))
+                        .putCurrency(Currency.getInstance("INR"))
+                        .putItemName(aptType));
                 storeData();
 
             }
@@ -513,38 +523,38 @@ public class AppointmentActivity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             Log.d(LOG_TAG, "back button pressed");
-        }
-        if(isTaskRoot())
-        {
-            Log.d(LOG_TAG,"No other Activities Exist");
-            AlertDialog.Builder builder = new AlertDialog.Builder(
-                    new ContextThemeWrapper(AppointmentActivity.this, R.style.AlertDialogCustom));
-            builder.setCancelable(true);
-            builder.setTitle("Exit App");
-            builder.setMessage("Are you sure you want to Exit?");
-            builder.setPositiveButton("YES",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Log.d(LOG_TAG,"Exiting App");
-                            finishAffinity();
 
-                        }
-                    });
-            builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
+            if (isTaskRoot()) {
+                Log.d(LOG_TAG, "No other Acitivites Exist");
+                AlertDialog.Builder builder = new AlertDialog.Builder(
+                        new ContextThemeWrapper(AppointmentActivity.this, R.style.AlertDialogCustom));
+                builder.setCancelable(true);
+                builder.setTitle("Exit App");
+                builder.setMessage("Are you sure you want to Exit?");
+                builder.setPositiveButton("YES",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.d(LOG_TAG, "Exiting App");
+                                finishAffinity();
 
-            AlertDialog dialog = builder.create();
-            dialog.show();
+                            }
+                        });
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            } else {
+                Log.d(LOG_TAG, "Other Activites Exist");
+            }
         }
-        else
-        {
-            Log.d(LOG_TAG,"Other Activities Exist");
-        }
+        if ((keyCode == KeyEvent.KEYCODE_DEL))
+            Log.d(LOG_TAG,"Backspace Pressed");
         return super.onKeyDown(keyCode, event);
     }
     public boolean isConnected()
