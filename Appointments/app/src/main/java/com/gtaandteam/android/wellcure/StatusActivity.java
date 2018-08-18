@@ -201,6 +201,9 @@ public class StatusActivity extends AppCompatActivity {
         Log.d(LOG_TAG,"Hashmap Done");
         String date;
         date=AppointmentActivity.TodaysDate.replaceAll("/", "-");
+        Time today = new Time(Time.getCurrentTimezone());
+        today.setToNow();
+        date=date+","+String.valueOf(today.hour)+String.valueOf(today.minute)+String.valueOf(today.second);
         UserDb1 = FirebaseDatabase.getInstance().getReference().child("txnDetails");
         UserDb1.child(FbAuth.getCurrentUser().getUid()).child(date).setValue(Data).addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
