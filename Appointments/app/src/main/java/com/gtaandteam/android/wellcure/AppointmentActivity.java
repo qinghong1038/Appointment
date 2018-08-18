@@ -163,6 +163,16 @@ public class AppointmentActivity extends AppCompatActivity {
                 else if(days==0)
                 {
                     BookingTypeTV.setText("Appointment Date Should Be \nMinimum 2 Days Later\n\nChoose A New Date");
+
+                    int date1=endDate.getDate();
+                    int date2=startDate.getDate();
+                    int diff=(date1-date2);
+                    if(diff==0)
+                    {
+                        BookingTypeTV.setText("Booking Appointment for Today");
+                    }
+                    else if(diff==1)
+                        BookingTypeTV.setText("Booking Appointment for Tomorrow");
                     BookAndPayBTN.setVisibility(View.INVISIBLE);
                 }
                 else {
