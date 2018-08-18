@@ -513,6 +513,7 @@ public class AppointmentActivity extends AppCompatActivity {
                     builder.deleteCharAt(LatestDate.length() - 2);
                     latestDate=builder.toString();
                     LatestDate=latestDate.replaceAll("-", "/");
+                    LatestDate=LatestDate.substring(0, LatestDate.indexOf(","));
                     Log.d(LOG_TAG,"Done fetching Latest Date : "+latestDate);
                     newApt=true;
                 }
