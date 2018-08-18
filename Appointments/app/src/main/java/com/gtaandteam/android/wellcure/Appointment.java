@@ -1,5 +1,5 @@
 package com.gtaandteam.android.wellcure;
-
+import android.text.format.Time;
 public class Appointment {
 
 //This class will be used to store information regarding a patient's Appointments in a well structured format
@@ -83,6 +83,9 @@ public class Appointment {
     }
 
     public String getmBookedOn() {
-        return mBookedOn;
+        Time today = new Time(Time.getCurrentTimezone());
+        today.setToNow();
+        return mBookedOn+','+String.valueOf(today.hour)+String.valueOf(today.minute)
+                +String.valueOf(today.second);
     }
 }
