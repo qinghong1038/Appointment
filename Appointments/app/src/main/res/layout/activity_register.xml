@@ -43,6 +43,7 @@
 
             <EditText
                 android:id="@+id/UserNameET"
+                style="@style/ETStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter Email ID"
@@ -59,6 +60,7 @@
 
             <EditText
                 android:id="@+id/PhoneNumberET"
+                style="@style/ETStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter Mobile No."
@@ -74,6 +76,7 @@
 
             <EditText
                 android:id="@+id/PasswordET"
+                style="@style/ETStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Create Password"
@@ -87,6 +90,7 @@
             android:layout_height="wrap_content">
 
             <EditText
+                style="@style/ETStyle"
                 android:id="@+id/ConfirmPasswordET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

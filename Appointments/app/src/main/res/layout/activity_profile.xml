@@ -252,6 +252,7 @@
             <EditText
                 android:id="@+id/OLDPasswordET"
                 android:layout_width="match_parent"
+                style="@style/ETStyle"
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:hint="Enter New Password"
@@ -267,6 +268,7 @@
 
             <EditText
                 android:id="@+id/NEWPasswordET"
+                style="@style/ETStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
