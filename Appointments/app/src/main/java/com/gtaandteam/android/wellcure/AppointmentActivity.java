@@ -174,7 +174,7 @@ public class AppointmentActivity extends AppCompatActivity {
                     }
                     else if(diff==1)
                         BookingTypeTV.setText("Booking Appointment for Tomorrow");
-                    BookAndPayBTN.setVisibility(View.INVISIBLE);
+                    BookAndPayBTN.setVisibility(View.VISIBLE);
                 }
                 else {
                     BookingTypeTV.setText("Number of Days till Appointment: "+days);
