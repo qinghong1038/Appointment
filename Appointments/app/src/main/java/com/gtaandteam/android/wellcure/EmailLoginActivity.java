@@ -238,7 +238,7 @@ public class EmailLoginActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(
                         new ContextThemeWrapper(EmailLoginActivity.this, R.style.AlertDialogCustom));
                 builder.setCancelable(true);
-                builder.setTitle("Exit App");
+                builder.setTitle("Exit App  ");
                 builder.setMessage("Are you sure you want to Exit?");
                 builder.setPositiveButton("YES",
                         new DialogInterface.OnClickListener() {

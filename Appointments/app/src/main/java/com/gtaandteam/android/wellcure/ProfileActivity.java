@@ -215,6 +215,8 @@ public class ProfileActivity extends AppCompatActivity {
                     NameET.setVisibility(View.VISIBLE);
                     EmailET.setVisibility(View.VISIBLE);
                     PhoneET.setVisibility(View.VISIBLE);
+                    if(user.getPhoneNumber()!=null)
+                        PhoneET.setFocusable(false);
                     NameTV.setVisibility(View.INVISIBLE);
                     EmailTV.setVisibility(View.INVISIBLE);
                     PhoneTV.setVisibility(View.INVISIBLE);

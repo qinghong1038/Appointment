@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.text.format.Time;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.PurchaseEvent;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -147,6 +147,18 @@ public class StatusActivity extends AppCompatActivity {
         newAppointment = new Appointment(PatientName,DoctorName,AppointmentDate,BookingDate, Fees);
         String date;
         date=AppointmentDate.replaceAll("/", "-");
+        Time today = new Time(Time.getCurrentTimezone());
+        today.setToNow();
+        String hr=String.valueOf(today.hour);
+        if(hr.length()==1){ hr= "0" + hr;}
+        String min=String.valueOf(today.minute);
+        if(min.length()==1){ min= "0" + min;}
+        String sec=String.valueOf(today.second);
+        if(sec.length()==1){ sec= "0" + sec;}
+        
+        String timeStamp=hr+":"
+                +min+":"+sec;
+        date=date+','+timeStamp;
         UserDb1 = FirebaseDatabase.getInstance().getReference().child("appointmentDB");
         UserDb1.child(FbAuth.getCurrentUser().getUid()).child(date).setValue(newAppointment).addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
@@ -196,6 +208,16 @@ public class StatusActivity extends AppCompatActivity {
         Log.d(LOG_TAG,"Hashmap Done");
         String date;
         date=AppointmentActivity.TodaysDate.replaceAll("/", "-");
+        Time today = new Time(Time.getCurrentTimezone());
+        today.setToNow();
+        String hr=String.valueOf(today.hour);
+        if(hr.length()==1){ hr= "0" + hr;}
+        String min=String.valueOf(today.minute);
+        if(min.length()==1){ min= "0" + min;}
+        String sec=String.valueOf(today.second);
+        if(sec.length()==1){ sec= "0" + sec;}
+        
+        date=date+","+hr+":"+min+":"+sec;
         UserDb1 = FirebaseDatabase.getInstance().getReference().child("txnDetails");
         UserDb1.child(FbAuth.getCurrentUser().getUid()).child(date).setValue(Data).addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override

@@ -48,6 +48,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
@@ -64,7 +65,7 @@ public class AppointmentActivity extends AppCompatActivity {
     HashMap<String, String> Data;
     static String SelectedDate, TodaysDate;
     Boolean UserExists, newApt=true;
-
+    long min=Integer.MAX_VALUE;
     /**Views*/
     EditText DateET, NameET, PhoneET, EmailET;
     TextView BookingTypeTV;
@@ -72,7 +73,7 @@ public class AppointmentActivity extends AppCompatActivity {
     RadioGroup RGroup;
     RadioButton newRB, FollowUpRB;
     Toolbar MyToolbar;
-
+    ArrayList<String> dates= new ArrayList<>();
     /**Firebase*/
     FirebaseUser NewUser;
     private ProgressDialog Progress;
@@ -163,6 +164,16 @@ public class AppointmentActivity extends AppCompatActivity {
                 else if(days==0)
                 {
                     BookingTypeTV.setText("Appointment Date Should Be \nMinimum 2 Days Later\n\nChoose A New Date");
+
+                    int date1=endDate.getDate();
+                    int date2=startDate.getDate();
+                    int diff=(date1-date2);
+                    if(diff==0)
+                    {
+                        BookingTypeTV.setText("Booking Appointment for Today");
+                    }
+                    else if(diff==1)
+                        BookingTypeTV.setText("Booking Appointment for Tomorrow");
                     BookAndPayBTN.setVisibility(View.INVISIBLE);
                 }
                 else {
@@ -233,34 +244,38 @@ public class AppointmentActivity extends AppCompatActivity {
                     Amount="300";
                     aptType="New Appointment";
                 }
-                if(FollowUpRB.isChecked())
-                {
+                if(FollowUpRB.isChecked()) {
+                    for (int i = 0; i < dates.size(); i++)
+                    {
+                        try {
+                        lastAppointment = format.parse(dates.get(i));
+                        }catch(Exception e){}
 
-                    long duration  = requestedApt.getTime() - lastAppointment.getTime();
-                    long diffday = duration/(24 * 60 * 60 * 1000) +1;
-                    int days =(int)diffday-1;
-                    Log.d(LOG_TAG,"No of days between appointments : "+days);
-                    if(days>31)
-                    {
-                        Log.d(LOG_TAG,"Booking New Appointment");
-                        Amount="300";
+                        long duration = requestedApt.getTime() - lastAppointment.getTime();
+                        long diffday = duration / (24 * 60 * 60 * 1000) + 1;
+                        int days = (int) diffday - 1;
+                        if(days<0)
+                            days=days*(-1);
+
+                        Log.d(LOG_TAG, "No of days between appointments : " + days);
+                        if(days<min)
+                            min=days;
                     }
-                    else if(days<0)
-                    {
-                        Log.d(LOG_TAG,"An appointment is already there ahead");
-                        Amount="300";
-                    }
-                    else if(days==0)
-                    {
-                        Log.d(LOG_TAG,"An appointment is already scheduled for same day");
+
+                    if (min > 31) {
+                        Log.d(LOG_TAG, "Booking New Appointment");
+                        Amount = "300";
+                    } else if (min < 0) {
+                        Log.d(LOG_TAG, "An appointment is already there ahead");
+                        Amount = "300";
+                    } else if (min == 0) {
+                        Log.d(LOG_TAG, "An appointment is already scheduled for same day");
                         Toast.makeText(AppointmentActivity.this, "You already have an appointment for that day", Toast.LENGTH_SHORT).show();
                         return;
-                    }
-                    else
-                    {
-                        Log.d(LOG_TAG,"Booking Follow Up Appointment");
-                        Amount="150";
-                        aptType="Follow Up Appointment";
+                    } else {
+                        Log.d(LOG_TAG, "Booking Follow Up Appointment");
+                        Amount = "150";
+                        aptType = "Follow Up Appointment";
                     }
                 }
                 Answers.getInstance().logAddToCart(new AddToCartEvent()
@@ -461,35 +476,44 @@ public class AppointmentActivity extends AppCompatActivity {
 
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("appointmentDB");//.child();
-        final Query lastQuery = databaseReference.child(FbAuth.getCurrentUser().getUid()).orderByKey().limitToLast(1);
+        final Query lastQuery = databaseReference.child(FbAuth.getCurrentUser().getUid()).orderByKey();
         lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 HashMap map=(HashMap) dataSnapshot.getValue();
                 try
                 {
-                    /*for ( Object key : map.keySet() ) {
-                        latestDate=key.toString();
+                    for ( Object key : map.keySet() ) {
 
-                    }*/
-                    Object key = map.keySet();
-                    LatestDate=key.toString();
-                    Log.d(LOG_TAG,"rName : "+rName);
-                    Log.d(LOG_TAG,"Latest Date : "+LatestDate);
-                    try{
-                        if(LatestDate.equals("")||LatestDate==null)
+                        LatestDate=key.toString();
+
+                        LatestDate=LatestDate.substring(0, LatestDate.indexOf(","));
+                        LatestDate=LatestDate.replace("-","/");
+                        dates.add(LatestDate);
+                        newApt=true;
+
+                        Log.d(LOG_TAG,"rName : "+rName);
+                        Log.d(LOG_TAG,"Latest Date : "+LatestDate);
+                        try{
+                            if(LatestDate.equals("")||LatestDate==null)
+                            {
+                                Amount ="300";
+                                Log.d(LOG_TAG,"Amount in try: "+Amount);
+                            }
+
+                        }
+                        catch (Exception e)
                         {
-                            Amount ="300";
-                            Log.d(LOG_TAG,"Amount in try: "+Amount);
+                            Amount="350";
+                            Log.d(LOG_TAG,"Amount in catch: "+Amount);
+                            Log.d(LOG_TAG,"Error : "+e.getMessage());
                         }
 
+
+
                     }
-                    catch (Exception e)
-                    {
-                        Amount="350";
-                        Log.d(LOG_TAG,"Amount in catch: "+Amount);
-                        Log.d(LOG_TAG,"Error : "+e.getMessage());
-                    }
+                    //Object key = map.keySet();
+                    //LatestDate=key.toString();
 
                 }
                 catch(Exception e)
@@ -497,19 +521,7 @@ public class AppointmentActivity extends AppCompatActivity {
                     Log.d(LOG_TAG,"Error inside getLatestAppt: "+e.getMessage());
                 }
                 //Do calculations here to find month diffrence
-                try{
-                    StringBuilder builder = new StringBuilder(LatestDate);
-                    builder.deleteCharAt(0);
-                    builder.deleteCharAt(LatestDate.length() - 2);
-                    latestDate=builder.toString();
-                    LatestDate=latestDate.replaceAll("-", "/");
-                    Log.d(LOG_TAG,"Done fetching Latest Date : "+latestDate);
-                    newApt=true;
-                }
-                catch (Exception e)
-                {
-                    Log.d(LOG_TAG,"Error : "+e.getMessage());
-                }
+
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
