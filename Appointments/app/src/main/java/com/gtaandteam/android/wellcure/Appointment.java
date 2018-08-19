@@ -85,7 +85,7 @@ public class Appointment {
     public String getmBookedOn() {
         Time today = new Time(Time.getCurrentTimezone());
         today.setToNow();
-        return mBookedOn+','+String.valueOf(today.hour)+String.valueOf(today.minute)
+        return mBookedOn+','+String.valueOf(today.hour)+":"+String.valueOf(today.minute)+":"
                 +String.valueOf(today.second);
     }
 }
