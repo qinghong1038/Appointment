@@ -149,8 +149,15 @@ public class StatusActivity extends AppCompatActivity {
         date=AppointmentDate.replaceAll("/", "-");
         Time today = new Time(Time.getCurrentTimezone());
         today.setToNow();
-        String timeStamp=String.valueOf(today.hour)+":"
-                +String.valueOf(today.minute)+":"+String.valueOf(today.second);
+        String hr=String.valueOf(today.hour);
+        if(hr.length()==1){ hr= "0" + hr;}
+        String min=String.valueOf(today.minute);
+        if(min.length()==1){ min= "0" + min;}
+        String sec=String.valueOf(today.second);
+        if(sec.length()==1){ sec= "0" + sec;}
+        
+        String timeStamp=hr+":"
+                +min+":"+sec;
         date=date+','+timeStamp;
         UserDb1 = FirebaseDatabase.getInstance().getReference().child("appointmentDB");
         UserDb1.child(FbAuth.getCurrentUser().getUid()).child(date).setValue(newAppointment).addOnCompleteListener(this, new OnCompleteListener<Void>() {
@@ -203,7 +210,14 @@ public class StatusActivity extends AppCompatActivity {
         date=AppointmentActivity.TodaysDate.replaceAll("/", "-");
         Time today = new Time(Time.getCurrentTimezone());
         today.setToNow();
-        date=date+","+String.valueOf(today.hour)+":"+String.valueOf(today.minute)+":"+String.valueOf(today.second);
+        String hr=String.valueOf(today.hour);
+        if(hr.length()==1){ hr= "0" + hr;}
+        String min=String.valueOf(today.minute);
+        if(min.length()==1){ min= "0" + min;}
+        String sec=String.valueOf(today.second);
+        if(sec.length()==1){ sec= "0" + sec;}
+        
+        date=date+","+hr+":"+min+":"+sec;
         UserDb1 = FirebaseDatabase.getInstance().getReference().child("txnDetails");
         UserDb1.child(FbAuth.getCurrentUser().getUid()).child(date).setValue(Data).addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
