@@ -83,16 +83,7 @@ public class Appointment {
     }
 
     public String getmBookedOn() {
-        Time today = new Time(Time.getCurrentTimezone());
-        today.setToNow();
-        String hr=String.valueOf(today.hour);
-        if(hr.length()==1){ hr= "0" + hr;}
-        String min=String.valueOf(today.minute);
-        if(min.length()==1){ min= "0" + min;}
-        String sec=String.valueOf(today.second);
-        if(sec.length()==1){ sec= "0" + sec;}
-            
-        return mBookedOn+','+hr+":"+min+":"
-                +sec;
+     
+        return mBookedOn;
     }
 }
