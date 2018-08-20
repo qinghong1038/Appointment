@@ -126,9 +126,17 @@ public class AppointmentActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
                 Year = cal.get(Calendar.YEAR);
+
                 Month = cal.get(Calendar.MONTH);
+                String mnth=String.valueOf(Month+1);
+                if(mnth.length()==1){mnth="0"+mnth;}
+
                 Day = cal.get(Calendar.DAY_OF_MONTH);
-                TodaysDate = Day +"/"+(Month +1)+"/"+ Year;
+                String date=String.valueOf(Day);
+                if(date.length()==1){date="0"+date;}
+
+
+                TodaysDate = date +"/"+mnth+"/"+ Year;
                 DatePickerDialog dialog = new DatePickerDialog(
                         AppointmentActivity.this, android.R.style.Theme_Holo_Dialog,mDateSetListener, Year, Month, Day);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -395,7 +403,7 @@ public class AppointmentActivity extends AppCompatActivity {
                 //finish();
                 //go to page which shows users details
                 Log.d(LOG_TAG,"Stored to Database");
-                Toast.makeText(getApplicationContext(),"Stored Data",Toast.LENGTH_SHORT).show();
+               Toast.makeText(getApplicationContext(),"Stored Data",Toast.LENGTH_SHORT).show();
                 Intent toConfirm = new Intent(AppointmentActivity.this, ConfirmActivity.class);
                 toConfirm.putExtra("Name", FirstName);
                 toConfirm.putExtra("Email", Email);
