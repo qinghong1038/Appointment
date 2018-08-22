@@ -68,7 +68,7 @@
 
     <EditText
         android:id="@+id/EmailET"
-        style="@style/ETStyle"
+        android:digits="qwertyuiopasdfghjklzxcvbnm.0123456789@"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Enter Email Address (To Receive Receipt)"

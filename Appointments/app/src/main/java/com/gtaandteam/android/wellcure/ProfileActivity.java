@@ -132,7 +132,13 @@ public class ProfileActivity extends AppCompatActivity {
 
         Progress =new ProgressDialog(this);
 
-
+        EmailTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!EditMode)
+                    Toast.makeText(ProfileActivity.this, "Not Allowed To Change Email ID", Toast.LENGTH_SHORT).show();
+            }
+        });
         //TODO: Add code to verify if Phone Number is verified. If not, display the message and the verify Button
         if(Phone==null)
         {
@@ -216,12 +222,12 @@ public class ProfileActivity extends AppCompatActivity {
                     EditButtonText.setText("Cancel");
                     SaveChangesBTN.setVisibility(View.VISIBLE);
                     NameET.setVisibility(View.VISIBLE);
-                    EmailET.setVisibility(View.VISIBLE);
+                    EmailET.setVisibility(View.INVISIBLE);
                     PhoneET.setVisibility(View.VISIBLE);
                     if(user.getPhoneNumber()!=null)
                         PhoneET.setFocusable(false);
                     NameTV.setVisibility(View.INVISIBLE);
-                    EmailTV.setVisibility(View.INVISIBLE);
+                    EmailTV.setVisibility(View.VISIBLE);
                     PhoneTV.setVisibility(View.INVISIBLE);
 
                     NameET.setText(NameTV.getText().toString());
@@ -452,6 +458,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }
                 Progress2.setMessage("Proceeding to Verify Mobile Number");
                 Progress2.show();
+
                 checkPhoneNumberExists(PhoneNumber);
 
 

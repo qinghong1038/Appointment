@@ -8,7 +8,7 @@ import android.widget.TextView;
 public class DetailsPopUp extends Activity {
 
     /**Views*/
-    TextView DoctorTV, NameTV, DateTV, FeesTV,BookedOnTV;
+    TextView DoctorTV, NameTV, DateTV, FeesTV,BookedOnTV,EmailTV,MobileTV;
     ImageView DoctorIV;
 
     final String LOG_TAG = this.getClass().getSimpleName();
@@ -25,6 +25,8 @@ public class DetailsPopUp extends Activity {
         FeesTV = findViewById(R.id.AmountTV);
         DoctorIV = findViewById(R.id.DoctorIV);
         BookedOnTV = findViewById(R.id.BookedOnET);
+        EmailTV=findViewById(R.id.EmailET);
+        MobileTV=findViewById(R.id.MobileET);
 
         String CurrentName = getIntent().getStringExtra("PatientName");
         String CurrentDoctor = getIntent().getStringExtra("Doctor");
@@ -32,6 +34,8 @@ public class DetailsPopUp extends Activity {
         int CurrentDoctorImage = getIntent().getIntExtra("DoctorImage", -1);
         float CurrentFees = getIntent().getFloatExtra("Fees", 0);
         String CurrentBookedOn = getIntent().getStringExtra("BookedOn");
+        String CurrentEmailID=getIntent().getStringExtra("EmailID");
+        String CurrentMobile=getIntent().getStringExtra("MobileNumber");
 
         
         
@@ -46,7 +50,8 @@ public class DetailsPopUp extends Activity {
         DoctorIV.setImageResource(CurrentDoctorImage);
         BookedOnTV.setText(CurrentBookedOn);
         FeesTV.setText("₹"+IntCurrentFees);
-
+        EmailTV.setText(CurrentEmailID);
+        MobileTV.setText(CurrentMobile);
         NameTV.setText(CurrentName);
         //FeesTV.setText("" +CurrentFees);
     }

@@ -1,9 +1,11 @@
 package com.gtaandteam.android.wellcure;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -67,6 +69,7 @@ public class PastActivity extends AppCompatActivity {
         Progress.setCancelable(false);
         Progress.show();
 
+
         if(!isConnected()) {
             Snackbar sb = Snackbar.make(this.getWindow().getDecorView(), "No Internet Connectivity", Snackbar.LENGTH_LONG);
             sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
@@ -102,6 +105,8 @@ public class PastActivity extends AppCompatActivity {
                 intent.putExtra("Fees", currentAppointment.getmFees());
                 intent.putExtra("BookedOn",currentAppointment.getmBookedOn());
                 intent.putExtra("PatientName",currentAppointment.getmPatientName());
+                intent.putExtra("MobileNumber",currentAppointment.getmPatientMobile());
+                intent.putExtra("EmailID",currentAppointment.getmPatientEmail());
 
                 if(currentAppointment.hasImage()) {
                     intent.putExtra("DoctorImage", currentAppointment.getmDoctorImage());
@@ -156,6 +161,7 @@ public class PastActivity extends AppCompatActivity {
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
+                timerDelayRemoveDialog(10000,dialog);
 
                 return true;
             case R.id.action_past:
@@ -235,6 +241,23 @@ public class PastActivity extends AppCompatActivity {
             Log.d(LOG_TAG,"Exception : "+e.getMessage());
         }
         return isConnectedVar;
+    }
+    public void timerDelayRemoveDialog(long time, final Dialog d){
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                try
+                {
+                    if(d.isShowing()) {
+                        d.dismiss();
+                        Toast.makeText(PastActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.d(LOG_TAG,""+e.getMessage());
+                }
+            }
+        }, time);
     }
 
 

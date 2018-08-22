@@ -78,7 +78,7 @@ public class WelcomeActivity extends AppCompatActivity {
                         Log.d(LOG_TAG,""+e.getMessage());
                     }
                 }
-            }, 3000);
+            }, 2000);
             new Handler().postDelayed(new Runnable() {
                 public void run() {
                     try
@@ -95,7 +95,7 @@ public class WelcomeActivity extends AppCompatActivity {
                         Log.d(LOG_TAG,""+e.getMessage());
                     }
                 }
-            }, 5000);
+            }, 4000);
 
             Log.d(LOG_TAG,FbAuth.getCurrentUser().getEmail());
 
