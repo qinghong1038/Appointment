@@ -28,7 +28,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class PastActivity extends AppCompatActivity {
@@ -148,7 +147,7 @@ public class PastActivity extends AppCompatActivity {
                                 signOut();
                                 startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
                                 finish();
-                                Toast.makeText(getApplicationContext(), "Signing Out", Toast.LENGTH_LONG).show();
+                          //      Toast.makeText(getApplicationContext(), "Signing Out", Toast.LENGTH_LONG).show();
 
                             }
                         });
@@ -165,7 +164,7 @@ public class PastActivity extends AppCompatActivity {
 
                 return true;
             case R.id.action_past:
-                Toast.makeText(this, "Already in Past Appointments Page", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(this, "Already in Past Appointments Page", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_About:
                 startActivity(new Intent(PastActivity.this, AboutActivity.class));

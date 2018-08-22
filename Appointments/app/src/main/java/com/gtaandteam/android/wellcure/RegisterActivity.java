@@ -237,12 +237,12 @@ public class RegisterActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 //user successfully registered
                                 Log.d(LOG_TAG, "Email account successfully created.");
-                                Toast.makeText(RegisterActivity.this, "Email registered successfully.", Toast.LENGTH_SHORT).show();
+                        //        Toast.makeText(RegisterActivity.this, "Email registered successfully.", Toast.LENGTH_SHORT).show();
                                 //finish();
                                 //startActivity(new Intent(getApplicationContext(), EmailLoginActivity.class));
 
                                 Log.d(LOG_TAG, "Proceeding to link Mobile Number with Email ID");
-                                Toast.makeText(RegisterActivity.this, "Proceeding to link mobile number with Email ID", Toast.LENGTH_SHORT).show();
+             //                   Toast.makeText(RegisterActivity.this, "Proceeding to link mobile number with Email ID", Toast.LENGTH_SHORT).show();
 //                            Progress.setMessage("Sending OTP");
 //                            Progress.show();
                                 PhoneNumberExists =false;

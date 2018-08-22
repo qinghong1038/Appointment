@@ -138,7 +138,7 @@ public class StatusActivity extends AppCompatActivity {
     {
         String PatientName,DoctorName;
         Float Fees;
-        Toast.makeText(this, "Appointment Details Stored To AppointmentDatabase", Toast.LENGTH_SHORT).show();
+     //   Toast.makeText(this, "Appointment Details Stored To AppointmentDatabase", Toast.LENGTH_SHORT).show();
         AppointmentDate = AppointmentActivity.SelectedDate;
         PatientName = Name;
         DoctorName = DoctorsActivity.DoctorName;
@@ -167,7 +167,7 @@ public class StatusActivity extends AppCompatActivity {
                 //finish();
                 //go to page which shows users details
                 Log.d(LOG_TAG,"New Appointment Added To Database");
-                Toast.makeText(getApplicationContext(),"Stored Appointment Data",Toast.LENGTH_SHORT).show();
+    //            Toast.makeText(getApplicationContext(),"Stored Appointment Data",Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -226,7 +226,7 @@ public class StatusActivity extends AppCompatActivity {
                 //finish();
                 //go to page which shows users details
                 Log.d(LOG_TAG,"Stored TXN Details to Database");
-                Toast.makeText(getApplicationContext(),"Stored Data",Toast.LENGTH_SHORT).show();
+      //          Toast.makeText(getApplicationContext(),"Stored Data",Toast.LENGTH_SHORT).show();
 
             }
         });

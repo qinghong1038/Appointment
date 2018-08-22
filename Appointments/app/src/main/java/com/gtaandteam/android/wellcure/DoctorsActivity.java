@@ -140,7 +140,7 @@ public class DoctorsActivity extends AppCompatActivity {
                                 signOut();
                                 startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
                                 finish();
-                                Toast.makeText(getApplicationContext(), "Signing Out", Toast.LENGTH_LONG).show();
+                                //Toast.makeText(getApplicationContext(), "Signing Out", Toast.LENGTH_LONG).show();
 
                             }
                         });

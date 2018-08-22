@@ -185,7 +185,7 @@ public class OTPopUp extends Activity {
         Pbuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(OTPopUp.this, "Retrying Phone Verification", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(OTPopUp.this, "Retrying Phone Verification", Toast.LENGTH_SHORT).show();
                 Log.d(LOG_TAG,"Retrying Phone Verification");
                 RetryCount=0;
                 dialog.dismiss();
@@ -218,7 +218,7 @@ public class OTPopUp extends Activity {
                     Progress.show();
                    // timerDelayRemoveDialog(10000,Progress);
                     resendCode();
-                    Toast.makeText(OTPopUp.this, "Resending OTP", Toast.LENGTH_LONG).show();
+                    //(OTPopUp.this, "Resending OTP", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -384,7 +384,7 @@ public class OTPopUp extends Activity {
                             String phone = user.getPhoneNumber();
                             UserId = user.getUid();
                             Progress.dismiss();
-                            Toast.makeText(OTPopUp.this,"Login Successful by : "+phone,Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(OTPopUp.this,"Login Successful by : "+phone,Toast.LENGTH_SHORT).show();
                             finish();
                             Intent i=new Intent(getApplicationContext(),DoctorsActivity.class);
                             i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -423,13 +423,13 @@ public class OTPopUp extends Activity {
                             {
                                 //user successfully logged in
                                 //we start doctor activity here
-                                Toast.makeText(OTPopUp.this,"Login with New Account Successful",Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(OTPopUp.this,"Login with New Account Successful",Toast.LENGTH_SHORT).show();
                                 EmailCreated=true;
 
                             }
                             else
                             {
-                                Toast.makeText(OTPopUp.this,"Couldn't Login with new Account ...",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(OTPopUp.this,"Couldn't Login",Toast.LENGTH_SHORT).show();
                                 Log.d(LOG_TAG,"Couldnt Login before linking. Error : "+task.getException().getMessage());
                                 return;
                             }
@@ -443,7 +443,7 @@ public class OTPopUp extends Activity {
                         if (task.isSuccessful()) {
                             //Progress.dismiss();
                             Log.d(LOG_TAG, "linkWithCredential:success");
-                            Toast.makeText(OTPopUp.this, "Mobile Number has been successfully linked with Email ID", Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(OTPopUp.this, "Mobile Number has been successfully linked with Email ID", Toast.LENGTH_SHORT).show();
 
                             Log.d(LOG_TAG, "Calling Register to Database");
                             registerToDatabase();
@@ -488,10 +488,10 @@ public class OTPopUp extends Activity {
                 {
                     LinkingStatus=true;
                     Log.v("App","Adding to User Database");
-                    Toast.makeText(getApplicationContext(),"Stored User Data to UserDatabase",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),"Stored User Data to UserDatabase",Toast.LENGTH_SHORT).show();
                     if(!Parent.equals("ProfileActivity"))
                     {
-                        Toast.makeText(OTPopUp.this, "Registration Complete", Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(OTPopUp.this, "Registration Complete", Toast.LENGTH_SHORT).show();
                         FbAuth.signOut();
                         Intent intent = new Intent(OTPopUp.this, WelcomeActivity.class);
                         intent.putExtra("Parent", LOG_TAG);

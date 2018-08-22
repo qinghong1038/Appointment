@@ -24,13 +24,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-
-import io.fabric.sdk.android.Fabric;
 
 //import com.crashlytics.android.Crashlytics;
 //import io.fabric.sdk.android.Fabric;
@@ -154,7 +151,7 @@ public class EmailLoginActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
                                         Log.d(LOG_TAG, "Email sent.");
-                                        Toast.makeText(EmailLoginActivity.this, "Email with Reset Link Sent", Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(EmailLoginActivity.this, "Email with Reset Link Sent", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -195,7 +192,7 @@ public class EmailLoginActivity extends AppCompatActivity {
                         {
                             //user successfully logged in
                             //we start doctor activity here
-                            Toast.makeText(EmailLoginActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
+                           //Toast.makeText(EmailLoginActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
                             finish();
                             Intent i =new Intent(EmailLoginActivity.this, DoctorsActivity.class);
                             i.putExtra("loginMode",1);

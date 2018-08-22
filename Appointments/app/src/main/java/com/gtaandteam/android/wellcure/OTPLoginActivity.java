@@ -185,7 +185,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                     Log.d(LOG_TAG, "Phone Number Exists");
                     //OTP will be sent now
                     Log.d(LOG_TAG, "Phone Number Exists Confirmed. Hence going to start OTPopUp");
-                    Toast.makeText(OTPLoginActivity.this, "PhoneNumberExists", Toast.LENGTH_SHORT).show();
+                    //(OTPLoginActivity.this, "PhoneNumberExists", Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(OTPLoginActivity.this, OTPopUp.class);
                     intent.putExtra("Parent", LOG_TAG);
@@ -200,7 +200,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                 else
                 {
                     Log.d(LOG_TAG, "Phone Number Doesn't exist.");
-                    Toast.makeText(OTPLoginActivity.this, "Phone number not linked to any account.\nPlease Register or Login Using Email. ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OTPLoginActivity.this, "Phone number not linked to any account.", Toast.LENGTH_SHORT).show();
                     Progress.dismiss();
                 }
 

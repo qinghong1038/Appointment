@@ -346,7 +346,7 @@ public class ProfileActivity extends AppCompatActivity {
                 if(NameInFB!=null)
                 {
                     if(!TextUtils.equals(Name, NameInFB)){
-                        Toast.makeText(ProfileActivity.this,"Names different in DB and EditText",Toast.LENGTH_SHORT).show();
+                       //Toast.makeText(ProfileActivity.this,"Names different in DB and EditText",Toast.LENGTH_SHORT).show();
                         Log.d(LOG_TAG, "Names different in DB and EditText");
                         if(Name.trim().equals(""))
                         {
@@ -368,7 +368,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }
                 if((!TextUtils.isEmpty(OLDPassword))||(!TextUtils.isEmpty(NEWPassword))){
                     // is empty
-                    Toast.makeText(ProfileActivity.this,"Changing Password",Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(ProfileActivity.this,"Changing Password",Toast.LENGTH_SHORT).show();
                     Log.d(LOG_TAG, "Changing Password");
                     if(!TextUtils.equals(OLDPassword, NEWPassword)){
                         // is empty
@@ -527,7 +527,7 @@ public class ProfileActivity extends AppCompatActivity {
                 else
                 {
                     Log.d(LOG_TAG, "Proceeding to link Mobile Number with Email ID");
-                    Toast.makeText(ProfileActivity.this, "Proceeding to link mobile number with Email ID", Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(ProfileActivity.this, "Proceeding to link mobile number with Email ID", Toast.LENGTH_SHORT).show();
 //                            Progress.setMessage("Sending OTP");
 //                            Progress.show();
                     Log.d(LOG_TAG, "All good, Calling OTPopUp Activity");

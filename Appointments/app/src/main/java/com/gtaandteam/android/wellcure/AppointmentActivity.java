@@ -46,7 +46,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.math.BigDecimal;
-import java.nio.FloatBuffer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -335,7 +334,7 @@ public class AppointmentActivity extends AppCompatActivity {
                                 signOut();
                                 startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
                                 finish();
-                                Toast.makeText(getApplicationContext(), "Signing Out", Toast.LENGTH_LONG).show();
+                                //Toast.makeText(getApplicationContext(), "Signing Out", Toast.LENGTH_LONG).show();
 
                             }
                         });
@@ -419,7 +418,7 @@ public class AppointmentActivity extends AppCompatActivity {
                 //finish();
                 //go to page which shows users details
                 Log.d(LOG_TAG,"Stored to Database");
-               Toast.makeText(getApplicationContext(),"Stored Data",Toast.LENGTH_SHORT).show();
+               //Toast.makeText(getApplicationContext(),"Stored Data",Toast.LENGTH_SHORT).show();
                 Intent toConfirm = new Intent(AppointmentActivity.this, ConfirmActivity.class);
                 toConfirm.putExtra("Name", FirstName);
                 toConfirm.putExtra("Email", EmailET.getText().toString());
