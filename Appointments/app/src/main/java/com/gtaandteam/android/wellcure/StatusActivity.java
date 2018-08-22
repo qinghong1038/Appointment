@@ -144,7 +144,7 @@ public class StatusActivity extends AppCompatActivity {
         DoctorName = DoctorsActivity.DoctorName;
         Fees = Float.parseFloat(Amount);
         Log.d(LOG_TAG, "Amount is "+Fees);
-        newAppointment = new Appointment(PatientName,DoctorName,AppointmentDate,BookingDate, Fees);
+        newAppointment = new Appointment(PatientName,DoctorName,AppointmentDate,BookingDate,Fees,Phone,Email);
         String date;
         date=AppointmentDate.replaceAll("/", "-");
         Time today = new Time(Time.getCurrentTimezone());
@@ -244,7 +244,7 @@ public class StatusActivity extends AppCompatActivity {
         {
             Log.d(LOG_TAG,"Other Activities Exist");
         }
-        Intent intent = new Intent(StatusActivity.this, AppointmentActivity.class);
+        Intent intent = new Intent(StatusActivity.this, DoctorsActivity.class);
 
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -138,7 +138,7 @@ public class DoctorsActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 signOut();
-                                startActivity(new Intent(getApplicationContext(), EmailLoginActivity.class));
+                                startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
                                 finish();
                                 Toast.makeText(getApplicationContext(), "Signing Out", Toast.LENGTH_LONG).show();
 
@@ -233,8 +233,8 @@ public class DoctorsActivity extends AppCompatActivity {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             Log.d(LOG_TAG, "back button pressed");
 
-            if (isTaskRoot()) {
-                Log.d(LOG_TAG, "No other Acitivites Exist");
+
+                Log.d(LOG_TAG, "No other Activities Exist");
                 AlertDialog.Builder builder = new AlertDialog.Builder(
                         new ContextThemeWrapper(DoctorsActivity.this, R.style.AlertDialogCustom));
                 builder.setCancelable(true);
@@ -258,9 +258,7 @@ public class DoctorsActivity extends AppCompatActivity {
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
-            } else {
-                Log.d(LOG_TAG, "Other Activites Exist");
-            }
+
         }
         if ((keyCode == KeyEvent.KEYCODE_DEL))
             Log.d(LOG_TAG,"Backspace Pressed");

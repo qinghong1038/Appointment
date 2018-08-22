@@ -48,7 +48,7 @@ public class OTPopUp extends Activity {
     String PhoneNumber;
     String Parent;
     String OTP,Code;
-    Boolean PhoneCredentialCreated, LinkingStatus,VerificationCompleted,AutoEnteredOTP;
+    Boolean PhoneCredentialCreated, LinkingStatus,VerificationCompleted,AutoEnteredOTP,OTPReceived,EmailCreated;
     String EmailId;
     private String Password;
     HashMap<String, String> Data;
@@ -100,7 +100,10 @@ public class OTPopUp extends Activity {
             Log.d(LOG_TAG,"No Such Progress : "+e.getMessage());
         }
         VerificationCompleted = false;
+        OTPReceived=false;
         AutoEnteredOTP=false;
+        LinkingStatus = false;
+        EmailCreated=false;
         OTPET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -160,7 +163,7 @@ public class OTPopUp extends Activity {
                         if(!Parent.equals("ProfileActivity"))
                         {
                             FbAuth.signOut();
-                            Intent intent = new Intent(OTPopUp.this, EmailLoginActivity.class);
+                            Intent intent = new Intent(OTPopUp.this, WelcomeActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -190,7 +193,12 @@ public class OTPopUp extends Activity {
                     public void run() {
 
                         AlertDialog rdialog = Pbuilder.create();
-                        rdialog.show();
+                        try
+                        {
+                            rdialog.show();
+                        }
+                        catch (Exception e)
+                        {}
 
                     }
 
@@ -401,7 +409,7 @@ public class OTPopUp extends Activity {
 
     private void linkMobWithEmail(PhoneAuthCredential credential)
     {
-        LinkingStatus = false;
+
 
         if(Parent.equals("RegisterActivity")){
             EmailId = getIntent().getStringExtra("EmailId");
@@ -416,6 +424,7 @@ public class OTPopUp extends Activity {
                                 //user successfully logged in
                                 //we start doctor activity here
                                 Toast.makeText(OTPopUp.this,"Login with New Account Successful",Toast.LENGTH_SHORT).show();
+                                EmailCreated=true;
 
                             }
                             else
@@ -475,12 +484,14 @@ public class OTPopUp extends Activity {
                 //go to page which shows users details
                 if(task.isSuccessful())
                 {
+                    LinkingStatus=true;
                     Log.v("App","Adding to User Database");
                     Toast.makeText(getApplicationContext(),"Stored User Data to UserDatabase",Toast.LENGTH_SHORT).show();
                     if(!Parent.equals("ProfileActivity"))
                     {
+                        Toast.makeText(OTPopUp.this, "Registration Complete", Toast.LENGTH_SHORT).show();
                         FbAuth.signOut();
-                        Intent intent = new Intent(OTPopUp.this, EmailLoginActivity.class);
+                        Intent intent = new Intent(OTPopUp.this, WelcomeActivity.class);
                         intent.putExtra("Parent", LOG_TAG);
                         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -531,6 +542,77 @@ public class OTPopUp extends Activity {
     }*/
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if((Parent.equals("RegisterActivity"))&&(!LinkingStatus)&&(keyCode == KeyEvent.KEYCODE_BACK)){
+            AlertDialog.Builder builder = new AlertDialog.Builder(
+                    new ContextThemeWrapper(OTPopUp.this, R.style.AlertDialogCustom));
+            builder.setCancelable(true);
+            builder.setTitle("Exit Registration");
+            builder.setMessage("Are you sure you want to Cancel Registration and Delete The Email Account Created?");
+            builder.setPositiveButton("YES",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d(LOG_TAG, "Delete Email User");
+                            if(EmailCreated)
+                            {
+                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                if(user!=null)
+                                {
+                                    user.delete()
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Log.d(LOG_TAG, "User account deleted.");
+                                                    }
+                                                }
+                                            });
+                                }
+                            }
+
+                        }
+                    });
+            builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(
+                            new ContextThemeWrapper(OTPopUp.this, R.style.AlertDialogCustom));
+                    builder.setCancelable(true);
+                    builder.setTitle("Continue With Registration");
+                    builder.setMessage("Would you like to Continue Waiting for Registration Completion?");
+                    builder.setPositiveButton("YES, Continue",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+
+                                }
+                            });
+                    builder.setNegativeButton("NO, Keep Email Account Only", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(FbAuth.getCurrentUser()!=null)
+                                FbAuth.signOut();
+                            Intent intent = new Intent(OTPopUp.this, WelcomeActivity.class);
+
+                            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+
+                    AlertDialog dialog1 = builder.create();
+                    dialog1.show();
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            return super.onKeyDown(keyCode, event);
+        }
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             Log.d(LOG_TAG, "back button pressed");
 
@@ -561,6 +643,34 @@ public class OTPopUp extends Activity {
                 dialog.show();
             } else {
                 Log.d(LOG_TAG, "Other Activites Exist");
+                AlertDialog.Builder builder = new AlertDialog.Builder(
+                        new ContextThemeWrapper(OTPopUp.this, R.style.AlertDialogCustom));
+                builder.setCancelable(true);
+                builder.setTitle("Try Different Login Method");
+                builder.setMessage("Would You Like To Stop and Try a Different Login Method?");
+                builder.setPositiveButton("YES, Go to Home Screen",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(OTPopUp.this, WelcomeActivity.class);
+
+                                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+
+                            }
+                        });
+                builder.setNegativeButton("NO, Continue Waiting", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         }
         if ((keyCode == KeyEvent.KEYCODE_DEL))

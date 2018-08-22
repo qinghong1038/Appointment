@@ -46,6 +46,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.math.BigDecimal;
+import java.nio.FloatBuffer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -332,7 +333,7 @@ public class AppointmentActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 signOut();
-                                startActivity(new Intent(getApplicationContext(), EmailLoginActivity.class));
+                                startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
                                 finish();
                                 Toast.makeText(getApplicationContext(), "Signing Out", Toast.LENGTH_LONG).show();
 
@@ -388,11 +389,26 @@ public class AppointmentActivity extends AppCompatActivity {
             updateDisplayName(FirstName);
 
         }
+        String registeredPhone="";
+        try{
+            registeredPhone=FbAuth.getCurrentUser().getPhoneNumber();
+            if(registeredPhone==null)
+            {
+                registeredPhone="Not Verified";
+            }
+        }
+        catch(Exception e)
+        {
+            Log.d(LOG_TAG,"Error : "+e.getMessage());
+            registeredPhone="Not Verified";
+        }
+
+
         Date = Day +"/"+(Month +1)+"/"+ Year;
         Data = new HashMap<>();
         Data.put("Name", FirstName);
-        Data.put("Email", Email);
-        Data.put("Phone", PhoneNumber);
+        Data.put("Email", FbAuth.getCurrentUser().getEmail());
+        Data.put("Phone", registeredPhone);
         Data.put("LoginDate", Date);
         Log.d(LOG_TAG,"Hashmap Done");
         UserDb1 = FirebaseDatabase.getInstance().getReference().child("users");
@@ -406,7 +422,7 @@ public class AppointmentActivity extends AppCompatActivity {
                Toast.makeText(getApplicationContext(),"Stored Data",Toast.LENGTH_SHORT).show();
                 Intent toConfirm = new Intent(AppointmentActivity.this, ConfirmActivity.class);
                 toConfirm.putExtra("Name", FirstName);
-                toConfirm.putExtra("Email", Email);
+                toConfirm.putExtra("Email", EmailET.getText().toString());
                 toConfirm.putExtra("Phone", PhoneNumber);
                 toConfirm.putExtra("Date", SelectedDate);
                 toConfirm.putExtra("Amount",Amount);

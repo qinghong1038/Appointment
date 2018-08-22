@@ -50,7 +50,7 @@ public class EmailLoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
+
 
         setContentView(R.layout.activity_main);
 
@@ -91,17 +91,7 @@ public class EmailLoginActivity extends AppCompatActivity {
             }
         });
 
-        if(FbAuth.getCurrentUser()!=null)
-        {
-            //User already logged in, previous login credentials stored in PhoneNumber
-            //then skip login and directly go to choosing doctor page
-            /*finish();
-            Log.d(LOG_TAG,FbAuth.getCurrentUser().getEmail());
-            Intent i =new Intent(EmailLoginActivity.this, DoctorsActivity.class);
-            i.putExtra("loginMode",1);
-            startActivity(i);*/
-            FbAuth.signOut();
-        }
+
         LoginBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

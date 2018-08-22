@@ -138,8 +138,8 @@ public class ConfirmActivity extends AppCompatActivity {
         EmailTV.setText(Email);
         DateTV.setText(Date);
         AmountTV.setText("₹"+Amount);
-
-        Purpose = "Wellcure Clinic Appointment Fee";
+        Purpose = "Wellcure Appt on "+Date;
+        Log.d(LOG_TAG,Purpose);
 
 
         ConfirmBTN.setOnClickListener(new View.OnClickListener() {

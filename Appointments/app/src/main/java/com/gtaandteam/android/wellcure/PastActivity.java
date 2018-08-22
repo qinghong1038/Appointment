@@ -148,7 +148,7 @@ public class PastActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 signOut();
-                                startActivity(new Intent(getApplicationContext(), EmailLoginActivity.class));
+                                startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
                                 finish();
                                 Toast.makeText(getApplicationContext(), "Signing Out", Toast.LENGTH_LONG).show();
 

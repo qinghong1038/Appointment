@@ -33,12 +33,13 @@
             android:name=".EmailLoginActivity"
         android:parentActivityName=".WelcomeActivity"
 
-        android:label="Login using EMail "
+        android:label="Login using Email "
 
         android:screenOrientation="portrait" />
         <activity
             android:name=".AppointmentActivity"
             android:label="New Appointment"
+            android:parentActivityName=".DoctorsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".DoctorsActivity"
@@ -46,7 +47,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".RegisterActivity"
-            android:label="Register"
+            android:label="Registration Page"
             android:parentActivityName=".WelcomeActivity"
             android:screenOrientation="portrait" />
         <activity
