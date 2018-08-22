@@ -32,8 +32,7 @@ public class DetailsPopUp extends Activity {
         int CurrentDoctorImage = getIntent().getIntExtra("DoctorImage", -1);
         float CurrentFees = getIntent().getFloatExtra("Fees", 0);
         String CurrentBookedOn = getIntent().getStringExtra("BookedOn");
-         CurrentBookedOn=CurrentBookedOn.substring(0,CurrentBookedOn.indexOf(","));
-        
+
         
         
         
