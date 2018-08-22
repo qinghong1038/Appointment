@@ -66,24 +66,17 @@ public class PastActivity extends AppCompatActivity {
         Progress.setMessage("Fetching Past Appointments.");
         Progress.setCancelable(false);
         Progress.show();
-        try
-        {
-            if(!isConnected()) {
-                Snackbar sb = Snackbar.make(this.getWindow().getDecorView(), "No Internet Connectivity", Snackbar.LENGTH_LONG);
-                sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
-                sb.show();
-                Log.d(LOG_TAG,"No Internet");
-                Progress.dismiss();
-                return;
-            }
-            else
-            {
-                Log.d(LOG_TAG,"Internet is connected");
-            }
+
+        if(!isConnected()) {
+            Snackbar sb = Snackbar.make(this.getWindow().getDecorView(), "No Internet Connectivity", Snackbar.LENGTH_LONG);
+            sb.getView().setBackgroundColor(getResources().getColor(R.color.darkred));
+            sb.show();
+            Log.d(LOG_TAG,"No Internet");
+            return;
         }
-        catch (Exception e)
+        else
         {
-            Log.d(LOG_TAG,"Exception : "+e.getMessage());
+            Log.d(LOG_TAG,"Internet is connected");
         }
 
         //TODO: Major FireBase changes/additions to be made in order to access past appointment Data from the particular ACCOUNT only
@@ -229,10 +222,19 @@ public class PastActivity extends AppCompatActivity {
 
         });
     }
-    public boolean isConnected() throws InterruptedException, IOException
+    public boolean isConnected()
     {
         String command = "ping -c 1 google.com";
-        return (Runtime.getRuntime().exec (command).waitFor() == 0);
+        Boolean isConnectedVar=false;
+        try{
+
+            isConnectedVar = (Runtime.getRuntime().exec (command).waitFor() == 0);
+        }
+        catch (Exception e)
+        {
+            Log.d(LOG_TAG,"Exception : "+e.getMessage());
+        }
+        return isConnectedVar;
     }
 
 

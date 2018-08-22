@@ -13,7 +13,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.Selection;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
@@ -43,6 +45,7 @@ public class OTPLoginActivity extends AppCompatActivity {
     private ProgressDialog Progress;
     Button SendOTPBTN;//Send OTP Button
     Button RegisterBTN;
+    String TempPhone;
     /**Firebase*/
 
     Toolbar MyToolbar;
@@ -62,6 +65,27 @@ public class OTPLoginActivity extends AppCompatActivity {
         PhoneOTPTV = findViewById(R.id.PhoneNumberET);
         RegisterBTN = findViewById(R.id.RegisterBTN);
 
+        PhoneOTPTV.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                TempPhone=PhoneOTPTV.getText().toString();
+                if(TempPhone.length()==0)
+                {
+                    PhoneOTPTV.setText("+91 ");
+                    Selection.setSelection(PhoneOTPTV.getText(), PhoneOTPTV.getText().length());
+                }
+            }
+        });
         RegisterBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -12,8 +12,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.Selection;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
@@ -40,6 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
     String EmailId;
     String PhoneNumber;
     Boolean PhoneNumberExists;
+    String TempPhone;
 
     /**Views*/
     Button LoginBTN, RegisterBTN;
@@ -77,6 +80,27 @@ public class RegisterActivity extends AppCompatActivity {
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
 
+        PhoneNumberET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                TempPhone=PhoneNumberET.getText().toString();
+                if(TempPhone.length()==0)
+                {
+                    PhoneNumberET.setText("+91 ");
+                    Selection.setSelection(PhoneNumberET.getText(), PhoneNumberET.getText().length());
+                }
+            }
+        });
         if(FbAuth.getCurrentUser()!=null)
         {
             FbAuth.signOut();
@@ -109,6 +133,7 @@ public class RegisterActivity extends AppCompatActivity {
                 registerUser();
             }
         });
+
 
 
     }
