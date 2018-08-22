@@ -475,6 +475,7 @@ public class OTPopUp extends Activity {
         Answers.getInstance().logSignUp(new SignUpEvent()
                 .putMethod("Email and Mobile")
                 .putSuccess(true));
+        EmailId=FbAuth.getCurrentUser().getEmail();
         Data = new HashMap<>();
         Data.put("Email", EmailId);
         Data.put("Phone", PhoneNumber);
