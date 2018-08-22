@@ -186,7 +186,7 @@ public class ConfirmActivity extends AppCompatActivity {
                 {
                     if(d.isShowing()) {
                         d.dismiss();
-                        Toast.makeText(ConfirmActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ConfirmActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_LONG).show();
                     }
                 }
                 catch (Exception e)

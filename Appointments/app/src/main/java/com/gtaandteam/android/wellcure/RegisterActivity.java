@@ -148,14 +148,14 @@ public class RegisterActivity extends AppCompatActivity {
 
         if(TextUtils.isEmpty(EmailId)){
             // is empty
-            Toast.makeText(this,"Please enter Email ID",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Please enter Email ID",Toast.LENGTH_LONG).show();
             Log.d(LOG_TAG, "No Email ID Entered, Exiting regitserUser()");
             return;
         }
 
         if(TextUtils.isEmpty(Password)){
             // is empty
-            Toast.makeText(this,"Please enter password",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Please enter password",Toast.LENGTH_LONG).show();
             Log.d(LOG_TAG, "No Password Entered, Exiting regitserUser()");
             return;
 
@@ -163,14 +163,14 @@ public class RegisterActivity extends AppCompatActivity {
 
         if(!TextUtils.equals(Password, confirm_pass)){
             // is empty
-            Toast.makeText(this,"Passwords do not match.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Passwords do not match.",Toast.LENGTH_LONG).show();
             Log.d(LOG_TAG, "Passwords do not match, Exiting regitserUser()");
 
             return;
         }
         if(Password.length()<6)
         {
-            Toast.makeText(this,"Minimum password length is 6",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Minimum password length is 6",Toast.LENGTH_LONG).show();
             Log.d(LOG_TAG, "Minimum password length is 6, Exiting regitserUser()");
             return;
         }
@@ -249,7 +249,8 @@ public class RegisterActivity extends AppCompatActivity {
                                 if(PhoneNumberExists)
                                 {
                                     Log.d(LOG_TAG, "Phone number already registered with another account");
-                                    Toast.makeText(RegisterActivity.this, "Phone number already registered with another account.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(RegisterActivity.this, "Phone number already registered with another account.", Toast.LENGTH_LONG).show();
+                                    return;
                                 }
                                 else
                                 {
@@ -264,7 +265,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 }
 
                             } else {
-                                Toast.makeText(RegisterActivity.this, "Couldn't Register.\n"+task.getException().getMessage()+" Please Try Again.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterActivity.this, "Couldn't Register.\n"+task.getException().getMessage()+" Please Try Again.", Toast.LENGTH_LONG).show();
                                 Log.d(LOG_TAG, "Couldn't create Email Account");
                                 Log.d(LOG_TAG, ""+task.getException().getMessage());
                                 Progress.dismiss();
@@ -316,7 +317,7 @@ public class RegisterActivity extends AppCompatActivity {
                 {
                     if(d.isShowing()) {
                         d.dismiss();
-                        Toast.makeText(RegisterActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_LONG).show();
                     }
                 }
                 catch (Exception e)

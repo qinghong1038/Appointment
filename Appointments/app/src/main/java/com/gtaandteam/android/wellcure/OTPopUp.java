@@ -335,11 +335,11 @@ public class OTPopUp extends Activity {
                             // Invalid request
                             Log.d(LOG_TAG, "Invalid credential: "
                                     + e.getLocalizedMessage());
-                            Toast.makeText(OTPopUp.this, "Invalid Request", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OTPopUp.this, "Invalid Request", Toast.LENGTH_LONG).show();
                         } else if (e instanceof FirebaseTooManyRequestsException) {
                             // SMS quota exceeded
                             Log.d(LOG_TAG, "SMS Quota exceeded.");
-                            Toast.makeText(OTPopUp.this, "Unable to send OTP. Please try to Login using EmailET", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OTPopUp.this, "Unable to send OTP. Please try to Login using Email", Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -398,7 +398,7 @@ public class OTPopUp extends Activity {
                                     FirebaseAuthInvalidCredentialsException) {
                                 // The verification code entered was invalid
                                 Progress.dismiss();
-                                Toast.makeText(OTPopUp.this,"Invalid OTP. Try Again.",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(OTPopUp.this,"Invalid OTP. Try Again.",Toast.LENGTH_LONG).show();
                                 OTPET.setText("");
 
                             }
@@ -429,7 +429,7 @@ public class OTPopUp extends Activity {
                             }
                             else
                             {
-                                Toast.makeText(OTPopUp.this,"Couldn't Login",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(OTPopUp.this,"Couldn't Login",Toast.LENGTH_LONG).show();
                                 Log.d(LOG_TAG,"Couldnt Login before linking. Error : "+task.getException().getMessage());
                                 return;
                             }
@@ -710,7 +710,7 @@ public class OTPopUp extends Activity {
                 {
                     if(d.isShowing()) {
                         d.dismiss();
-                        Toast.makeText(OTPopUp.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OTPopUp.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_LONG).show();
                     }
                 }
                 catch (Exception e)

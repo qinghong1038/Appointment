@@ -285,7 +285,7 @@ public class DoctorsActivity extends AppCompatActivity {
                 {
                     if(d.isShowing()) {
                         d.dismiss();
-                        Toast.makeText(DoctorsActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DoctorsActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_LONG).show();
                     }
                 }
                 catch (Exception e)

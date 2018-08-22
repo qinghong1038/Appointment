@@ -200,7 +200,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                 else
                 {
                     Log.d(LOG_TAG, "Phone Number Doesn't exist.");
-                    Toast.makeText(OTPLoginActivity.this, "Phone number not linked to any account.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OTPLoginActivity.this, "Phone number not linked to any account.", Toast.LENGTH_LONG).show();
                     Progress.dismiss();
                 }
 
@@ -283,7 +283,7 @@ public class OTPLoginActivity extends AppCompatActivity {
                 {
                     if(d.isShowing()) {
                         d.dismiss();
-                        Toast.makeText(OTPLoginActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OTPLoginActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_LONG).show();
                     }
                 }
                 catch (Exception e)

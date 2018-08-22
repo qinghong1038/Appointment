@@ -136,7 +136,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!EditMode)
-                    Toast.makeText(ProfileActivity.this, "Not Allowed To Change Email ID", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProfileActivity.this, "Not Allowed To Change Email ID", Toast.LENGTH_LONG).show();
             }
         });
         //TODO: Add code to verify if Phone Number is verified. If not, display the message and the verify Button
@@ -350,7 +350,7 @@ public class ProfileActivity extends AppCompatActivity {
                         Log.d(LOG_TAG, "Names different in DB and EditText");
                         if(Name.trim().equals(""))
                         {
-                            Toast.makeText(ProfileActivity.this,"Please Enter Valid Name",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProfileActivity.this,"Please Enter Valid Name",Toast.LENGTH_LONG).show();
                             Log.d(LOG_TAG, "Not Valid Name");
                             return;
                         }
@@ -360,7 +360,7 @@ public class ProfileActivity extends AppCompatActivity {
                 else {
                     if(Name.trim().equals(""))
                     {
-                        Toast.makeText(ProfileActivity.this,"Please Enter Valid Name",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProfileActivity.this,"Please Enter Valid Name",Toast.LENGTH_LONG).show();
                         Log.d(LOG_TAG, "Not Valid Name");
                         return;
                     }
@@ -372,13 +372,13 @@ public class ProfileActivity extends AppCompatActivity {
                     Log.d(LOG_TAG, "Changing Password");
                     if(!TextUtils.equals(OLDPassword, NEWPassword)){
                         // is empty
-                        Toast.makeText(ProfileActivity.this,"Passwords do not match.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProfileActivity.this,"Passwords do not match.",Toast.LENGTH_LONG).show();
                         Log.d(LOG_TAG, "Passwords do not match");
                         return;
                     }
                     if(OLDPassword.length()<6)
                     {
-                        Toast.makeText(ProfileActivity.this,"Minimum password length is 6",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProfileActivity.this,"Minimum password length is 6",Toast.LENGTH_LONG).show();
                         Log.d(LOG_TAG, "Minimum password length is 6");
                         return;
                     }
@@ -388,7 +388,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
                                         Log.d(LOG_TAG, "User password updated.");
-                                        Toast.makeText(ProfileActivity.this, "Password Updated Successfully", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ProfileActivity.this, "Password Updated Successfully", Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });
@@ -517,7 +517,7 @@ public class ProfileActivity extends AppCompatActivity {
                 if (dataSnapshot.getValue() != null) {
                     //it means user already registered
                     PhoneNumberExists =true;
-                    Toast.makeText(ProfileActivity.this, "Phone Number already exists", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProfileActivity.this, "Phone Number already exists", Toast.LENGTH_LONG).show();
                     Log.d(LOG_TAG,"Phone Number Exists");
                     PhoneET.setText("+91 ");
                     PhoneTV.setText("+91 ");
@@ -571,7 +571,7 @@ public class ProfileActivity extends AppCompatActivity {
                 {
                     if(d.isShowing()) {
                         d.dismiss();
-                        Toast.makeText(ProfileActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProfileActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_LONG).show();
                     }
                 }
                 catch (Exception e)

@@ -202,21 +202,21 @@ public class AppointmentActivity extends AppCompatActivity {
                 PhoneNumber=PhoneET.getText().toString().trim();
                 if (TextUtils.isEmpty(FirstName)) {
                     // is empty
-                    Toast.makeText(AppointmentActivity.this, "Name Field Cannot Be Blank", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AppointmentActivity.this, "Name Field Cannot Be Blank", Toast.LENGTH_LONG).show();
                     Log.d(LOG_TAG, "Name Field Is Blank");
                     return;
 
                 }
                 if (TextUtils.isEmpty(PhoneNumber)) {
                     // is empty
-                    Toast.makeText(AppointmentActivity.this, "Phone Field Cannot Be Blank", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AppointmentActivity.this, "Phone Field Cannot Be Blank", Toast.LENGTH_LONG).show();
                     Log.d(LOG_TAG, "Phone Field Is Blank");
                     return;
 
                 }
                 if(PhoneNumber.length()!=10)
                 {
-                    Toast.makeText(AppointmentActivity.this, "Invalid Phone Number", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AppointmentActivity.this, "Invalid Phone Number", Toast.LENGTH_LONG).show();
                     Log.d(LOG_TAG, "Phone Field Is Not 10 Digit Long");
                     return;
 
@@ -242,7 +242,7 @@ public class AppointmentActivity extends AppCompatActivity {
 
                     if(FollowUpRB.isChecked())
                     {
-                        Toast.makeText(AppointmentActivity.this, "Follow Up Appointment Cannot Be Booked", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AppointmentActivity.this, "Follow Up Appointment Cannot Be Booked since No Appointment Was Taken in the Last 30 Days", Toast.LENGTH_LONG).show();
                         newRB.setChecked(true);
                         return;
                     }
@@ -251,6 +251,7 @@ public class AppointmentActivity extends AppCompatActivity {
                 {
                     Amount="300";
                     aptType="New Appointment";
+
                 }
                 if(FollowUpRB.isChecked()) {
                     for (int i = 0; i < dates.size(); i++)
@@ -263,10 +264,14 @@ public class AppointmentActivity extends AppCompatActivity {
                         long diffday = duration / (24 * 60 * 60 * 1000) + 1;
                         int days = (int) diffday - 1;
                         if(days<0)
-                            days=days*(-1);
+                        {
+                            Toast.makeText(AppointmentActivity.this, "Follow Up Appointment Cannot Be Booked since No Appointment Was Taken in the Last 30 Days", Toast.LENGTH_LONG).show();
+                            newRB.setChecked(true);
+                            return;
+                        }
 
                         Log.d(LOG_TAG, "No of days between appointments : " + days);
-                        if(days<min && days>1)
+                        if(days<min)
                             min=days;
                     }
 
@@ -276,11 +281,7 @@ public class AppointmentActivity extends AppCompatActivity {
                     } else if (min < 0) {
                         Log.d(LOG_TAG, "An appointment is already there ahead");
                         Amount = "300";
-                    } else if (min == 0) {
-                        Log.d(LOG_TAG, "An appointment is already scheduled for same day");
-                        Toast.makeText(AppointmentActivity.this, "You already have an appointment for that day", Toast.LENGTH_SHORT).show();
-                        return;
-                    } else {
+                    }  else {
                         Log.d(LOG_TAG, "Booking Follow Up Appointment");
                         Amount = "150";
                         aptType = "Follow Up Appointment";
@@ -613,7 +614,7 @@ public class AppointmentActivity extends AppCompatActivity {
                 {
                     if(d.isShowing()) {
                         d.dismiss();
-                        Toast.makeText(AppointmentActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AppointmentActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_LONG).show();
                     }
                 }
                 catch (Exception e)

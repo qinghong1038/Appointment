@@ -141,7 +141,7 @@ public class EmailLoginActivity extends AppCompatActivity {
                 String emailAddress = UsernameET.getText().toString().trim();
                 if(emailAddress.equals(""))
                 {
-                    Toast.makeText(EmailLoginActivity.this, "Please Enter The Email ID and Try Again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EmailLoginActivity.this, "Please Enter The Email ID and Try Again", Toast.LENGTH_LONG).show();
                 }
                 else
                 {
@@ -167,12 +167,12 @@ public class EmailLoginActivity extends AppCompatActivity {
         String pass= PasswordET.getText().toString().trim();
         if(TextUtils.isEmpty(email)){
             // is empty
-            Toast.makeText(this,"Please Enter Email Id",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Please Enter Email Id",Toast.LENGTH_LONG).show();
             return;
         }
         if(TextUtils.isEmpty(pass)){
             // is empty
-            Toast.makeText(this,"Please Enter Password",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Please Enter Password",Toast.LENGTH_LONG).show();
             return;
 
         }
@@ -202,7 +202,7 @@ public class EmailLoginActivity extends AppCompatActivity {
                         {
                             if(task.getException().toString().contains("com.google.firebase.FirebaseNetworkException"))
                             {
-                                Toast.makeText(EmailLoginActivity.this, "Internet Connectivity Issues", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(EmailLoginActivity.this, "Internet Connectivity Issues", Toast.LENGTH_LONG).show();
                             }
                             else
                             {
@@ -285,7 +285,7 @@ public class EmailLoginActivity extends AppCompatActivity {
                 {
                     if(d.isShowing()) {
                         d.dismiss();
-                        Toast.makeText(EmailLoginActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EmailLoginActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_LONG).show();
                     }
                 }
                 catch (Exception e)
