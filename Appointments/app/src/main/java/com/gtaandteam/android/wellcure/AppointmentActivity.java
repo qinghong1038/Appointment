@@ -267,7 +267,7 @@ public class AppointmentActivity extends AppCompatActivity {
                             days=days*(-1);
 
                         Log.d(LOG_TAG, "No of days between appointments : " + days);
-                        if(days<min)
+                        if(days<min && days>1)
                             min=days;
                     }
 
