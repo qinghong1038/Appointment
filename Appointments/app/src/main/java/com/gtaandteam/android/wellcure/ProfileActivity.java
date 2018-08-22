@@ -107,7 +107,7 @@ public class ProfileActivity extends AppCompatActivity {
         EmailET = findViewById(R.id.EmailEdit);
         PhoneET = findViewById(R.id.PhoneEdit);
         NameTV = findViewById(R.id.NameTV);
-        EmailTV = findViewById(R.id.EmailTV);
+        EmailTV = findViewById(R.id.FeesTV);
         PhoneTV = findViewById(R.id.PhoneTV);
         VerifyMessage = findViewById(R.id.NotVerifiedMessage);
         OLDPasswordET = findViewById(R.id.OLDPasswordET);

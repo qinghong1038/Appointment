@@ -107,7 +107,7 @@
         app:layout_constraintStart_toEndOf="@+id/EmailTag"  />
 
     <TextView
-        android:id="@+id/EmailTV"
+        android:id="@+id/FeesTV"
         style="@style/ETStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

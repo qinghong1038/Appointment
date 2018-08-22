@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/DateTV" />
 
     <TextView
-        android:id="@+id/EmailTV"
+        android:id="@+id/FeesTV"
         style="@style/TVStyle"
         android:layout_marginTop="8dp"
         android:layout_width="0dp"
@@ -112,7 +112,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="glennlx@douchebag.com"
-        app:layout_constraintBaseline_toBaselineOf="@+id/EmailTV"
+        app:layout_constraintBaseline_toBaselineOf="@+id/FeesTV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/DateET" />
 

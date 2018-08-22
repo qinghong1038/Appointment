@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@+id/NameET" />
 
     <TextView
-        android:id="@+id/EmailTV"
+        android:id="@+id/FeesTV"
         style="@style/TVStyle"
         android:layout_marginTop="8dp"
         android:layout_width="wrap_content"
@@ -76,7 +76,7 @@
         android:tooltipText="Enter A Valid Email Address to Receive Receipt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/EmailTV" />
+        app:layout_constraintTop_toBottomOf="@+id/FeesTV" />
 
     <TextView
         android:id="@+id/DateTV"
