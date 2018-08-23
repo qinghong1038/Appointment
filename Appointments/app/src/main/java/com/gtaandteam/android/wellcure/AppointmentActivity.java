@@ -396,6 +396,10 @@ public class AppointmentActivity extends AppCompatActivity {
             {
                 registeredPhone="Not Verified";
             }
+            else
+            {
+                registeredPhone=registeredPhone.substring(3);
+            }
         }
         catch(Exception e)
         {
@@ -437,7 +441,14 @@ public class AppointmentActivity extends AppCompatActivity {
         /**Function to Auto-fill information about a previously registered user.*/
 
         rName="";
-        rName=FbAuth.getCurrentUser().getDisplayName();
+        try {
+            rName=FbAuth.getCurrentUser().getDisplayName();
+        }
+        catch (Exception e)
+        {
+            rName="";
+            Log.d(LOG_TAG,"Error : "+e.getMessage());
+        }
         if(FbAuth.getCurrentUser().getPhoneNumber()!=null) {
             PhoneNumber = FbAuth.getCurrentUser().getPhoneNumber().substring(3);
             PhoneET.setText(PhoneNumber);

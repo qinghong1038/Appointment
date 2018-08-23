@@ -215,6 +215,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void checkPhoneNumberExists()
     {
+        Log.d(LOG_TAG,"Entered Phone Number Exists");
         PhoneNumberExists=false;
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("mobileDB");
         userRef.orderByChild("Phone").equalTo(PhoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -231,6 +232,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 else
                 {
+                    Log.d(LOG_TAG,"Phone Number Doesnt Exist");
                     FbAuth.createUserWithEmailAndPassword(EmailId, Password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {

@@ -1,8 +1,12 @@
 package com.gtaandteam.android.wellcure;
 
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -28,6 +32,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -73,21 +78,28 @@ public class DoctorsActivity extends AppCompatActivity {
         FbUser = FbAuth.getCurrentUser();
         setSupportActionBar(MyToolbar);
 
-        /*if(FbUser.getPhoneNumber() == null){
-            signOut();
-            startActivity(new Intent(DoctorsActivity.this, EmailLoginActivity.class));
-            finish();
-
-
-        }*/
-
-
-        //Toast.makeText(this, user.getEmail(), Toast.LENGTH_SHORT).show();
-        Log.d(LOG_TAG, "" + FbUser.getPhoneNumber());
-
-
         Intent intent = getIntent();	//gives the reference to the destination intent
         final int loginMode = intent .getIntExtra("loginMode",0);	//loginMode is given in EmailLoginActivity and OTPLoginAcitivty
+
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            Log.d(LOG_TAG,"Building Channel");
+            NotificationManager mNotificationManager =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel mChannel = new NotificationChannel(Constants.CHANNEL_ID, Constants.CHANNEL_NAME, importance);
+            mChannel.setDescription(Constants.CHANNEL_DESCRIPTION);
+            mChannel.enableLights(true);
+            mChannel.setLightColor(Color.RED);
+            mChannel.enableVibration(true);
+            mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+            mNotificationManager.createNotificationChannel(mChannel);
+        }
+
+        /*
+        * Displaying a notification locally
+        */
+        //MyNotificationManager.getInstance(this).displayNotification("Greetings", "Hello how are you?");
 
 
         AppointmentBTN.setOnClickListener(new View.OnClickListener() {
@@ -209,12 +221,28 @@ public class DoctorsActivity extends AppCompatActivity {
             Log.d(LOG_TAG,"Error : "+e.getMessage());
         }
         String Email=FbAuth.getCurrentUser().getEmail();
+        String localFCM;
+        try{
+
+            localFCM = MyFirebaseInstanceIdService.FCMtoken;
+            Log.d(LOG_TAG,"Token : "+localFCM);
+            if(localFCM==null)
+                localFCM=FirebaseInstanceId.getInstance().getToken();
+            Log.d(LOG_TAG,"Fetch Direct : "+localFCM);
+        }
+        catch (Exception e)
+        {
+            localFCM="";
+            Log.d(LOG_TAG,"Couldnt Fetch FCM. : "+e.getMessage());
+        }
         //Date = Day +"/"+(Month +1)+"/"+ Year;
         //Data = new HashMap<>();
         Data.put("Name", rName);
         Data.put("Email", Email);
         Data.put("Phone", PhoneNumber);
         Data.put("LoginDate", Date);
+        Data.put("FCMToken",localFCM);
+
         Log.d(LOG_TAG,"Hashmap Done");
         UserDb1 = FirebaseDatabase.getInstance().getReference().child("users");
         UserDb1.child(FbAuth.getCurrentUser().getUid()).setValue(Data).addOnCompleteListener(this, new OnCompleteListener<Void>() {
