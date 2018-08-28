@@ -88,7 +88,14 @@ public class OTPopUp extends Activity {
         Log.d(LOG_TAG,  "Parent Activity: " + Parent);
         if(!Parent.equals("OTPLoginActivity"))
         {
-            RegisterActivity.Progress.dismiss();
+            try {
+                if(RegisterActivity.Progress.isShowing())
+                    RegisterActivity.Progress.dismiss();
+            }
+            catch (Exception e)
+            {
+                Log.d(LOG_TAG,"No Such Progress : "+e.getMessage());
+            }
         }
         //Log.d(LOG_TAG),"Width Major : "
         try {
@@ -425,6 +432,7 @@ public class OTPopUp extends Activity {
                                 //we start doctor activity here
                                 //Toast.makeText(OTPopUp.this,"Login with New Account Successful",Toast.LENGTH_SHORT).show();
                                 EmailCreated=true;
+                                Log.d(LOG_TAG,"User After Login : "+FbAuth.getCurrentUser());
 
                             }
                             else
@@ -556,29 +564,32 @@ public class OTPopUp extends Activity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Log.d(LOG_TAG, "Delete Email User");
-                            if(EmailCreated)
-                            {
-                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            FirebaseUser user = FbAuth.getInstance().getCurrentUser();
                                 if(user!=null)
-                                {
+                                {   Log.d(LOG_TAG,"User Not Null Inside Delete Function");
                                     user.delete()
                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
                                                     if (task.isSuccessful()) {
                                                         Log.d(LOG_TAG, "User account deleted.");
+                                                        Log.d(LOG_TAG,"Status Now : "+FbAuth.getCurrentUser());
+                                                        Intent intent = new Intent(OTPopUp.this, WelcomeActivity.class);
+
+                                                        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                        startActivity(intent);
+                                                        finish();
                                                     }
                                                 }
                                             });
                                 }
-                            }
-                            Intent intent = new Intent(OTPopUp.this, WelcomeActivity.class);
+                                else
+                                {
+                                    Log.d(LOG_TAG,"User is Null before entering delete");
+                                }
 
-                            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                            finish();
 
 
                         }

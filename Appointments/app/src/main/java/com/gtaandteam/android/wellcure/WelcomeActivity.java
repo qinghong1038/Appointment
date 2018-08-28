@@ -32,6 +32,7 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         Fabric.with(this, new Crashlytics());
+        Log.d(LOG_TAG,"Entered Welcome Activity");
         EmailBTN = findViewById(R.id.EmailButton);
         OTPBTN = findViewById(R.id.OTPButton);
         RegisterBTN = findViewById(R.id.RegisterButton);
@@ -65,7 +66,8 @@ public class WelcomeActivity extends AppCompatActivity {
             OTPBTN.setVisibility(View.INVISIBLE);
             RegisterBTN.setVisibility(View.INVISIBLE);
             AutoLogin.setMessage("Logging In Automatically");
-
+            Log.d(LOG_TAG,"User is Not Null");
+            Log.d(LOG_TAG,"User Email : "+FbAuth.getCurrentUser().getEmail());
             new Handler().postDelayed(new Runnable() {
                 public void run() {
                     try
@@ -87,6 +89,7 @@ public class WelcomeActivity extends AppCompatActivity {
                         finish();
                         Intent i =new Intent(WelcomeActivity.this, DoctorsActivity.class);
                         //i.putExtra("loginMode",1);
+                        finish();
                         startActivity(i);
 
                     }
@@ -99,7 +102,11 @@ public class WelcomeActivity extends AppCompatActivity {
 
             Log.d(LOG_TAG,FbAuth.getCurrentUser().getEmail());
 
-            //FbAuth.signOut();
+
+        }
+        else
+        {
+            Log.d(LOG_TAG,"User is Null");
         }
 
 
@@ -107,13 +114,20 @@ public class WelcomeActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+        Log.d(LOG_TAG,"Entered onStart");
+    }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             Log.d(LOG_TAG, "back button pressed");
 
             if (isTaskRoot()) {
-                Log.d(LOG_TAG, "No other Acitivites Exist");
+                Log.d(LOG_TAG, "No other Activities Exist");
                 AlertDialog.Builder builder = new AlertDialog.Builder(
                         new ContextThemeWrapper(WelcomeActivity.this, R.style.AlertDialogCustom));
                 builder.setCancelable(true);
