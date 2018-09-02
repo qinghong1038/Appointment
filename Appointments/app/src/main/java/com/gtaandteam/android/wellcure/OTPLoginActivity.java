@@ -65,6 +65,8 @@ public class OTPLoginActivity extends AppCompatActivity {
         PhoneOTPTV = findViewById(R.id.PhoneNumberET);
         RegisterBTN = findViewById(R.id.RegisterBTN);
 
+
+
         PhoneOTPTV.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -165,6 +167,24 @@ public class OTPLoginActivity extends AppCompatActivity {
             }
         });
 
+        Intent newIntent = getIntent();
+        String Parent=newIntent.getStringExtra("Parent");
+        if(Parent==null)
+            Parent=" ";
+        if(Parent.equals("WelcomeActivity")){
+            String mobile = newIntent.getStringExtra("Mobile");
+            PhoneOTPTV.setText(mobile);
+            try
+            {
+                if(WelcomeActivity.WelcomeProgress.isShowing()) {
+                    WelcomeActivity.WelcomeProgress.dismiss();
+                }
+            }
+            catch (Exception e)
+            {
+                Log.d(LOG_TAG,""+e.getMessage());
+            }
+        }
 
 
 

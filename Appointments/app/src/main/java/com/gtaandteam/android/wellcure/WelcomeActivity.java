@@ -1,22 +1,33 @@
 package com.gtaandteam.android.wellcure;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TabHost;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -26,6 +37,10 @@ public class WelcomeActivity extends AppCompatActivity {
     final String LOG_TAG = this.getClass().getSimpleName();
     private FirebaseAuth FbAuth;
     static ProgressDialog AutoLogin;
+    Button proceedButton;
+    EditText EntryText;
+    TextInputLayout EntryLayout;
+    static ProgressDialog WelcomeProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,38 +48,75 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
         Fabric.with(this, new Crashlytics());
         Log.d(LOG_TAG,"Entered Welcome Activity");
-        EmailBTN = findViewById(R.id.EmailButton);
-        OTPBTN = findViewById(R.id.OTPButton);
-        RegisterBTN = findViewById(R.id.RegisterButton);
         AutoLogin = new ProgressDialog(this);
+        proceedButton = findViewById(R.id.ProceedButton);
+        EntryText = findViewById(R.id.EntryText);
+        EntryLayout = findViewById(R.id.password_confirm_layout);
+        EntryLayout.setVisibility(View.INVISIBLE);
+        proceedButton.setVisibility(View.INVISIBLE);
+        WelcomeProgress=new ProgressDialog(this);
 
-        EmailBTN.setOnClickListener(new View.OnClickListener() {
+        proceedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(WelcomeActivity.this, EmailLoginActivity.class));
+                String entry = EntryText.getText().toString().trim();
+                if(TextUtils.isEmpty(entry)){
+                    // is empty
+                    Toast.makeText(WelcomeActivity.this,"Please Enter Email Id / Mobile Number",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(entry.toUpperCase().matches("[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}"))
+                {
+                    Log.d(LOG_TAG,"Entry is Email");
+                    checkEmailExists(entry);
+                    WelcomeProgress.setMessage("Verifying Email ID");
+                }
+                else if(entry.length()!=10)
+                {
+                    Log.d(LOG_TAG,"Invalid Input");
+                    Toast.makeText(WelcomeActivity.this, "Invalid Input. Please Try Again", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else if(entry.matches("[0-9]+"))
+                {
+
+                    WelcomeProgress.setMessage("Verifying Mobile Number");
+                    entry="+91"+entry;
+                    Log.d(LOG_TAG,"Possible Mobile : "+entry);
+                    checkPhoneNumberExists(entry);
+                }
+                //TODO: DO stuff with entry
+                WelcomeProgress.setCancelable(false);
+                WelcomeProgress.show();
+                timerDelayRemoveDialog(30000,WelcomeProgress);
             }
         });
 
 
-        OTPBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(WelcomeActivity.this, OTPLoginActivity.class));
-            }
-        });
-
-        RegisterBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(WelcomeActivity.this, RegisterActivity.class));
-            }
-        });
+//        EmailBTN.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(WelcomeActivity.this, EmailLoginActivity.class));
+//            }
+//        });
+//
+//
+//        OTPBTN.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(WelcomeActivity.this, OTPLoginActivity.class));
+//            }
+//        });
+//
+//        RegisterBTN.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(WelcomeActivity.this, RegisterActivity.class));
+//            }
+//        });
         FbAuth = FirebaseAuth.getInstance();
         if(FbAuth.getCurrentUser()!=null)
         {
-            EmailBTN.setVisibility(View.INVISIBLE);
-            OTPBTN.setVisibility(View.INVISIBLE);
-            RegisterBTN.setVisibility(View.INVISIBLE);
             AutoLogin.setMessage("Logging In Automatically");
             Log.d(LOG_TAG,"User is Not Null");
             Log.d(LOG_TAG,"User Email : "+FbAuth.getCurrentUser().getEmail());
@@ -107,6 +159,20 @@ public class WelcomeActivity extends AppCompatActivity {
         else
         {
             Log.d(LOG_TAG,"User is Null");
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    try
+                    {
+                        EntryLayout.setVisibility(View.VISIBLE);
+                        proceedButton.setVisibility(View.VISIBLE);
+
+                    }
+                    catch (Exception e)
+                    {
+                        Log.d(LOG_TAG,""+e.getMessage());
+                    }
+                }
+            }, 1000);
         }
 
 
@@ -158,5 +224,112 @@ public class WelcomeActivity extends AppCompatActivity {
         if ((keyCode == KeyEvent.KEYCODE_DEL))
             Log.d(LOG_TAG,"Backspace Pressed");
         return super.onKeyDown(keyCode, event);
+    }
+    private void checkEmailExists(final String email)
+    {
+        Log.d(LOG_TAG, "Entered  checkPhoneNumberExists");
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("mobileDB");
+        userRef.orderByChild("Email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(LOG_TAG, "Entered onDataChanged() " );
+
+                if (dataSnapshot.getValue() != null) {
+                    //it means user already registered
+                    Log.d(LOG_TAG, "Email ID Exists");
+                    Intent intent = new Intent(WelcomeActivity.this, EmailLoginActivity.class);
+                    intent.putExtra("Email",email);
+                    intent.putExtra("Parent", LOG_TAG);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+                else
+                {
+                    Log.d(LOG_TAG, "Email Doesn't exist.");
+                    Intent intent = new Intent(WelcomeActivity.this, RegisterActivity.class);
+                    intent.putExtra("Email",email);
+                    intent.putExtra("Parent", LOG_TAG);
+                    intent.putExtra("Mode", "Email");
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        Log.d(LOG_TAG, "Returning from checkPhoneNumberExists");
+    }
+    public void timerDelayRemoveDialog(long time, final Dialog d){
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                try
+                {
+                    if(d.isShowing()) {
+                        d.dismiss();
+                        Toast.makeText(WelcomeActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_LONG).show();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.d(LOG_TAG,""+e.getMessage());
+                }
+            }
+        }, time);
+    }
+    private void checkPhoneNumberExists(final String PhoneNumber)
+    {
+        Log.d(LOG_TAG, "Entered  checkPhoneNumberExists");
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("mobileDB");
+        userRef.orderByChild("Phone").equalTo(PhoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(LOG_TAG, "Entered onDataChanged() " );
+
+                if (dataSnapshot.getValue() != null) {
+                    //it means user already registered
+                    Log.d(LOG_TAG, "Phone Number Exists");
+                    //OTP will be sent now
+                    Log.d(LOG_TAG, "Phone Number Exists Confirmed. Hence going to start OTPopUp");
+                    //(OTPLoginActivity.this, "PhoneNumberExists", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(WelcomeActivity.this, OTPopUp.class);
+                    intent.putExtra("Parent", LOG_TAG);
+                    intent.putExtra("PhoneNumber", PhoneNumber);
+                    Log.d(LOG_TAG, "All good. Switching to OTPopUp");
+                    startActivity(intent);
+                }
+                else
+                {
+                    Log.d(LOG_TAG, "Phone Number Doesn't exist.");
+                    Intent intent = new Intent(WelcomeActivity.this, RegisterActivity.class);
+                    intent.putExtra("Phone",PhoneNumber);
+                    intent.putExtra("Parent", LOG_TAG);
+                    intent.putExtra("Mode", "Phone");
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        Log.d(LOG_TAG, "Returning from checkPhoneNumberExists");
     }
 }

@@ -72,11 +72,27 @@ public class EmailLoginActivity extends AppCompatActivity {
         Intent intent=getIntent();
         String Parent=intent.getStringExtra("Parent");
         if(Parent==null)
-            Parent="";
+            Parent=" ";
         if(Parent.equals("OTPopUp"))
             if(OTPopUp.Progress.isShowing()){
             Log.d(LOG_TAG,"OTP Progress was showing");
             OTPopUp.Progress.dismiss();
+            }
+            if(Parent.equals("WelcomeActivity"))
+            {
+                String RetEmail=intent.getStringExtra("Email");
+                UsernameET.setText(RetEmail);
+                try
+                {
+                    if(WelcomeActivity.WelcomeProgress.isShowing()) {
+                        WelcomeActivity.WelcomeProgress.dismiss();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.d(LOG_TAG,""+e.getMessage());
+                }
+
             }
 
         OTPLogin.setOnClickListener(new View.OnClickListener() {
@@ -246,7 +262,7 @@ public class EmailLoginActivity extends AppCompatActivity {
                 AlertDialog dialog = builder.create();
                 dialog.show();
             } else {
-                Log.d(LOG_TAG, "Other Activites Exist");
+                Log.d(LOG_TAG, "Other Activities Exist");
             }
         }
         if ((keyCode == KeyEvent.KEYCODE_DEL))

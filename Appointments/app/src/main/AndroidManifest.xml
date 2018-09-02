@@ -33,7 +33,6 @@
         </activity><activity
             android:name=".EmailLoginActivity"
         android:parentActivityName=".WelcomeActivity"
-
         android:label="Login using Email "
 
         android:screenOrientation="portrait" />
@@ -76,7 +75,7 @@
         <meta-data
             android:name="instamojo.orderauth.url"
             android:screenOrientation="portrait"
-            android:value="https://wellcure.000webhostapp.com/access_token_test.php" />
+            android:value="https://wellcure.000webhostapp.com/access_token_final.php" />
 
         <activity
             android:name=".OTPopUp"

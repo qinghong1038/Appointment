@@ -73,6 +73,33 @@ public class RegisterActivity extends AppCompatActivity {
         PhoneNumberET.setText("+91 ");
         Progress =new ProgressDialog(this);
 
+        Intent newIntent=getIntent();
+        String Parent=newIntent.getStringExtra("Parent");
+        if(Parent==null)
+            Parent="";
+        if(Parent.equals("WelcomeActivity"))
+        {
+            String mode=newIntent.getStringExtra("Mode");
+            if(mode.equals("Phone")){
+                String RetPhone=newIntent.getStringExtra("Phone");
+                PhoneNumberET.setText(RetPhone);
+            }
+            if(mode.equals("Email"))
+            {
+                String RetEmail=newIntent.getStringExtra("Email");
+                UsernameET.setText(RetEmail);
+            }
+            try
+            {
+                if(WelcomeActivity.WelcomeProgress.isShowing()) {
+                    WelcomeActivity.WelcomeProgress.dismiss();
+                }
+            }
+            catch (Exception e)
+            {
+                Log.d(LOG_TAG,""+e.getMessage());
+            }
+        }
 
         MyToolbar = findViewById(R.id.MyToolbar);
         setSupportActionBar(MyToolbar);
