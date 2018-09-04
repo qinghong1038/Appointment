@@ -106,6 +106,16 @@ public class OTPopUp extends Activity {
         {
             Log.d(LOG_TAG,"No Such Progress : "+e.getMessage());
         }
+        try
+        {
+            if(WelcomeActivity.WelcomeProgress.isShowing()) {
+                WelcomeActivity.WelcomeProgress.dismiss();
+            }
+        }
+        catch (Exception e)
+        {
+            Log.d(LOG_TAG,""+e.getMessage());
+        }
         VerificationCompleted = false;
         OTPReceived=false;
         AutoEnteredOTP=false;
@@ -150,7 +160,7 @@ public class OTPopUp extends Activity {
             Pbuilder.setMessage("Would you like to continue anyway without linking mobile number?\n\n" +
                     "Note : If you proceed without linking mobile number, you wont be able to Login using Mobile Number");
         }
-        else if(Parent.equals("OTPLoginActivity"))
+        else if((Parent.equals("OTPLoginActivity"))||(Parent.equals("WelcomeActivity")))
         {
             Pbuilder.setTitle("Waiting for OTP");
             Pbuilder.setMessage("Would you like to Login with Email Instead?\n\n" +
@@ -282,7 +292,7 @@ public class OTPopUp extends Activity {
         PhoneAuthCredential credential =
                 PhoneAuthProvider.getCredential(phoneVerificationId, Code);
         Log.d(LOG_TAG, "Verification In Progress");
-        if(Parent.equals("OTPLoginActivity"))
+        if((Parent.equals("OTPLoginActivity"))||(Parent.equals("WelcomeActivity")))
             signInWithPhoneAuthCredential(credential);
         else
         {

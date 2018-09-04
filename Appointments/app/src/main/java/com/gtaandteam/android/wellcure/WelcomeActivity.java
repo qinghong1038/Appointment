@@ -13,12 +13,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
@@ -132,7 +134,7 @@ public class WelcomeActivity extends AppCompatActivity {
                         Log.d(LOG_TAG,""+e.getMessage());
                     }
                 }
-            }, 2000);
+            }, 1000);
             new Handler().postDelayed(new Runnable() {
                 public void run() {
                     try
@@ -150,7 +152,7 @@ public class WelcomeActivity extends AppCompatActivity {
                         Log.d(LOG_TAG,""+e.getMessage());
                     }
                 }
-            }, 4000);
+            }, 3500);
 
             Log.d(LOG_TAG,FbAuth.getCurrentUser().getEmail());
 
@@ -172,7 +174,7 @@ public class WelcomeActivity extends AppCompatActivity {
                         Log.d(LOG_TAG,""+e.getMessage());
                     }
                 }
-            }, 1000);
+            }, 1500);
         }
 
 
@@ -276,7 +278,12 @@ public class WelcomeActivity extends AppCompatActivity {
                 {
                     if(d.isShowing()) {
                         d.dismiss();
-                        Toast.makeText(WelcomeActivity.this, "Taking Too Long Due To Connectivity Issues", Toast.LENGTH_LONG).show();
+                        Toast toast = Toast.makeText(WelcomeActivity.this, "Please Check Internet Connection\nCheck App's Internet Permissions", Toast.LENGTH_LONG);
+                        TextView tv = toast.getView().findViewById(android.R.id.message);
+                        if(tv!=null)
+                            tv.setGravity(Gravity.CENTER);
+                        toast.show();
+
                     }
                 }
                 catch (Exception e)

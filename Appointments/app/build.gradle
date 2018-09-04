@@ -16,8 +16,8 @@ android {
         applicationId "com.gtaandteam.android.wellcure"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 8
-        versionName "2.0.2"
+        versionCode 9
+        versionName "2.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
