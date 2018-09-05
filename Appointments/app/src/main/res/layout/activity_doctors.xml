@@ -46,15 +46,29 @@
 
 
     <TextView
-        android:id="@+id/QualificationsTV"
+    android:id="@+id/QualificationsTV"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fontFamily="sans-serif-condensed"
+    android:gravity="center"
+    android:text="BHMS"
+    app:layout_constraintEnd_toEndOf="@+id/DoctorsNameTV"
+    app:layout_constraintStart_toStartOf="@+id/DoctorsNameTV"
+    app:layout_constraintTop_toBottomOf="@+id/DoctorsNameTV" />
+
+    <TextView
+        android:id="@+id/ShortBioTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-condensed"
+        android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="BHMS"
+        android:text="Dr. Ritu Jain is a Homeopathic Consultant\nand has been practicing for more than 10 Years,\nhelping individuals cure their ailments through Homeopathy."
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/DoctorsNameTV"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/DoctorsNameTV"
-        app:layout_constraintTop_toBottomOf="@+id/DoctorsNameTV" />
+        app:layout_constraintTop_toBottomOf="@+id/QualificationsTV" />
 
 
     <Button
@@ -63,10 +77,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="appointment"
+        android:layout_marginTop="8dp"
+        android:text="book appointment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ShortBioTV" />
 
 
 

@@ -1,5 +1,6 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -106,11 +107,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:text="Book and pay"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/BookingMessage" />
+        app:layout_constraintTop_toBottomOf="@+id/PromoCodeET" />
 
     <TextView
         android:id="@+id/BookingMessage"
@@ -131,10 +133,10 @@
     <TextView
         android:id="@+id/BookingType"
         style="@style/TVStyle"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Type"
-        app:layout_constraintEnd_toEndOf="@+id/DateTV"
+        android:text="Type OF APPOINTMENT"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/DateET" />
     <RadioGroup
@@ -155,8 +157,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="New"
+            android:background="#FF9191"
+            android:backgroundTintMode="screen"
             android:checked="true"
+            android:text="New"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:textColor="@color/background"
+            android:textStyle="bold"
             android:tooltipText="For Making A New Appointment Booking" />
 
         <RadioButton
@@ -165,9 +172,33 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="#22AD73"
             android:text="Follow-up"
+            android:textAllCaps="true"
+            android:textColor="@color/background"
+            android:textStyle="bold"
             android:tooltipText="For Making A Follow Up Appointment Booking" />
     </RadioGroup>
+    <TextView
+        android:id="@+id/PromoCodeTV"
+        style="@style/TVStyle"
+        android:layout_marginTop="8dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="  Promo Code  "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Radio_group" />
+
+    <EditText
+        android:id="@+id/PromoCodeET"
+        style="@style/ETStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter Promo Code (Optional)"
+        android:tooltipText="Enter Promo Code (Optional)"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/PromoCodeTV" />
 
 
 
