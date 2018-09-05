@@ -112,7 +112,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PromoCodeET" />
+        app:layout_constraintTop_toBottomOf="@+id/BookingMessage" />
 
     <TextView
         android:id="@+id/BookingMessage"
@@ -128,7 +128,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Radio_group" />
+        app:layout_constraintTop_toBottomOf="@+id/PromoCodeET" />
 
     <TextView
         android:id="@+id/BookingType"

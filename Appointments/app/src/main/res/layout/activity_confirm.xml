@@ -65,7 +65,18 @@
         app:layout_constraintTop_toBottomOf="@+id/DoctorIV" />
 
     <TextView
-        android:id="@+id/AmountTV"
+    android:id="@+id/AmountTV"
+    style="@style/ETStyle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="₹10"
+    android:textSize="36sp"
+    app:layout_constraintBottom_toTopOf="@+id/PayBTN"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/PromoAmountTV"
         style="@style/ETStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
