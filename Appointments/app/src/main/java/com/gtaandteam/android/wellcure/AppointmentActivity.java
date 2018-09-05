@@ -534,7 +534,7 @@ public class AppointmentActivity extends AppCompatActivity {
         {
             rName="";
             Log.d(LOG_TAG,"Inside rName exception : "+e.getMessage());
-            Amount="300";
+           // Amount="300";
         }
 
 
@@ -587,7 +587,7 @@ public class AppointmentActivity extends AppCompatActivity {
                         try{
                             if(LatestDate.equals("")||LatestDate==null)
                             {
-                                Amount ="300";
+                                //Amount ="300";
                                 Log.d(LOG_TAG,"Amount in try: "+Amount);
                             }
 
