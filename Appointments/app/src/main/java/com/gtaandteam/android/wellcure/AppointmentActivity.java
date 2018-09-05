@@ -81,7 +81,8 @@ public class AppointmentActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private FirebaseAuth FbAuth;
     DatabaseReference UserDb1, UserDb2, AppointmentDb;
-
+    //deduction from promocode//
+    double deduction;
     final String LOG_TAG = this.getClass().getSimpleName();
     String latestDate="";
     String LatestDate="";
@@ -232,6 +233,21 @@ public class AppointmentActivity extends AppCompatActivity {
                 {
                     Log.d(LOG_TAG,"Internet is connected");
                 }
+                
+                //fetching amount from firebase//
+                 UserDb2 = FirebaseDatabase.getInstance().getReference().child("fee");
+                UserDb1.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Amount= dataSnapshot.getValue().toString();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+                
 
                 format = new SimpleDateFormat("dd/MM/yyyy");
                 try {
@@ -249,7 +265,7 @@ public class AppointmentActivity extends AppCompatActivity {
                 }
                 if(newRB.isChecked())
                 {
-                    Amount="300";
+                    //Amount="300";
                     aptType="New Appointment";
 
                 }
@@ -277,18 +293,57 @@ public class AppointmentActivity extends AppCompatActivity {
 
                     if (min > 31) {
                         Log.d(LOG_TAG, "Booking New Appointment");
-                        Amount = "300";
+                       // Amount = "300";
                     } else if (min < 0) {
                         Log.d(LOG_TAG, "An appointment is already there ahead");
-                        Amount = "300";
+                       // Amount = "300";
                     }  else {
                         Log.d(LOG_TAG, "Booking Follow Up Appointment");
-                        Amount = "150";
+                        //Amount = "150";
+                        //fetching follow up from firebase
+                        UserDb1 = FirebaseDatabase.getInstance().getReference().child("offer");
+                        UserDb1.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Amount = dataSnapshot.getValue().toString();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                         aptType = "Follow Up Appointment";
                     }
                 }
+                //fetching promocode//
+                /*promocode need to taken from edit text*/
+
+                final String promocode="";
+
+                UserDb2 = FirebaseDatabase.getInstance().getReference().child("promo");
+                UserDb2.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        HashMap map=(HashMap) dataSnapshot.getValue();
+                        for (Object code: map.keySet()){
+                            if(promocode.equals(code.toString())){
+                               deduction=Double.parseDouble(map.get(code.toString()).toString());
+
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+                
                 Answers.getInstance().logAddToCart(new AddToCartEvent()
-                        .putItemPrice(BigDecimal.valueOf(Double.parseDouble(Amount)))
+                        .putItemPrice(BigDecimal.valueOf(Double.parseDouble(Amount)-deduction))
                         .putCurrency(Currency.getInstance("INR"))
                         .putItemName(aptType));
                 storeData();
@@ -479,7 +534,7 @@ public class AppointmentActivity extends AppCompatActivity {
         {
             rName="";
             Log.d(LOG_TAG,"Inside rName exception : "+e.getMessage());
-            Amount="300";
+           // Amount="300";
         }
 
 
@@ -532,7 +587,7 @@ public class AppointmentActivity extends AppCompatActivity {
                         try{
                             if(LatestDate.equals("")||LatestDate==null)
                             {
-                                Amount ="300";
+                                //Amount ="300";
                                 Log.d(LOG_TAG,"Amount in try: "+Amount);
                             }
 
