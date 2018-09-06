@@ -87,6 +87,10 @@
             android:screenOrientation="portrait"
             android:value="80547909762a12903a49cd9f0b3e3467762a2231" />
 
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/new_app_logo" />
+
         <activity android:name=".AboutActivity" />
         <activity
             android:name=".ProfileActivity"

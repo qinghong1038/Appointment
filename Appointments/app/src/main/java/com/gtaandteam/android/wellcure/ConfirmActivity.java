@@ -38,7 +38,7 @@ public class ConfirmActivity extends AppCompatActivity {
 
     /**Views*/
     Button ConfirmBTN;
-    TextView DoctorNameTV, DateTV, PatientNameTV, EmailTV, AmountTV;
+    TextView DoctorNameTV, DateTV, PatientNameTV, EmailTV, AmountTV,PromoTV;
     ImageView DoctorIV;
 
     InstapayListener listener;
@@ -126,6 +126,8 @@ public class ConfirmActivity extends AppCompatActivity {
         EmailTV = findViewById(R.id.EmailET);
         AmountTV = findViewById(R.id.AmountTV); //AmountTV to be paid
         DoctorIV = findViewById(R.id.DoctorIV);
+        PromoTV = findViewById(R.id.PromoAmountTV);
+        PromoTV.setVisibility(View.INVISIBLE);
 
         Intent getDetails = getIntent();
         AppointmentActivity.Progress2.dismiss();
@@ -137,7 +139,12 @@ public class ConfirmActivity extends AppCompatActivity {
         PatientNameTV.setText(Name);
         EmailTV.setText(Email);
         DateTV.setText(Date);
-        AmountTV.setText("₹"+Amount);
+        if(AppointmentActivity.PromoApplied) {
+            PromoTV.setText("Discount of ₹"+AppointmentActivity.PromoValue+" is applied");
+            PromoTV.setVisibility(View.VISIBLE);
+        }
+
+        AmountTV.setText("Amount to be Paid : ₹"+Amount);
         Purpose = "Wellcure Appt on "+Date;
         Log.d(LOG_TAG,Purpose);
 

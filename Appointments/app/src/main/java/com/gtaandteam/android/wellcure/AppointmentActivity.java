@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -60,14 +61,17 @@ public class AppointmentActivity extends AppCompatActivity {
     /**Data Structures*/
     int Year, Month, Day;
     String FirstName, Email, PhoneNumber, Date;
-    String rName, Amount; //retrieved files from database
+    String rName, Amount;
+    static Double FinalAmount,DoubleAmount,DoubleFollowUp; //retrieved files from database
     static String aptType="";
     HashMap<String, String> Data;
     static String SelectedDate, TodaysDate;
-    Boolean UserExists, newApt=true;
+    Boolean UserExists,newApt=true;
+    static Boolean PromoApplied;
+    static String PromoValue="";
     long min=Integer.MAX_VALUE;
     /**Views*/
-    EditText DateET, NameET, PhoneET, EmailET;
+    EditText DateET, NameET, PhoneET, EmailET,PromoCodeET;
     TextView BookingTypeTV;
     Button BookAndPayBTN;
     RadioGroup RGroup;
@@ -83,6 +87,7 @@ public class AppointmentActivity extends AppCompatActivity {
     DatabaseReference UserDb1, UserDb2, AppointmentDb;
     //deduction from promocode//
     double deduction;
+    static String PromoCode;
     final String LOG_TAG = this.getClass().getSimpleName();
     String latestDate="";
     String LatestDate="";
@@ -100,6 +105,7 @@ public class AppointmentActivity extends AppCompatActivity {
         PhoneET = findViewById(R.id.PhoneET);
         EmailET = findViewById(R.id.EmailET);
         DateET = findViewById(R.id.DateET);
+        PromoCodeET = findViewById(R.id.PromoCodeET);
         BookingTypeTV = findViewById(R.id.BookingMessage);
         BookAndPayBTN = findViewById(R.id.bookAndPay_Button);
         MyToolbar = findViewById(R.id.MyToolbar);
@@ -110,6 +116,10 @@ public class AppointmentActivity extends AppCompatActivity {
         newRB = findViewById(R.id.new_appt);
         FollowUpRB = findViewById(R.id.follow_up_appt);
         RGroup = findViewById(R.id.Radio_group);
+        PromoApplied=false;
+        FinalAmount=0.0;
+        DoubleAmount=0.0;
+        DoubleFollowUp=0.0;
 
         Intent intent = getIntent();
         UserExists = intent.getBooleanExtra("UserExists",false);
@@ -233,21 +243,6 @@ public class AppointmentActivity extends AppCompatActivity {
                 {
                     Log.d(LOG_TAG,"Internet is connected");
                 }
-                
-                //fetching amount from firebase//
-                 UserDb2 = FirebaseDatabase.getInstance().getReference().child("fee");
-                UserDb1.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                Amount= dataSnapshot.getValue().toString();
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-                
 
                 format = new SimpleDateFormat("dd/MM/yyyy");
                 try {
@@ -267,13 +262,85 @@ public class AppointmentActivity extends AppCompatActivity {
                 {
                     //Amount="300";
                     aptType="New Appointment";
+                    UserDb2 = FirebaseDatabase.getInstance().getReference().child("fees");
+                    UserDb2.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Amount= dataSnapshot.getValue().toString();
+                            Log.d(LOG_TAG,"NewApptAmount : "+Amount);
+                            if(Amount==null)
+                                Amount="300";
+                            DoubleAmount=Double.parseDouble(Amount);
+                            FinalAmount=DoubleAmount;
+                            Log.d(LOG_TAG,"Final Amount Before Promo : "+FinalAmount);
+                            Log.d(LOG_TAG,"Type of Apt : "+aptType);
+                            PromoCode=PromoCodeET.getText().toString().toUpperCase();
+                            if(!PromoCode.trim().equals(""))
+                            {
+                                UserDb2 = FirebaseDatabase.getInstance().getReference().child("promoCodes");
+                                UserDb2.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        HashMap map=(HashMap) dataSnapshot.getValue();
+                                        for (Object code: map.keySet()){
+                                            //Log.d(LOG_TAG,"Promo Code : "+code.toString()+" Value : "+map.get(code.toString()).toString());
+                                            if(PromoCode.equals(code.toString())){
+                                                deduction=Double.parseDouble(map.get(code.toString()).toString());
+                                                PromoValue=""+deduction;
+                                                Log.d(LOG_TAG,"Deduction : "+deduction);
+                                                FinalAmount=DoubleAmount-deduction;
+                                                Log.d(LOG_TAG,"Promo Code : "+PromoCode+" applied!");
+                                                Toast.makeText(AppointmentActivity.this, "Promo Code : "+PromoCode+" applied!", Toast.LENGTH_SHORT).show();
+                                                Log.d(LOG_TAG,"Final Amount for CheckOut : "+FinalAmount);
+                                                PromoApplied=true;
+                                                Answers.getInstance().logAddToCart(new AddToCartEvent()
+                                                        .putItemPrice(BigDecimal.valueOf(FinalAmount))
+                                                        .putCurrency(Currency.getInstance("INR"))
+                                                        .putItemName(aptType));
+                                                storeData();
+                                            }
+                                        }
+                                        if(!PromoApplied) {
+                                            Log.d(LOG_TAG,"No Such PromoCode");
+                                            Toast.makeText(AppointmentActivity.this, "No Such Promo Code", Toast.LENGTH_LONG).show();
+                                            //PromoCodeET.selectAll();
+                                            PromoCodeET.setSelectAllOnFocus(true);
+                                            PromoCodeET.clearFocus();
+                                        }
+
+
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        Log.d(LOG_TAG,"Error PromoCode : "+databaseError.getMessage());
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                Log.d(LOG_TAG,"Final Amount for CheckOut : "+FinalAmount);
+                                Answers.getInstance().logAddToCart(new AddToCartEvent()
+                                        .putItemPrice(BigDecimal.valueOf(DoubleAmount))
+                                        .putCurrency(Currency.getInstance("INR"))
+                                        .putItemName(aptType));
+                                storeData();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.d(LOG_TAG,"Error : "+databaseError.getMessage());
+                        }
+                    });
 
                 }
                 if(FollowUpRB.isChecked()) {
                     for (int i = 0; i < dates.size(); i++)
                     {
                         try {
-                        lastAppointment = format.parse(dates.get(i));
+                            lastAppointment = format.parse(dates.get(i));
                         }catch(Exception e){}
 
                         long duration = requestedApt.getTime() - lastAppointment.getTime();
@@ -293,64 +360,98 @@ public class AppointmentActivity extends AppCompatActivity {
 
                     if (min > 31) {
                         Log.d(LOG_TAG, "Booking New Appointment");
-                       // Amount = "300";
+                        // Amount = "300";
                     } else if (min < 0) {
                         Log.d(LOG_TAG, "An appointment is already there ahead");
-                       // Amount = "300";
+                        // Amount = "300";
                     }  else {
                         Log.d(LOG_TAG, "Booking Follow Up Appointment");
                         //Amount = "150";
                         //fetching follow up from firebase
-                        UserDb1 = FirebaseDatabase.getInstance().getReference().child("offer");
-                        UserDb1.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                Amount = dataSnapshot.getValue().toString();
-                            }
+                        try{
+                            UserDb1 = FirebaseDatabase.getInstance().getReference().child("followup");
+                            UserDb1.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    Amount = dataSnapshot.getValue().toString();
+                                    Log.d(LOG_TAG,"FollowUp Amount : "+Amount);
+                                    if(Amount==null)
+                                        Amount="150";
+                                    DoubleFollowUp=Double.parseDouble(Amount);
+                                    PromoValue=""+deduction;
+                                    FinalAmount=DoubleFollowUp;
+                                    Log.d(LOG_TAG,"Final Amount Before Promo : "+FinalAmount);
+                                    Log.d(LOG_TAG,"Type of Apt : "+aptType);
+                                    PromoCode=PromoCodeET.getText().toString().toUpperCase();
+                                    if(!PromoCode.trim().equals(""))
+                                    {
+                                        UserDb2 = FirebaseDatabase.getInstance().getReference().child("promoCodes");
+                                        UserDb2.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                HashMap map=(HashMap) dataSnapshot.getValue();
+                                                for (Object code: map.keySet()){
+                                                    Log.d(LOG_TAG,"Promo Code : "+code.toString()+"Value : "+map.get(code.toString()).toString());
+                                                    if(PromoCode.equals(code.toString())){
+                                                        deduction=Double.parseDouble(map.get(code.toString()).toString());
+                                                        Log.d(LOG_TAG,"Deduction : "+deduction);
+                                                        FinalAmount=DoubleFollowUp-deduction;
+                                                        Log.d(LOG_TAG,"Promo Code : "+PromoCode+" applied!");
+                                                        Toast.makeText(AppointmentActivity.this, "Promo Code : "+PromoCode+" applied!", Toast.LENGTH_SHORT).show();
+                                                        Log.d(LOG_TAG,"Final Amount for CheckOut : "+FinalAmount);
+                                                        PromoApplied=true;
+                                                Answers.getInstance().logAddToCart(new AddToCartEvent()
+                                                        .putItemPrice(BigDecimal.valueOf(FinalAmount))
+                                                        .putCurrency(Currency.getInstance("INR"))
+                                                        .putItemName(aptType));
+                                                storeData();
+                                                    }
+                                                }
+                                                if(!PromoApplied) {
+                                                    Log.d(LOG_TAG,"No Such PromoCode");
+                                                    Toast.makeText(AppointmentActivity.this, "No Such Promo Code", Toast.LENGTH_LONG).show();
+                                                    //PromoCodeET.selectAll();
+                                                    PromoCodeET.setSelectAllOnFocus(true);
+                                                    PromoCodeET.clearFocus();
+                                                }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                            }
-                        });
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                Log.d(LOG_TAG,"Error PromoCode : "+databaseError.getMessage());
+                                            }
+                                        });
+                                    }
+                                    else
+                                    {
+                                        Log.d(LOG_TAG,"Final Amount for CheckOut : "+FinalAmount);
+                                Answers.getInstance().logAddToCart(new AddToCartEvent()
+                                        .putItemPrice(BigDecimal.valueOf(DoubleAmount))
+                                        .putCurrency(Currency.getInstance("INR"))
+                                        .putItemName(aptType));
+                                storeData();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    Log.d(LOG_TAG,"Error FollowUp : "+databaseError.getMessage());
+                                }
+                            });
+                        }
+                        catch (Exception e)
+                        {
+                            Amount="150";
+                            FinalAmount=Double.parseDouble(Amount);
+                        }
                         aptType = "Follow Up Appointment";
                     }
                 }
-                //fetching promocode//
-                /*promocode need to taken from edit text*/
-
-                final String promocode="";
-
-                UserDb2 = FirebaseDatabase.getInstance().getReference().child("promo");
-                UserDb2.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        HashMap map=(HashMap) dataSnapshot.getValue();
-                        for (Object code: map.keySet()){
-                            if(promocode.equals(code.toString())){
-                               deduction=Double.parseDouble(map.get(code.toString()).toString());
-
-                            }
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
-                
-                Answers.getInstance().logAddToCart(new AddToCartEvent()
-                        .putItemPrice(BigDecimal.valueOf(Double.parseDouble(Amount)-deduction))
-                        .putCurrency(Currency.getInstance("INR"))
-                        .putItemName(aptType));
-                storeData();
-
             }
         });
-
 
         setSupportActionBar(MyToolbar);
         // Get a support ActionBar corresponding to this MyToolbar
@@ -462,7 +563,8 @@ public class AppointmentActivity extends AppCompatActivity {
             registeredPhone="Not Verified";
         }
 
-
+        final int intFinalAmount = (int) Math.round(FinalAmount);
+        Log.d(LOG_TAG,"Checking out Rs "+intFinalAmount);
         Date = Day +"/"+(Month +1)+"/"+ Year;
         Data = new HashMap<>();
         Data.put("Name", FirstName);
@@ -478,13 +580,13 @@ public class AppointmentActivity extends AppCompatActivity {
                 //finish();
                 //go to page which shows users details
                 Log.d(LOG_TAG,"Stored to Database");
-               //Toast.makeText(getApplicationContext(),"Stored Data",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),"Stored Data",Toast.LENGTH_SHORT).show();
                 Intent toConfirm = new Intent(AppointmentActivity.this, ConfirmActivity.class);
                 toConfirm.putExtra("Name", FirstName);
                 toConfirm.putExtra("Email", EmailET.getText().toString());
                 toConfirm.putExtra("Phone", PhoneNumber);
                 toConfirm.putExtra("Date", SelectedDate);
-                toConfirm.putExtra("Amount",Amount);
+                toConfirm.putExtra("Amount",""+intFinalAmount);
                 startActivity (toConfirm);
             }
         });
@@ -534,7 +636,7 @@ public class AppointmentActivity extends AppCompatActivity {
         {
             rName="";
             Log.d(LOG_TAG,"Inside rName exception : "+e.getMessage());
-           // Amount="300";
+            // Amount="300";
         }
 
 
@@ -652,7 +754,7 @@ public class AppointmentActivity extends AppCompatActivity {
                 AlertDialog dialog = builder.create();
                 dialog.show();
             } else {
-                Log.d(LOG_TAG, "Other Activites Exist");
+                Log.d(LOG_TAG, "Other Activities Exist");
             }
         }
         if ((keyCode == KeyEvent.KEYCODE_DEL))

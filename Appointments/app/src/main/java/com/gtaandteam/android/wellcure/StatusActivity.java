@@ -177,7 +177,9 @@ public class StatusActivity extends AppCompatActivity {
         /**Stores user data in the database*/
 
         Log.d(LOG_TAG,"Entered storeData() Function");
-
+        String Promo="None";
+        if(AppointmentActivity.PromoApplied)
+            Promo=AppointmentActivity.PromoCode;
         /*onSuccess.putExtra("Status",true);
         getStatus.getStringExtra("OrderID",orderID[1]);
         getStatus.getStringExtra("PaymentID",paymentID[1]);
@@ -191,6 +193,7 @@ public class StatusActivity extends AppCompatActivity {
         Data.put("AppointmentDate",AppointmentActivity.SelectedDate);
         Data.put("BookingDate",AppointmentActivity.TodaysDate);
         Data.put("Amount", Amount);
+        Data.put("PromoCodeUsed",Promo);
         if(Success)
         {
             Data.put("OrderID", OrderID);
