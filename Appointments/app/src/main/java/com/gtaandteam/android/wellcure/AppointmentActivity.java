@@ -123,6 +123,7 @@ public class AppointmentActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         UserExists = intent.getBooleanExtra("UserExists",false);
+
         Progress = new ProgressDialog(this);
         Progress2 = new ProgressDialog(this);
         //Toast.makeText(AppointmentActivity.this, "Value of UserExists : "+UserExists, Toast.LENGTH_SHORT).show();
@@ -209,6 +210,7 @@ public class AppointmentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //TODO: Calculate Amount To Be Paid based on Past Appointments.
                 Log.v("APP","Clicked Submit");
+                PromoApplied=false;
                 FirstName = NameET.getText().toString().trim();
                 PhoneNumber=PhoneET.getText().toString().trim();
                 if (TextUtils.isEmpty(FirstName)) {
@@ -260,6 +262,10 @@ public class AppointmentActivity extends AppCompatActivity {
                 }
                 if(newRB.isChecked())
                 {
+                    Progress2.setMessage("Preparing Your Order");
+                    Progress2.setCancelable(false);
+                    Progress2.show();
+                    timerDelayRemoveDialog(30000,Progress2);
                     //Amount="300";
                     aptType="New Appointment";
                     UserDb2 = FirebaseDatabase.getInstance().getReference().child("fees");
@@ -275,8 +281,13 @@ public class AppointmentActivity extends AppCompatActivity {
                             Log.d(LOG_TAG,"Final Amount Before Promo : "+FinalAmount);
                             Log.d(LOG_TAG,"Type of Apt : "+aptType);
                             PromoCode=PromoCodeET.getText().toString().toUpperCase();
+                            Progress2.dismiss();
                             if(!PromoCode.trim().equals(""))
                             {
+                                Progress2.setMessage("Checking PromoCode");
+                                Progress2.setCancelable(false);
+                                Progress2.show();
+                                timerDelayRemoveDialog(30000,Progress2);
                                 UserDb2 = FirebaseDatabase.getInstance().getReference().child("promoCodes");
                                 UserDb2.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -285,6 +296,7 @@ public class AppointmentActivity extends AppCompatActivity {
                                         for (Object code: map.keySet()){
                                             //Log.d(LOG_TAG,"Promo Code : "+code.toString()+" Value : "+map.get(code.toString()).toString());
                                             if(PromoCode.equals(code.toString())){
+                                                Progress2.dismiss();
                                                 deduction=Double.parseDouble(map.get(code.toString()).toString());
                                                 PromoValue=""+deduction;
                                                 Log.d(LOG_TAG,"Deduction : "+deduction);
@@ -301,6 +313,7 @@ public class AppointmentActivity extends AppCompatActivity {
                                             }
                                         }
                                         if(!PromoApplied) {
+                                            Progress2.dismiss();
                                             Log.d(LOG_TAG,"No Such PromoCode");
                                             Toast.makeText(AppointmentActivity.this, "No Such Promo Code", Toast.LENGTH_LONG).show();
                                             //PromoCodeET.selectAll();
@@ -320,6 +333,7 @@ public class AppointmentActivity extends AppCompatActivity {
                             }
                             else
                             {
+                                PromoApplied=false;
                                 Log.d(LOG_TAG,"Final Amount for CheckOut : "+FinalAmount);
                                 Answers.getInstance().logAddToCart(new AddToCartEvent()
                                         .putItemPrice(BigDecimal.valueOf(DoubleAmount))
@@ -337,6 +351,10 @@ public class AppointmentActivity extends AppCompatActivity {
 
                 }
                 if(FollowUpRB.isChecked()) {
+                    Progress2.setMessage("Preparing Your Order");
+                    Progress2.setCancelable(false);
+                    Progress2.show();
+                    timerDelayRemoveDialog(30000,Progress2);
                     for (int i = 0; i < dates.size(); i++)
                     {
                         try {
@@ -383,8 +401,13 @@ public class AppointmentActivity extends AppCompatActivity {
                                     Log.d(LOG_TAG,"Final Amount Before Promo : "+FinalAmount);
                                     Log.d(LOG_TAG,"Type of Apt : "+aptType);
                                     PromoCode=PromoCodeET.getText().toString().toUpperCase();
+                                    Progress2.dismiss();
                                     if(!PromoCode.trim().equals(""))
                                     {
+                                        Progress2.setMessage("Checking Promocode");
+                                        Progress2.setCancelable(false);
+                                        Progress2.show();
+                                        timerDelayRemoveDialog(30000,Progress2);
                                         UserDb2 = FirebaseDatabase.getInstance().getReference().child("promoCodes");
                                         UserDb2.addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
@@ -393,6 +416,7 @@ public class AppointmentActivity extends AppCompatActivity {
                                                 for (Object code: map.keySet()){
                                                     Log.d(LOG_TAG,"Promo Code : "+code.toString()+"Value : "+map.get(code.toString()).toString());
                                                     if(PromoCode.equals(code.toString())){
+                                                        Progress2.dismiss();
                                                         deduction=Double.parseDouble(map.get(code.toString()).toString());
                                                         Log.d(LOG_TAG,"Deduction : "+deduction);
                                                         FinalAmount=DoubleFollowUp-deduction;
@@ -408,6 +432,7 @@ public class AppointmentActivity extends AppCompatActivity {
                                                     }
                                                 }
                                                 if(!PromoApplied) {
+                                                    Progress2.dismiss();
                                                     Log.d(LOG_TAG,"No Such PromoCode");
                                                     Toast.makeText(AppointmentActivity.this, "No Such Promo Code", Toast.LENGTH_LONG).show();
                                                     //PromoCodeET.selectAll();
@@ -427,6 +452,7 @@ public class AppointmentActivity extends AppCompatActivity {
                                     }
                                     else
                                     {
+                                        PromoApplied=false;
                                         Log.d(LOG_TAG,"Final Amount for CheckOut : "+FinalAmount);
                                 Answers.getInstance().logAddToCart(new AddToCartEvent()
                                         .putItemPrice(BigDecimal.valueOf(DoubleAmount))

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -43,6 +44,7 @@ public class WelcomeActivity extends AppCompatActivity {
     EditText EntryText;
     TextInputLayout EntryLayout;
     static ProgressDialog WelcomeProgress;
+    String NotifOpenMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,25 @@ public class WelcomeActivity extends AppCompatActivity {
         EntryLayout.setVisibility(View.INVISIBLE);
         proceedButton.setVisibility(View.INVISIBLE);
         WelcomeProgress=new ProgressDialog(this);
+        Intent newIntent = getIntent();
+        NotifOpenMode=newIntent.getStringExtra("Action");
+        Log.d(LOG_TAG,"ExtrasBackground : "+newIntent.getStringExtra("Action"));
+        if(NotifOpenMode!=null)
+        {
+            if(NotifOpenMode.equals("update"))
+            {
+                final String appPackageName = "com.gtaandteam.android.wellcure"; // getPackageName() from Context or Activity object
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+
+                }
+            }
+        }
+
+
 
         proceedButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,64 +138,75 @@ public class WelcomeActivity extends AppCompatActivity {
 //            }
 //        });
         FbAuth = FirebaseAuth.getInstance();
-        if(FbAuth.getCurrentUser()!=null)
+        Log.d(LOG_TAG,"NotifOpenMode : "+NotifOpenMode);
+        Boolean openNormally=false;
+        if(NotifOpenMode==null)
+            openNormally=true;
+        else if(!NotifOpenMode.equals("update"))
+            openNormally=true;
+
+        if(openNormally)
         {
-            AutoLogin.setMessage("Logging In Automatically");
-            Log.d(LOG_TAG,"User is Not Null");
-            Log.d(LOG_TAG,"User Email : "+FbAuth.getCurrentUser().getEmail());
-            new Handler().postDelayed(new Runnable() {
-                public void run() {
-                    try
-                    {
-                        AutoLogin.show();
+            if(FbAuth.getCurrentUser()!=null)
+            {
+                AutoLogin.setMessage("Logging In Automatically");
+                Log.d(LOG_TAG,"User is Not Null");
+                Log.d(LOG_TAG,"User Email : "+FbAuth.getCurrentUser().getEmail());
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        try
+                        {
+                            AutoLogin.show();
 
+                        }
+                        catch (Exception e)
+                        {
+                            Log.d(LOG_TAG,""+e.getMessage());
+                        }
                     }
-                    catch (Exception e)
-                    {
-                        Log.d(LOG_TAG,""+e.getMessage());
-                    }
-                }
-            }, 1000);
-            new Handler().postDelayed(new Runnable() {
-                public void run() {
-                    try
-                    {
-                        AutoLogin.dismiss();
-                        finish();
-                        Intent i =new Intent(WelcomeActivity.this, DoctorsActivity.class);
-                        //i.putExtra("loginMode",1);
-                        finish();
-                        startActivity(i);
+                }, 1000);
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        try
+                        {
+                            AutoLogin.dismiss();
+                            finish();
+                            Intent i =new Intent(WelcomeActivity.this, DoctorsActivity.class);
+                            //i.putExtra("loginMode",1);
+                            finish();
+                            startActivity(i);
 
+                        }
+                        catch (Exception e)
+                        {
+                            Log.d(LOG_TAG,""+e.getMessage());
+                        }
                     }
-                    catch (Exception e)
-                    {
-                        Log.d(LOG_TAG,""+e.getMessage());
+                }, 3500);
+
+                Log.d(LOG_TAG,FbAuth.getCurrentUser().getEmail());
+
+
+            }
+            else
+            {
+                Log.d(LOG_TAG,"User is Null");
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        try
+                        {
+                            EntryLayout.setVisibility(View.VISIBLE);
+                            proceedButton.setVisibility(View.VISIBLE);
+
+                        }
+                        catch (Exception e)
+                        {
+                            Log.d(LOG_TAG,""+e.getMessage());
+                        }
                     }
-                }
-            }, 3500);
+                }, 1500);
+            }
 
-            Log.d(LOG_TAG,FbAuth.getCurrentUser().getEmail());
-
-
-        }
-        else
-        {
-            Log.d(LOG_TAG,"User is Null");
-            new Handler().postDelayed(new Runnable() {
-                public void run() {
-                    try
-                    {
-                        EntryLayout.setVisibility(View.VISIBLE);
-                        proceedButton.setVisibility(View.VISIBLE);
-
-                    }
-                    catch (Exception e)
-                    {
-                        Log.d(LOG_TAG,""+e.getMessage());
-                    }
-                }
-            }, 1500);
         }
 
 

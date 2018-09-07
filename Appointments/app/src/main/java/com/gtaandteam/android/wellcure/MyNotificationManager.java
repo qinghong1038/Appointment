@@ -7,7 +7,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 
@@ -26,7 +28,7 @@ public class MyNotificationManager {
         return mInstance;
     }
 
-    public void displayNotification(String title, String body) {
+    public void displayNotification(String title, String body,String msg) {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(mCtx, Constants.CHANNEL_ID)
@@ -40,8 +42,14 @@ public class MyNotificationManager {
         *  Right now we are using the MainActivity as this is the only activity we have in our application
         *  But for your project you can customize it as you want
         * */
+        Intent resultIntent;
+        resultIntent = new Intent(mCtx, WelcomeActivity.class);
+        resultIntent.putExtra("Notification",MyFirebaseMessagingService.Activity);
 
-        Intent resultIntent = new Intent(mCtx, WelcomeActivity.class);
+
+
+
+
 
         /*
         *  Now we will create a pending intent

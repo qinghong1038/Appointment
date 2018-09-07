@@ -140,7 +140,8 @@ public class ConfirmActivity extends AppCompatActivity {
         EmailTV.setText(Email);
         DateTV.setText(Date);
         if(AppointmentActivity.PromoApplied) {
-            PromoTV.setText("Discount of ₹"+AppointmentActivity.PromoValue+" is applied");
+            final int intPromoAmount = (int) Math.round(Double.parseDouble(AppointmentActivity.PromoValue));
+            PromoTV.setText("Discount of ₹"+intPromoAmount+" is applied");
             PromoTV.setVisibility(View.VISIBLE);
         }
 
