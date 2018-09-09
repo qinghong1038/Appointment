@@ -31,7 +31,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             if(Message.containsKey("Action")) {
                 activity = Message.get("Action");
                 Log.d("FCMActivityMFMS", activity);
-                Toast.makeText(this, "You Have A New Update Pending in Play Store", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "You Have A New Update Pending in Play Store", Toast.LENGTH_SHORT).show();
                 if (activity.equals("update")) {
                     final String appPackageName = "com.gtaandteam.android.wellcure"; // getPackageName() from Context or Activity object
                     try {
