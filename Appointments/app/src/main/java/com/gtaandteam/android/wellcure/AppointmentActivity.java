@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.LinearGradient;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -543,7 +542,9 @@ public class AppointmentActivity extends AppCompatActivity {
             case R.id.action_profile:
                 startActivity(new Intent(AppointmentActivity.this, ProfileActivity.class));
                 return true;
-
+            case R.id.action_Report:
+                startActivity(new Intent(AppointmentActivity.this, BugReportActivity.class));
+                return true;
 
             default:
                 // If we got here, the user's action was not recognized.

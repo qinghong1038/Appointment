@@ -14,16 +14,23 @@
         android:title="Past Appointments"
         app:showAsAction="never"/>
 
-    <item
-        android:id="@+id/action_SignOut"
-        android:icon="@drawable/common_full_open_on_phone"
-        android:title="Sign Out"
-        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_About"
         android:icon="@drawable/common_full_open_on_phone"
         android:title="About"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_Report"
+        android:icon="@drawable/common_full_open_on_phone"
+        android:title="Report a bug"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_SignOut"
+        android:icon="@drawable/common_full_open_on_phone"
+        android:title="Sign Out"
         app:showAsAction="never"/>
 
 

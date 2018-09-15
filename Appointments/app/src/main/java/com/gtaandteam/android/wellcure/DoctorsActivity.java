@@ -71,12 +71,13 @@ public class DoctorsActivity extends AppCompatActivity {
 
         //Linking to views
         MyToolbar = findViewById(R.id.MyToolbar);
+        setSupportActionBar(MyToolbar);
+
         AppointmentBTN = findViewById(R.id.get_appointment);
 
 
         FbAuth = FirebaseAuth.getInstance();
         FbUser = FbAuth.getCurrentUser();
-        setSupportActionBar(MyToolbar);
 
         Intent intent = getIntent();	//gives the reference to the destination intent
         final int loginMode = intent .getIntExtra("loginMode",0);	//loginMode is given in EmailLoginActivity and OTPLoginAcitivty
@@ -177,6 +178,9 @@ public class DoctorsActivity extends AppCompatActivity {
                 return true;
             case R.id.action_profile:
                 startActivity(new Intent(DoctorsActivity.this, ProfileActivity.class));
+                return true;
+            case R.id.action_Report:
+                startActivity(new Intent(DoctorsActivity.this, BugReportActivity.class));
                 return true;
 
             default:

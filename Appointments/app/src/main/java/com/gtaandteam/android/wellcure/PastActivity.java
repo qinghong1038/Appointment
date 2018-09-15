@@ -175,6 +175,10 @@ public class PastActivity extends AppCompatActivity {
                 startActivity(new Intent(PastActivity.this, ProfileActivity.class));
                 return true;
 
+            case R.id.action_Report:
+                startActivity(new Intent(PastActivity.this, BugReportActivity.class));
+                return true;
+
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.

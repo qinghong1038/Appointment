@@ -17,9 +17,9 @@
         android:allowBackup="true"
         android:icon="@drawable/app_logo"
         android:label="@string/app_name"
+        android:resizeableActivity="false"
         android:roundIcon="@drawable/app_logo"
         android:supportsRtl="true"
-        android:resizeableActivity="false"
         android:theme="@style/AppTheme">
         <activity
             android:name=".WelcomeActivity"
@@ -30,12 +30,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity><activity
+        </activity>
+        <activity
             android:name=".EmailLoginActivity"
-        android:parentActivityName=".WelcomeActivity"
-        android:label="Login using Email "
-
-        android:screenOrientation="portrait" />
+            android:label="Login using Email "
+            android:parentActivityName=".WelcomeActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".AppointmentActivity"
             android:label="New Appointment"
@@ -54,7 +54,6 @@
             android:name=".OTPLoginActivity"
             android:label="Login using OTP"
             android:parentActivityName=".WelcomeActivity"
-
             android:screenOrientation="portrait" />
         <activity
             android:name=".StatusActivity"
@@ -86,7 +85,6 @@
             android:name="io.fabric.ApiKey"
             android:screenOrientation="portrait"
             android:value="80547909762a12903a49cd9f0b3e3467762a2231" />
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/new_app_logo" />
@@ -95,21 +93,21 @@
         <activity
             android:name=".ProfileActivity"
             android:label="Personal Details"
-            android:screenOrientation="portrait"/>
-        <service
-            android:name=".MyFirebaseInstanceIdService">
+            android:screenOrientation="portrait" />
+
+        <service android:name=".MyFirebaseInstanceIdService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name=".MyFirebaseMessagingService">
+        <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
+        <activity android:name=".BugReportActivity"
+            android:label="Report A Bug"></activity>
     </application>
-
 
 </manifest>
